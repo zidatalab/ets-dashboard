@@ -1,0 +1,11 @@
+<mat-list>
+  <ng-container *ngFor="let item of menu">
+    <mat-list-item *ngIf="item.title" [routerLink]="item.link" routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon mat-list-icon> {{ item.icon }}</mat-icon>
+      <div mat-line>{{ item.title }}</div>
+    </mat-list-item>
+  </ng-container>
+</mat-list>
+
+<!-- https://stackblitz.com/edit/angular-material-dashboard-setup?file=src%2Fapp%2Fapp.module.ts,src%2Fapp%2Flayout%2Flayout.component.ts -->

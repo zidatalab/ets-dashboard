@@ -1,0 +1,25 @@
+<!-- <div fxFlex fxFlex.lt-md=50 fxFlex.lt-sm=100>
+  <mat-card [style.background-color]="this.itemColor">
+    <div fxLayout="row">
+      <div fxFlex>
+        <h1 *ngIf="!this.isTextBehind">{{ this.title }}{{ this.value | number: this.numberFormat: 'de' }}</h1>
+        <h1 *ngIf="this.isTextBehind">{{ this.value | number: this.numberFormat : "de" }} {{ this.title }}</h1>
+        <p><span>{{ this.description }}</span></p>
+      </div>
+      <div fxFlex *ngIf="this.matIcon">
+        <span class="mat-headline"><mat-icon inline=true>{{ this.matIcon }}</mat-icon></span>
+      </div>
+    </div>
+  </mat-card>
+</div> -->
+
+<mat-card class="dashboard-card">
+  <mat-card-header class="dashboard-card-title">
+    <mat-card-title>
+      {{ this.value | number: this.numberFormat: 'de' }}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="dashboard-card-content">
+    {{ this.title }}
+  </mat-card-content>
+</mat-card>

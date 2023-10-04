@@ -1,0 +1,29 @@
+<mat-toolbar>
+  <button (click)="menuToggled.emit(true)" mat-icon-button>
+    <mat-icon>
+      menu
+    </mat-icon>
+  </button>
+  <span>Dashboard-Title</span>
+  <span class="spacer"></span>
+  <span *ngIf="currentUser">{{ loggedInUserName }}</span>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>person_pin</mat-icon>
+    <mat-menu #menu="matMenu">
+      <div *ngIf="currentUser; then isLoggedIn else isNotLoggedIn"></div>
+      <ng-template #isLoggedIn>
+        <button mat-menu-item routerLink="/profile">
+          <span>Profil</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <span>Logout</span>
+        </button>
+      </ng-template>
+      <ng-template #isNotLoggedIn>
+        <button mat-menu-item (click)="onOpenLoginDialog()">
+          <span>Login</span>
+        </button>
+      </ng-template>
+    </mat-menu>
+  </button>
+</mat-toolbar>

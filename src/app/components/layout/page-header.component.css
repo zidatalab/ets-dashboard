@@ -1,0 +1,17 @@
+header {
+  position: relative;
+  padding:0;  
+  height: 80px;
+  border: 1px solid;
+}
+
+h2 {
+  text-align: center;
+}
+
+.logo-img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;  
+}

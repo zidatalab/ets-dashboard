@@ -10,9 +10,6 @@ export class DashboardComponent implements OnInit {
   constructor(
   ) { }
 
-  isSmedDashboard = false
-  isETerminDashboard = true
-
   ngOnInit(): void {
     /**
      * needs to check url to check which dashboard is called

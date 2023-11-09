@@ -35,13 +35,15 @@
   </div>
   <div>Loading...</div>
   <div class="grid-container">
-    <mat-grid-list cols="2" rowHeight="200px">
+    <mat-grid-list cols="4" rowHeight="200px">
       <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
-          title="Termine im Angebot"></app-key-data-container></mat-grid-tile>
-      <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']" title="Termine vermittelt">
+          title="Mittlere Dauer pro Assessment (in Sekunden)"></app-key-data-container></mat-grid-tile>
+      <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']" title="Gesamtanzahl der Assessments">
         </app-key-data-container></mat-grid-tile>
-      <mat-grid-tile>
-      </mat-grid-tile>
+      <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']" title="Mittlere Anzahl Beschwerden pro Asssessment">
+        </app-key-data-container></mat-grid-tile>
+        <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']" title="Mittlere Anzahl beantworteter Fragen pro Asssessment">
+        </app-key-data-container></mat-grid-tile>
     </mat-grid-list>
     <app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
       [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">

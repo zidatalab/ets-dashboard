@@ -16,7 +16,7 @@ export class KeyDataContainerComponent implements OnInit {
   @Input() value: number = 0
   @Input() title: string = ''
   @Input() description: string = ''
-  @Input() colors: any = []
+  @Input() color: any = ''
   @Input() cutOffs: any = []
   @Input() mainColor: string = ''
   @Input() numberFormat: string = ''
@@ -40,21 +40,21 @@ export class KeyDataContainerComponent implements OnInit {
       this.cutOffs = []
     }
 
-    this.setColor()
+    // this.setColor()
   }
 
-  setColor() {
-    let color = this.mainColor
-    this.itemColor = this.mainColor
+  // setColor() {
+  //   let color = this.mainColor
+  //   this.itemColor = this.mainColor
 
-    if (this.cutOffs.length > 0 && this.cutOffs.length === this.colors.length) {
-      let i = 0
-      for (let cutValue of this.cutOffs) {
-        if (Number(cutValue) <= this.value) {
-          color = this.colors[i]
-        }
-        i += 1
-      }
-    }
-  }
+  //   if (this.cutOffs.length > 0 && this.cutOffs.length === this.colors.length) {
+  //     let i = 0
+  //     for (let cutValue of this.cutOffs) {
+  //       if (Number(cutValue) <= this.value) {
+  //         color = this.colors[i]
+  //       }
+  //       i += 1
+  //     }
+  //   }
+  // }
 }

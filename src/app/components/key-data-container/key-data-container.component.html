@@ -13,7 +13,7 @@
   </mat-card>
 </div> -->
 
-<mat-card class="dashboard-card">
+<mat-card class="dashboard-card" [style.background-color]="this.color">
   <mat-card-header class="dashboard-card-title">
     <mat-card-title>
       {{ this.value | number: this.numberFormat: 'de' }}

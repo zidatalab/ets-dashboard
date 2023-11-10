@@ -85,12 +85,46 @@ export class ETerminDashboardRender implements OnInit {
   summaryInfo: any = []
   professionGroup: any = ''
   appointmentOffer: any = []
+  keyDataContainerStrings = [
+    {
+      key: "offer",
+      name: 'Terminangebot',
+      firstTile: "Termine im Angebot",
+      firstTileColor: "#F75F7C",
+      secondTile: "unvermittelte Termine",
+      secondTileColor: "#C8D42B",
+      thirdTile: "Termin vermittelt",
+      thirdTileColor: "#F75F7C",
+    },
+    {
+      key: "demand",
+      name: "Anfrage",
+      firstTile: "Terminnachfrage",
+      firstTileColor: "#EB9F47",
+      secondTile: "unvermittelte Terminanfragen",
+      secondTileColor: "#EB9F47",
+      thirdTile: "Termin vermittelt",
+      thirdTileColor: "#C8D42B",
+    },
+    {
+      key: "overview",
+      name: "Überblick",
+      firstTile: "Terminnachfrage",
+      firstTileColor: "#EB9F47",
+      secondTile: "unvermittelte Terminanfragen",
+      secondTileColor: "#C8D42B",
+      thirdTile: "Termin vermittelt",
+      thirdTileColor: "#F75F7C",
+    },
+  ]
+  selectedContainerStringObject: any
 
   async ngOnInit(): Promise<void> {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly' }
+    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick' }
     this.colorScheme = this.api.makeScale(5)
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
     this.metaData = await this.updateMetaData()
+    this.setKeyDataString()
 
     if (this.metaData) {
       this.setLevelData()
@@ -104,6 +138,7 @@ export class ETerminDashboardRender implements OnInit {
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 
     if (this.levelSettings['start'] && this.levelSettings['stop']) {
+      // this.setKeyDataString()
       await this.setData()
     }
   }
@@ -134,5 +169,17 @@ export class ETerminDashboardRender implements OnInit {
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal
       }
     }
+
+  }
+
+  setKeyDataString() {
+    console.log(this.levelSettings["thema"])
+    let [res] = this.keyDataContainerStrings.filter((item) => {
+      return item.name === this.levelSettings["thema"]
+    })
+
+    console.log(res)
+
+    this.selectedContainerStringObject = res
   }
 }

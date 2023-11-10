@@ -14,7 +14,7 @@
     <h3>Thema</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('thema',item);" *ngFor="let item of this.themes" color="primary"
-        [selected]="(this.levelSettings['thema']==item)">
+        [selected]="(this.levelSettings['thema']==item)" (click)="setKeyDataString()">
         {{ item }}
       </mat-chip-option>
     </mat-chip-listbox>
@@ -35,14 +35,16 @@
   </div>
   <div>Loading...</div>
   <div class="grid-container">
+    {{ selectedContainerStringObject | json }}
     <mat-grid-list cols="4" rowHeight="200px">
       <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
-          title="Mittlere Dauer pro Assessment (in Sekunden)"></app-key-data-container></mat-grid-tile>
-      <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']" title="Gesamtanzahl der Assessments">
+          [title]="selectedContainerStringObject.firstTile"
+          [color]="selectedContainerStringObject.firstTileColor"></app-key-data-container></mat-grid-tile>
+      <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']"
+          [title]="selectedContainerStringObject.secondTile" [color]="selectedContainerStringObject.secondTileColor">
         </app-key-data-container></mat-grid-tile>
-      <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']" title="Mittlere Anzahl Beschwerden pro Asssessment">
-        </app-key-data-container></mat-grid-tile>
-        <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']" title="Mittlere Anzahl beantworteter Fragen pro Asssessment">
+      <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']"
+          [title]="selectedContainerStringObject.thirdTile" [color]="selectedContainerStringObject.thirdTileColor">
         </app-key-data-container></mat-grid-tile>
     </mat-grid-list>
     <app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"

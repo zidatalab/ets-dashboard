@@ -4,13 +4,6 @@
     <img class="logo-img" src="./assets/images/logos/zi_Logo komplett_RGB.png" alt="">
   </header>
   <div>
-    <h3>Region</h3>
-    <mat-chip-listbox>
-      <mat-chip-option (click)="this.setLevelData('levelValues',item);" *ngFor="let item of this.levelValues"
-        color="primary" [selected]="(this.levelSettings['levelValues']==item)">
-        {{ item }}
-      </mat-chip-option>
-    </mat-chip-listbox>
     <h3>Thema</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('thema',item);" *ngFor="let item of this.themes" color="primary"
@@ -18,10 +11,24 @@
         {{ item }}
       </mat-chip-option>
     </mat-chip-listbox>
+    <h3>Region</h3>
+    <mat-chip-listbox>
+      <mat-chip-option (click)="this.setLevelData('levelValues',item);" *ngFor="let item of this.levelValues"
+        color="primary" [selected]="(this.levelSettings['levelValues']==item)">
+        {{ item }}
+      </mat-chip-option>
+    </mat-chip-listbox>
     <h3>Fachgruppe</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('fg',item);" *ngFor="let item of this.professionGroups"
         color="primary" [selected]="(this.levelSettings['fg']==item)">
+        {{ item }}
+      </mat-chip-option>
+    </mat-chip-listbox>
+    <h3>Dringlichkeit</h3>
+    <mat-chip-listbox>
+      <mat-chip-option (click)="this.setLevelData('urgency',item);" *ngFor="let item of this.urgencies"
+        color="primary" [selected]="(this.levelSettings['urgency']==item)">
         {{ item }}
       </mat-chip-option>
     </mat-chip-listbox>
@@ -33,9 +40,8 @@
       </mat-chip-option>
     </mat-chip-listbox>
   </div>
-  <div>Loading...</div>
+  <!-- <div>Loading...</div> -->
   <div class="grid-container">
-    {{ selectedContainerStringObject | json }}
     <mat-grid-list cols="4" rowHeight="200px">
       <mat-grid-tile><app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
           [title]="selectedContainerStringObject.firstTile"

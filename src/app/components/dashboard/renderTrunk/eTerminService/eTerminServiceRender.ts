@@ -77,6 +77,7 @@ export class ETerminDashboardRender implements OnInit {
   resolutionOptions = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Überblick", "Terminangebot", "Anfrage"]
+  urgencies = ["Akut", "Dringend", "Nicht Dringend", "Sonstige"]
   levelSettings: any = {};
   data: any;
   currentUser: any;
@@ -120,11 +121,11 @@ export class ETerminDashboardRender implements OnInit {
   selectedContainerStringObject: any
 
   async ngOnInit(): Promise<void> {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick' }
+    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Akut' }
+    this.setKeyDataString()
     this.colorScheme = this.api.makeScale(5)
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
     this.metaData = await this.updateMetaData()
-    this.setKeyDataString()
 
     if (this.metaData) {
       this.setLevelData()
@@ -138,7 +139,6 @@ export class ETerminDashboardRender implements OnInit {
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 
     if (this.levelSettings['start'] && this.levelSettings['stop']) {
-      // this.setKeyDataString()
       await this.setData()
     }
   }
@@ -173,12 +173,9 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   setKeyDataString() {
-    console.log(this.levelSettings["thema"])
     let [res] = this.keyDataContainerStrings.filter((item) => {
       return item.name === this.levelSettings["thema"]
     })
-
-    console.log(res)
 
     this.selectedContainerStringObject = res
   }

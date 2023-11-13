@@ -39,22 +39,5 @@ export class KeyDataContainerComponent implements OnInit {
     if (!this.cutOffs) {
       this.cutOffs = []
     }
-
-    // this.setColor()
   }
-
-  // setColor() {
-  //   let color = this.mainColor
-  //   this.itemColor = this.mainColor
-
-  //   if (this.cutOffs.length > 0 && this.cutOffs.length === this.colors.length) {
-  //     let i = 0
-  //     for (let cutValue of this.cutOffs) {
-  //       if (Number(cutValue) <= this.value) {
-  //         color = this.colors[i]
-  //       }
-  //       i += 1
-  //     }
-  //   }
-  // }
 }

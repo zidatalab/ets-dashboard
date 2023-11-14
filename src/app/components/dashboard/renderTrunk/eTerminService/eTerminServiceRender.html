@@ -27,8 +27,8 @@
     </mat-chip-listbox>
     <h3>Dringlichkeit</h3>
     <mat-chip-listbox>
-      <mat-chip-option (click)="this.setLevelData('urgency',item);" *ngFor="let item of this.urgencies"
-        color="primary" [selected]="(this.levelSettings['urgency']==item)">
+      <mat-chip-option (click)="this.setLevelData('urgency',item);" *ngFor="let item of this.urgencies" color="primary"
+        [selected]="(this.levelSettings['urgency']==item)">
         {{ item }}
       </mat-chip-option>
     </mat-chip-listbox>
@@ -53,8 +53,16 @@
           [title]="selectedContainerStringObject.thirdTile" [color]="selectedContainerStringObject.thirdTileColor">
         </app-key-data-container></mat-grid-tile>
     </mat-grid-list>
-    <app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
-      [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-    </app-plot-container>
+    <mat-grid-list cols="2">
+      <mat-grid-tile><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+          [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+        </app-plot-container></mat-grid-tile>
+      <mat-grid-tile><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+          [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+        </app-plot-container></mat-grid-tile>
+      <mat-grid-tile><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+          [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+        </app-plot-container></mat-grid-tile>
+    </mat-grid-list>
   </div>
 </div>

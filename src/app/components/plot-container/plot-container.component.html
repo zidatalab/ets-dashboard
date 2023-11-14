@@ -1,7 +1,10 @@
-<div class="sliderHeader">
-  <h3>{{ title }}</h3>
-  <mat-slide-toggle *ngIf="isAbsoluteNumbers" input (change)="emitIsAbsoluteNumber($event)">Absolute Zahlen</mat-slide-toggle>
+<div class="plot">
+  <div class="sliderHeader">
+    <h3>{{ title }}</h3>
+    <mat-slide-toggle *ngIf="isAbsoluteNumbers" input (change)="emitIsAbsoluteNumber($event)">Absolute
+      Zahlen</mat-slide-toggle>
+  </div>
+  <plotly-plot class="plotlydiv" [data]="this.plotData" [divId]="this.divId" [debug]="true" [layout]="this.plotLayout"
+    [config]="this.mainConfig" (plotlyClick)="this.catchClick($event)" [useResizeHandler]="true"
+    [style]="{position: 'relative', width: '100%', height: '100%'}"></plotly-plot>
 </div>
-<plotly-plot class="plotlydiv" [data]="this.plotData" [divId]="this.divId" [debug]="true" [layout]="this.plotLayout"
-  [config]="this.mainConfig" (plotlyClick)="this.catchClick($event)" [useResizeHandler]="true"
-  [style]="{position: 'relative', width: '100%', height: '100%'}"></plotly-plot>

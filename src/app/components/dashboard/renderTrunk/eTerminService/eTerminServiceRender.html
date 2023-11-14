@@ -53,16 +53,19 @@
           [title]="selectedContainerStringObject.thirdTile" [color]="selectedContainerStringObject.thirdTileColor">
         </app-key-data-container></mat-grid-tile>
     </mat-grid-list>
-    <mat-grid-list cols="2">
-      <mat-grid-tile><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+    <div class="flex-container wrap">
+      <div class="flex-item"><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
           [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-        </app-plot-container></mat-grid-tile>
-      <mat-grid-tile><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+        </app-plot-container></div>
+      <div class="flex-item"><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
           [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-        </app-plot-container></mat-grid-tile>
-      <mat-grid-tile><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+        </app-plot-container></div>
+      <div class="flex-item"><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
           [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-        </app-plot-container></mat-grid-tile>
-    </mat-grid-list>
+        </app-plot-container></div>
+      <div class="flex-item"><app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+          [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+        </app-plot-container></div>
+    </div>
   </div>
 </div>

@@ -39,6 +39,10 @@ export class MakeETerminData {
     let appointmentOffer = []
     let summaryInfo: any = []
 
+    /**
+     * data aggregation condionally depending on theme selection
+     */
+
     let appointments: any = await this.db.listData(
       'stats_angebot',
       'KV',
@@ -52,6 +56,7 @@ export class MakeETerminData {
     if (appointments) {
       let dataAvailable = 0
       let dataBooked = 0
+      let dataUnarrangedAppointments = 0
 
       for (const item of appointments) {
         if (item.status === "available") {
@@ -62,9 +67,12 @@ export class MakeETerminData {
         if (item.status === 'booked') {
           dataBooked += item.Anzahl
         }
+
+        dataUnarrangedAppointments = dataAvailable - dataBooked
       }
 
       summaryInfo['Anzahl Angebot'] = dataAvailable
+      summaryInfo['Anzahl unvermittelte Termine'] = dataUnarrangedAppointments
       summaryInfo['Anzahl Verteilt'] = dataBooked
 
       appointments.appointmentOffer = this.flattenArray(appointmentOffer)

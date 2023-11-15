@@ -28,6 +28,13 @@ import { PlotContainerComponent } from './components/plot-container/plot-contain
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KeyDataContainerComponent } from './components/key-data-container/key-data-container.component';
 import { ETerminDashboardRender } from './components/dashboard/renderTrunk/eTerminService/eTerminServiceRender';
+import { DashComponent } from './components/dash_comp/dash.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { LayoutModule } from '@angular/cdk/layout';
 
 PlotlyModule.plotlyjs = PlotlyJS
 
@@ -79,7 +86,8 @@ const routes: Routes = [
     PrivateAnalysisComponent,
     PlotContainerComponent,
     KeyDataContainerComponent,
-    ETerminDashboardRender
+    ETerminDashboardRender,
+    DashComponent
   ],
   imports: [
     CommonModule,
@@ -91,6 +99,12 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     PlotlyModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    LayoutModule,
   ],
   providers: [
     {

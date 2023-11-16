@@ -86,15 +86,16 @@ export class ETerminDashboardRender implements OnInit {
   summaryInfo: any = []
   professionGroup: any = ''
   appointmentOffer: any = []
+  appointmentBooked: any = []
   keyDataContainerStrings = [
     {
       key: "offer",
-      name: 'Terminangebot',
+      name: 'Terminangebote',
       firstTile: "Termine im Angebot",
       firstTileColor: "#F75F7C",
-      secondTile: "unvermittelte Termine",
+      secondTile: "Termine vermittelt",
       secondTileColor: "#C8D42B",
-      thirdTile: "Termin vermittelt",
+      thirdTile: "unvermittelte Termine",
       thirdTileColor: "#F75F7C",
     },
     {
@@ -104,17 +105,17 @@ export class ETerminDashboardRender implements OnInit {
       firstTileColor: "#EB9F47",
       secondTile: "unvermittelte Terminanfragen",
       secondTileColor: "#EB9F47",
-      thirdTile: "Termin vermittelt",
+      thirdTile: "Termine vermittelt",
       thirdTileColor: "#C8D42B",
     },
     {
       key: "overview",
       name: "Gesamt",
-      firstTile: "Terminnachfrage",
+      firstTile: "unvermittelte Terminanfragen",
       firstTileColor: "#EB9F47",
-      secondTile: "unvermittelte Terminanfragen",
+      secondTile: "fristgerecht vermittelte Termine",
       secondTileColor: "#C8D42B",
-      thirdTile: "Termin vermittelt",
+      thirdTile: "unvermittelte Termine",
       thirdTileColor: "#F75F7C",
     },
   ]
@@ -167,6 +168,7 @@ export class ETerminDashboardRender implements OnInit {
       if (result.stats_angebot) {
         this.summaryInfo = result.stats_angebot.summaryInfo
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal
+        this.appointmentBooked = result.stats_angebot.appointmentBookedTotal
       }
     }
 

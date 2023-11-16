@@ -37,7 +37,9 @@ export class MakeETerminData {
 
   async createStats(levelSettings: any) {
     let appointmentOffer = []
+    let appointmentBooked = []
     let summaryInfo: any = []
+    let appointmentByProfessionGroups = []
 
     /**
      * data aggregation condionally depending on theme selection
@@ -65,22 +67,31 @@ export class MakeETerminData {
         }
 
         if (item.status === 'booked') {
+          appointmentBooked.push({ total: item['Anzahl'], date: item['reference_date'] })
           dataBooked += item.Anzahl
         }
 
         dataUnarrangedAppointments = dataAvailable - dataBooked
       }
 
+      summaryInfo['Anzahl Terminanfragen'] = 0
+      summaryInfo['Anzahl nicht vermittelte Terminanfragen'] = 0
+      summaryInfo['Anzahl vermittelte Terminanfragen'] = 0
+      summaryInfo['Anzahl Termine vermittelt'] = 0
+      summaryInfo['Anzahl fristgerecht vermittelt'] = 0
       summaryInfo['Anzahl Angebot'] = dataAvailable
-      summaryInfo['Anzahl unvermittelte Termine'] = dataUnarrangedAppointments
-      summaryInfo['Anzahl Verteilt'] = dataBooked
+      summaryInfo['Anzahl nicht vermittelt Termine'] = dataUnarrangedAppointments
+      summaryInfo['Anzahl vermittelt'] = dataBooked
 
+      appointments.appointmentByProfessionGroups = this.api.groupBySum(appointments, 'fg', 'test', 'Anzahl')
       appointments.appointmentOffer = this.flattenArray(appointmentOffer)
+      appointments.appointmentBooked = this.flattenArray(appointmentBooked)
     }
 
     return {
       summaryInfo: summaryInfo,
-      appointmentOfferTotal: appointments.appointmentOffer
+      appointmentOfferTotal: appointments.appointmentOffer,
+      appointmentBookedTotal: appointments.appointmentBooked
     }
   }
 

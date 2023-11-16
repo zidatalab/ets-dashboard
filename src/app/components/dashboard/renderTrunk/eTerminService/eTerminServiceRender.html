@@ -51,52 +51,80 @@
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl unvermittelte Termine']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl vermittelt']"
+          [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
+        </app-key-data-container>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" rowspan="1">
+          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelt Termine']"
             [title]="keyDataContainerStrings[0].secondTile" [color]="keyDataContainerStrings[0].secondTileColor">
-          </app-key-data-container>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']"
-            [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
           </app-key-data-container>
         </mat-grid-tile>
       </div>
       <div *ngIf="this.levelSettings['thema'] === 'Terminanfragen'">
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl Terminanfragen']"
             [title]="keyDataContainerStrings[1].firstTile" [color]="keyDataContainerStrings[1].firstTileColor">
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl unvermittelte Termine']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminanfragen']"
             [title]="keyDataContainerStrings[1].secondTile" [color]="keyDataContainerStrings[1].secondTileColor">
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl vermittelte Terminanfragen']"
             [title]="keyDataContainerStrings[1].thirdTile" [color]="keyDataContainerStrings[1].thirdTileColor">
           </app-key-data-container>
         </mat-grid-tile>
       </div>
       <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminanfragen']"
             [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[2].firstTileColor">
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl unvermittelte Termine']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl fristgerecht vermittelt']"
             [title]="keyDataContainerStrings[2].secondTile" [color]="keyDataContainerStrings[2].secondTileColor">
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl Verteilt']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelt Termine']"
             [title]="keyDataContainerStrings[2].thirdTile" [color]="keyDataContainerStrings[2].thirdTileColor">
           </app-key-data-container>
         </mat-grid-tile>
       </div>
     </mat-grid-list>
     <mat-grid-list cols="2" rowHeight="350px">
+      <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
+      <mat-grid-tile colspan="1" rowspan="2">
+        <mat-card class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>
+              Terminangebot und Inanspruchnahme
+              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item>Expand</button>
+                <button mat-menu-item>Remove</button>
+              </mat-menu> -->
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="dashboard-card-content">
+            <!-- example <app-plot [(data)]="this.decisions_pocvsttt" [xvalue]="'TTTsmed_text'" [fontcolor]="'white'"
+              [showlegend]="false" [outcomes]="['Anzahl']" [custommargins]="{ l: 50, r: 50, b: 150, t: 0 }"
+              plottype="stackedbar" [colorby]="'POCsmed_text'">
+            </app-plot> -->
+            <app-plot-container title="Terminangebot und Inanspruchnahme" [data]="appointmentOffer" [xValue]="'date'"
+              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
+            </app-plot-container>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+      </div>
+      <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
       <mat-grid-tile colspan="1" rowspan="2">
         <mat-card class="dashboard-card">
           <mat-card-header>
@@ -112,12 +140,35 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-card-content">
-            <app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+            <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'date'"
               [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
             </app-plot-container>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
+      <mat-grid-tile colspan="1" rowspan="2">
+        <mat-card class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>
+              Terminangebot vermittelt
+              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item>Expand</button>
+                <button mat-menu-item>Remove</button>
+              </mat-menu> -->
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="dashboard-card-content">
+            <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
+              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+            </app-plot-container>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+      </div>
+      <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
       <mat-grid-tile colspan="1" rowspan="2">
         <mat-card class="dashboard-card">
           <mat-card-header>
@@ -133,12 +184,34 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="dashboard-card-content">
-            <app-plot-container title="Terminangebot Insgesamt" [data]="appointmentOffer" [xValue]="'date'"
+            <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'date'"
+              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
+            </app-plot-container>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+      <mat-grid-tile colspan="1" rowspan="2">
+        <mat-card class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>
+              Terminangebot vermittelt
+              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item>Expand</button>
+                <button mat-menu-item>Remove</button>
+              </mat-menu> -->
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="dashboard-card-content">
+            <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
               [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
             </app-plot-container>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
+      </div>
     </mat-grid-list>
   </div>
 </div>

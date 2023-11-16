@@ -35,7 +35,7 @@ export class ETerminQuery {
           '$lte': parseInt(levelSettings['stop'].slice(0, 4))
         }
       },
-      "showfields": ["stats_angebot", "stats_nachfrage"]
+      "showfields": ["stats_angebot"]
     }
 
     let _result: any = []

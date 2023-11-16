@@ -15,6 +15,7 @@ export class MakeETerminData {
   ) { }
 
   levelSettings: any = []
+  professionGroups = ["Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
 
   async init(input: any, levelSettings: any) {
     this.levelSettings = levelSettings
@@ -38,6 +39,7 @@ export class MakeETerminData {
   async createStats(levelSettings: any) {
     let appointmentOffer = []
     let appointmentBooked = []
+    let appointmentUnarranged = []
     let summaryInfo: any = []
     let appointmentByProfessionGroups = []
 
@@ -55,6 +57,8 @@ export class MakeETerminData {
       levelSettings["resolution"]
     )
 
+    console.log(appointments)
+
     if (appointments) {
       let dataAvailable = 0
       let dataBooked = 0
@@ -71,21 +75,27 @@ export class MakeETerminData {
           dataBooked += item.Anzahl
         }
 
+        if (item.status === 'unavailable') {
+          appointmentUnarranged.push({ total: item['Anzahl'], date: item['reference_date'] })
+        }
+
         dataUnarrangedAppointments = dataAvailable - dataBooked
       }
 
       summaryInfo['Anzahl Terminanfragen'] = 0
       summaryInfo['Anzahl nicht vermittelte Terminanfragen'] = 0
       summaryInfo['Anzahl vermittelte Terminanfragen'] = 0
-      summaryInfo['Anzahl Termine vermittelt'] = 0
       summaryInfo['Anzahl fristgerecht vermittelt'] = 0
       summaryInfo['Anzahl Angebot'] = dataAvailable
       summaryInfo['Anzahl nicht vermittelt Termine'] = dataUnarrangedAppointments
-      summaryInfo['Anzahl vermittelt'] = dataBooked
+      summaryInfo['Anzahl Termine vermittelt'] = dataBooked
+
+      // console.log(appointments)
 
       appointments.appointmentByProfessionGroups = this.api.groupBySum(appointments, 'fg', 'test', 'Anzahl')
       appointments.appointmentOffer = this.flattenArray(appointmentOffer)
       appointments.appointmentBooked = this.flattenArray(appointmentBooked)
+      appointments.appointmentUnarranged = this.flattenArray(appointmentUnarranged)
     }
 
     return {

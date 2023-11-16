@@ -87,6 +87,8 @@ export class ETerminDashboardRender implements OnInit {
   professionGroup: any = ''
   appointmentOffer: any = []
   appointmentBooked: any = []
+  appointmentUnarranged: any = []
+  appointmentByProfessionGroups: any = []
   keyDataContainerStrings = [
     {
       key: "offer",
@@ -96,7 +98,7 @@ export class ETerminDashboardRender implements OnInit {
       secondTile: "Termine vermittelt",
       secondTileColor: "#C8D42B",
       thirdTile: "unvermittelte Termine",
-      thirdTileColor: "#F75F7C",
+      thirdTileColor: "#FF879E",
     },
     {
       key: "demand",
@@ -104,7 +106,7 @@ export class ETerminDashboardRender implements OnInit {
       firstTile: "Terminnachfrage",
       firstTileColor: "#EB9F47",
       secondTile: "unvermittelte Terminanfragen",
-      secondTileColor: "#EB9F47",
+      secondTileColor: "#E5A75E",
       thirdTile: "Termine vermittelt",
       thirdTileColor: "#C8D42B",
     },
@@ -162,6 +164,26 @@ export class ETerminDashboardRender implements OnInit {
    * fixing reactivity on change filter values
    */
   async setData(input: any = '') {
+    console.log(this.levelSettings)
+
+    // if (this.levelSettings.thema === 'Gesamt') {
+    //   let _levelSettings = structuredClone(this.levelSettings)
+
+    //   for (let group of this.professionGroups) {
+    //     let test = []
+
+    //     if (group !== 'Gesamt') {
+    //       _levelSettings['fg'] = group
+    //       test = await this.queryETerminData.getQueryData(input, _levelSettings, this.allPublicFields)
+    //     }
+
+    //     console.log(test)
+
+    //     for (let item of test) {
+    //     }
+    //   }
+    // }
+
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
 
     if (result) {
@@ -169,9 +191,10 @@ export class ETerminDashboardRender implements OnInit {
         this.summaryInfo = result.stats_angebot.summaryInfo
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal
         this.appointmentBooked = result.stats_angebot.appointmentBookedTotal
+        this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged
+        this.appointmentByProfessionGroups = result.stats_angebot.appointmentByProfessionGroups
       }
     }
-
   }
 
   setKeyDataString() {

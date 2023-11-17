@@ -1,6 +1,6 @@
 header {
   position: relative;
-  padding:0;  
+  padding: 0;
   height: 80px;
 }
 
@@ -10,10 +10,27 @@ h2 {
 
 .logo-img {
   height: 50px;
-  position: absolute;
+  position: relative;
   right: 0;
   top: 0;
-  bottom: 0;  
+  bottom: 0;
+}
+
+.head-container {
+  display: flex;
+  flex-flow: row wrap;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: flex-end;
+  float: left;
+  padding-top: 1rem;
 }
 
 .grid-container {
@@ -36,4 +53,41 @@ h2 {
 
 .dashboard-card-content {
   text-align: center;
+}
+
+.textOverviewContainer {
+  width: 100%;
+  height: 100%;
+  font-size: 45px;
+  padding: 15px;
+}
+
+.textFirst {
+  color: #61CFF1;
+  font-weight: 800;
+  word-wrap: break-word
+}
+
+.textFirstOffer {
+  color: #F75F7C;
+  font-weight: 800;
+  word-wrap: break-word
+}
+
+.textFirstDemand {
+  color: #EB9F47;
+  font-weight: 800;
+  word-wrap: break-word
+}
+
+.textSecond {
+  color: white;
+  font-weight: 800;
+  word-wrap: break-word
+}
+
+.textThird {
+  color: #6F6F6F;
+  font-weight: 800;
+  word-wrap: break-word
 }

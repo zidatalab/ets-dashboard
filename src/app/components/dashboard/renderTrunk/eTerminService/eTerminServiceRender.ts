@@ -103,7 +103,7 @@ export class ETerminDashboardRender implements OnInit {
     {
       key: "demand",
       name: "Anfrage",
-      firstTile: "Terminnachfrage",
+      firstTile: "Terminanfragen",
       firstTileColor: "#EB9F47",
       secondTile: "unvermittelte Terminanfragen",
       secondTileColor: "#E5A75E",
@@ -124,7 +124,7 @@ export class ETerminDashboardRender implements OnInit {
   selectedContainerStringObject: any
 
   async ngOnInit(): Promise<void> {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Gesamt', 'urgency': 'Akut' }
+    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'weekly', 'thema': 'Gesamt', 'urgency': 'Akut' }
     this.setKeyDataString()
     this.colorScheme = this.api.makeScale(5)
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)

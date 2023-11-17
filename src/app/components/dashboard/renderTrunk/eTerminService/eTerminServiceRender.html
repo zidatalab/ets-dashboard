@@ -1,7 +1,16 @@
 <div style="padding: 0 20px;">
   <header>
-    <h2>eTS Reporting</h2>
-    <img class="logo-img" src="./assets/images/logos/zi_Logo komplett_RGB.png" alt="">
+    <div class="head-container">
+      <h2>eTS Reporting</h2>
+      <div class="logo-container">
+        <div class="logo">
+          <img class="logo-img" src="./assets/images/logos/logo-zi-fullversion.svg" alt="">
+        </div>
+        <div class="logo">
+          <img class="logo-img" src="./assets/images/logos/kvdigital-wort-bild-marke-pos-rgb-b.svg" alt="">
+        </div>
+      </div>
+    </div>
   </header>
   <div>
     <h3>Thema</h3>
@@ -18,13 +27,22 @@
         {{ item }}
       </mat-chip-option>
     </mat-chip-listbox>
-    <h3>Fachgruppe</h3>
-    <mat-chip-listbox>
-      <mat-chip-option (click)="this.setLevelData('fg',item);" *ngFor="let item of this.professionGroups"
-        color="primary" [selected]="(this.levelSettings['fg']==item)">
-        {{ item }}
-      </mat-chip-option>
-    </mat-chip-listbox>
+    <div *ngIf="this.levelSettings['thema'] !== 'Gesamt'; then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+      <h3>Facharztgruppen</h3>
+      <mat-chip-listbox>
+        <mat-chip-option (click)="this.setLevelData('fg',item);" *ngFor="let item of this.professionGroups"
+          color="primary" [selected]="(this.levelSettings['fg']==item)">
+          {{ item }}
+        </mat-chip-option>
+      </mat-chip-listbox>
+    </ng-template>
+    <ng-template #elseBlock>
+      <div class="textOverviewContainer">
+        <span class="textFirst">eTS</span><span class="textSecond"> auf einen
+          Blick </span><span class="textThird">seit 2019</span>
+      </div>
+    </ng-template>
     <h3>Dringlichkeit</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('urgency',item);" *ngFor="let item of this.urgencies" color="primary"
@@ -40,9 +58,20 @@
       </mat-chip-option>
     </mat-chip-listbox>
   </div>
+  <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
+    <div class="textOverviewContainer">
+      <span class="textFirstOffer">Angebote</span><span class="textSecond"> auf einen
+        Blick </span><span class="textThird">seit 2019</span>
+    </div>
+  </div>
+  <div *ngIf="this.levelSettings['thema'] === 'Terminanfragen'">
+    <div class="textOverviewContainer">
+      <span class="textFirstDemand">Nachfrage</span><span class="textSecond"> auf einen
+        Blick </span><span class="textThird">seit 2019</span>
+    </div>
+  </div>
   <!-- <div>Loading...</div> -->
   <div class="grid-container">
-    <!-- needs conditionally data rendering depending on theme selection -->
     <mat-grid-list cols="3" rowHeight="200px">
       <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
         <mat-grid-tile colspan="1" rowspan="1">
@@ -52,10 +81,10 @@
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl Termine vermittelt']"
-          [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
-        </app-key-data-container>
-      </mat-grid-tile>
-      <mat-grid-tile colspan="1" rowspan="1">
+            [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
+          </app-key-data-container>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelt Termine']"
             [title]="keyDataContainerStrings[0].secondTile" [color]="keyDataContainerStrings[0].secondTileColor">
           </app-key-data-container>
@@ -96,143 +125,133 @@
         </mat-grid-tile>
       </div>
     </mat-grid-list>
+  </div>
+  <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
+    <div class="textOverviewContainer">
+      <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
+        Blick </span><span class="textThird">seit 2019</span>
+    </div>
+  </div>
+  <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
+    <div class="textOverviewContainer">
+      <span class="textFirstOffer">Angebots</span><span class="textSecond">entwicklung </span><span
+        class="textThird">seit 2019</span>
+    </div>
+  </div>
+  <div *ngIf="this.levelSettings['thema'] === 'Terminanfragen'">
+    <div class="textOverviewContainer">
+      <span class="textFirstDemand">Nachfrage</span><span class="textSecond">entwicklung </span><span
+        class="textThird">seit 2019</span>
+    </div>
+  </div>
+  <div class="grid-container">
     <mat-grid-list cols="2" rowHeight="350px">
       <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
-      <mat-grid-tile colspan="1" rowspan="2">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Terminangebot und Inanspruchnahme
-              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu> -->
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <!-- example <app-plot [(data)]="this.decisions_pocvsttt" [xvalue]="'TTTsmed_text'" [fontcolor]="'white'"
+        <mat-grid-tile colspan="1" rowspan="2">
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>
+                Terminangebot und Inanspruchnahme
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="dashboard-card-content">
+              <!-- example <app-plot [(data)]="this.decisions_pocvsttt" [xvalue]="'TTTsmed_text'" [fontcolor]="'white'"
               [showlegend]="false" [outcomes]="['Anzahl']" [custommargins]="{ l: 50, r: 50, b: 150, t: 0 }"
               plottype="stackedbar" [colorby]="'POCsmed_text'">
             </app-plot> -->
-            <app-plot-container title="Terminangebot und Inanspruchnahme" [data]="appointmentOffer" [xValue]="'date'"
-              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
-            </app-plot-container>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
+              <app-plot-container title="Terminangebot und Inanspruchnahme" [data]="appointmentOffer" [xValue]="'date'"
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
+              </app-plot-container>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
       </div>
       <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
-      <mat-grid-tile colspan="1" rowspan="2">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Terminangebot Insgesamt
-              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu> -->
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'date'"
-              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-            </app-plot-container>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-      <mat-grid-tile colspan="1" rowspan="2">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Terminangebot vermittelt
-              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu> -->
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
-              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-            </app-plot-container>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-      <mat-grid-tile colspan="1" rowspan="2">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Terminangebot nicht vermittelt
-              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu> -->
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <app-plot-container title="Terminangebot vermittelt" [data]="appointmentUnarranged" [xValue]="'date'"
-              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-            </app-plot-container>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="2">
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>
+                Terminangebot Insgesamt
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="dashboard-card-content">
+              <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'date'"
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+              </app-plot-container>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="2">
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>
+                Terminangebot vermittelt
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="dashboard-card-content">
+              <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+              </app-plot-container>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="2">
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>
+                Terminangebot nicht vermittelt
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="dashboard-card-content">
+              <app-plot-container title="Terminangebot vermittelt" [data]="appointmentUnarranged" [xValue]="'date'"
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+              </app-plot-container>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
       </div>
       <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
-      <mat-grid-tile colspan="1" rowspan="2">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Terminangebot Insgesamt
-              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu> -->
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'date'"
-              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
-            </app-plot-container>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
-      <mat-grid-tile colspan="1" rowspan="2">
-        <mat-card class="dashboard-card">
-          <mat-card-header>
-            <mat-card-title>
-              Terminangebot vermittelt
-              <!-- <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
-              </mat-menu> -->
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="dashboard-card-content">
-            <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
-              [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-            </app-plot-container>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="2">
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>
+                Terminangebot Insgesamt
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="dashboard-card-content">
+              <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'date'"
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
+              </app-plot-container>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="2">
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>
+                Terminangebot vermittelt
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="dashboard-card-content">
+              <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+              </app-plot-container>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
       </div>
     </mat-grid-list>
+  </div>
+  <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
+    <div class="textOverviewContainer">
+      <span class="textSecond">ein Blick in die Zukunft des</span><span class="textFirstOffer"> Angebots </span><span
+        class="textThird">bis 31.12.2023</span>
+    </div>
+  </div>
+  <div *ngIf="this.levelSettings['thema'] === 'Terminanfragen'">
+    <div class="textOverviewContainer">
+      <span class="textSecond">ein Blick in die Zukunft der</span><span class="textFirstDemand"> Nachfrage </span><span
+        class="textThird">bis 31.12.2023</span>
+    </div>
   </div>
 </div>

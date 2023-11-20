@@ -66,6 +66,8 @@ export class ETerminQuery {
     } else {
       let { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
+      console.log(result)
+
       if (!input.length && result.length) {
         result = result.map((entry: any) => ({
           ...entry,

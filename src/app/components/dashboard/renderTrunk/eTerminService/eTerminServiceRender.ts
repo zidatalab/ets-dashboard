@@ -130,6 +130,8 @@ export class ETerminDashboardRender implements OnInit {
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
     this.metaData = await this.updateMetaData()
 
+    console.log(this.metaData)
+
     if (this.metaData) {
       this.setLevelData()
     }
@@ -164,8 +166,6 @@ export class ETerminDashboardRender implements OnInit {
    * fixing reactivity on change filter values
    */
   async setData(input: any = '') {
-    console.log(this.levelSettings)
-
     // if (this.levelSettings.thema === 'Gesamt') {
     //   let _levelSettings = structuredClone(this.levelSettings)
 

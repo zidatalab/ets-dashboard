@@ -57,8 +57,6 @@ export class MakeETerminData {
       levelSettings["resolution"]
     )
 
-    console.log(appointments)
-
     if (appointments) {
       let dataAvailable = 0
       let dataBooked = 0

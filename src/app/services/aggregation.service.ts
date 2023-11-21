@@ -34,7 +34,8 @@ export class AggregationService {
         toPush['year'] = item['Jahr'];
         toPush['month'] = item['Monat'];
         toPush['calenderWeek'] = fieldItem['KW'] ? fieldItem['KW'] : '';
-        toPush['date'] = fieldItem['Datum'] ? fieldItem['Datum'] : fieldItem['reference_date']
+        // ATTENTION
+        toPush['date'] = fieldItem['Datum'] ? fieldItem['Datum'] : fieldItem['angebot_reference_date']
         delete fieldItem['KW'];
         toPush['data'] = fieldItem;
         toPush['indicator'] = fieldname;

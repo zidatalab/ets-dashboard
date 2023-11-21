@@ -57,7 +57,7 @@ export class MakeETerminData {
       levelSettings["resolution"]
     )
 
-    console.log(appointments)
+    // console.log(appointments)
 
     if (appointments) {
       let dataAvailable = 0
@@ -65,18 +65,20 @@ export class MakeETerminData {
       let dataUnarrangedAppointments = 0
 
       for (const item of appointments) {
-        if (item.status === "available") {
-          appointmentOffer.push({ total: item['Anzahl'], date: item['reference_date'] })
-          dataAvailable += item.Anzahl
+        if (item.angebot_group_status === "available") {
+          console.log('avail', item)
+          appointmentOffer.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
+          dataAvailable += item.angebot_Anzahl
+        }
+        
+        if (item.angebot_group_status === 'booked') {
+          console.log('booked', item)
+          appointmentBooked.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
+          dataBooked += item.angebot_Anzahl
         }
 
-        if (item.status === 'booked') {
-          appointmentBooked.push({ total: item['Anzahl'], date: item['reference_date'] })
-          dataBooked += item.Anzahl
-        }
-
-        if (item.status === 'unavailable') {
-          appointmentUnarranged.push({ total: item['Anzahl'], date: item['reference_date'] })
+        if (item.angebot_group_status === 'unavailable') {
+          appointmentUnarranged.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
         }
 
         dataUnarrangedAppointments = dataAvailable - dataBooked
@@ -90,7 +92,6 @@ export class MakeETerminData {
       summaryInfo['Anzahl nicht vermittelt Termine'] = dataUnarrangedAppointments
       summaryInfo['Anzahl Termine vermittelt'] = dataBooked
 
-      // console.log(appointments)
 
       appointments.appointmentByProfessionGroups = this.api.groupBySum(appointments, 'fg', 'test', 'Anzahl')
       appointments.appointmentOffer = this.flattenArray(appointmentOffer)

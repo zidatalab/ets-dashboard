@@ -164,8 +164,6 @@ export class ETerminDashboardRender implements OnInit {
    * fixing reactivity on change filter values
    */
   async setData(input: any = '') {
-    console.log(this.levelSettings)
-
     // if (this.levelSettings.thema === 'Gesamt') {
     //   let _levelSettings = structuredClone(this.levelSettings)
 
@@ -187,6 +185,7 @@ export class ETerminDashboardRender implements OnInit {
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
 
     if (result) {
+      console.log(result)
       if (result.stats_angebot) {
         this.summaryInfo = result.stats_angebot.summaryInfo
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal

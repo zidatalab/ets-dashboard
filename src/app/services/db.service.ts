@@ -12,10 +12,10 @@ export class DBService {
   constructor(private api: ApiService) { }
 
   async store(indicator: any, level: any, levelId: any, stand: any, minDate: any, maxDate: any, resolution: any) {
-    // await db.standDB
-    //   .where('[level+levelId+indicator+timeframe]')
-    //   .equals([level, levelId, indicator, resolution])
-    //   .delete()
+    await db.standDB
+      .where('[level+levelId+indicator+timeframe]')
+      .equals([level, levelId, indicator, resolution])
+      .delete()
 
     db.standDB.put({
       'level': level,
@@ -42,10 +42,13 @@ export class DBService {
     }
 
     if (start !== '' && stop !== '' && expand) {
+      console.log(level, levelId, indicator, resolution, start, stop)
       const data = await db.dataDB
         .where('[level+levelId+indicator+timeframe+date]')
         .between([level, levelId, indicator, resolution, start], [level, levelId, indicator, resolution, stop])
         .toArray()
+
+        console.log(this.api.objectKeysToColumns(data, 'data'))
 
       return this.api.objectKeysToColumns(data, 'data')
     }

@@ -82,7 +82,7 @@ export class ETerminDashboardRender implements OnInit {
   data: any;
   currentUser: any;
   colorScheme: any;
-  allPublicFields = ["stats_angebot", "dringlichkeit", "status_dringlichkeit_combined"]
+  allPublicFields = ["stats_angebot", "stats_anfrage", "dringlichkeit", "status_dringlichkeit_combined"]
   summaryInfo: any = []
   professionGroup: any = ''
   appointmentOffer: any = []

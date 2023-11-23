@@ -106,7 +106,7 @@ export class ETerminDashboardRender implements OnInit {
       firstTile: "Terminanfragen",
       firstTileColor: "#EB9F47",
       secondTile: "unvermittelte Terminanfragen",
-      secondTileColor: "#E5A75E",
+      secondTileColor: "#EB9F47",
       thirdTile: "Termine vermittelt",
       thirdTileColor: "#C8D42B",
     },
@@ -118,7 +118,7 @@ export class ETerminDashboardRender implements OnInit {
       secondTile: "fristgerecht vermittelte Termine",
       secondTileColor: "#C8D42B",
       thirdTile: "unvermittelte Termine",
-      thirdTileColor: "#F75F7C",
+      thirdTileColor: "#FF879E",
     },
   ]
   selectedContainerStringObject: any

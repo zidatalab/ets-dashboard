@@ -60,38 +60,37 @@ export class MakeETerminData {
     // console.log(appointments)
 
     if (appointments) {
-      let dataAvailable = 0
-      let dataBooked = 0
+      let dataAvailableOffer = 0
+      let dataBookedAppointments = 0
       let dataUnarrangedAppointments = 0
 
       for (const item of appointments) {
         if (item.angebot_group_status === "available") {
           console.log('avail', item)
           appointmentOffer.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
-          dataAvailable += item.angebot_Anzahl
+          dataAvailableOffer += item.angebot_Anzahl
         }
         
         if (item.angebot_group_status === 'booked') {
           console.log('booked', item)
           appointmentBooked.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
-          dataBooked += item.angebot_Anzahl
+          dataBookedAppointments += item.angebot_Anzahl
         }
 
         if (item.angebot_group_status === 'unavailable') {
           appointmentUnarranged.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
         }
 
-        dataUnarrangedAppointments = dataAvailable - dataBooked
+        dataUnarrangedAppointments = dataAvailableOffer - dataBookedAppointments
       }
 
       summaryInfo['Anzahl Terminanfragen'] = 0
       summaryInfo['Anzahl nicht vermittelte Terminanfragen'] = 0
       summaryInfo['Anzahl vermittelte Terminanfragen'] = 0
       summaryInfo['Anzahl fristgerecht vermittelt'] = 0
-      summaryInfo['Anzahl Angebot'] = dataAvailable
+      summaryInfo['Anzahl Angebot'] = dataAvailableOffer
       summaryInfo['Anzahl nicht vermittelt Termine'] = dataUnarrangedAppointments
-      summaryInfo['Anzahl Termine vermittelt'] = dataBooked
-
+      summaryInfo['Anzahl Termine vermittelt'] = dataBookedAppointments
 
       appointments.appointmentByProfessionGroups = this.api.groupBySum(appointments, 'fg', 'test', 'Anzahl')
       appointments.appointmentOffer = this.flattenArray(appointmentOffer)

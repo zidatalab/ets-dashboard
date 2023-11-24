@@ -82,7 +82,7 @@ export class ETerminDashboardRender implements OnInit {
   data: any;
   currentUser: any;
   colorScheme: any;
-  allPublicFields = ["stats_angebot", "stats_anfrage", "dringlichkeit", "status_dringlichkeit_combined"]
+  allPublicFields = ["stats_angebot", "stats_stats_nachfrage", "dringlichkeit", "status_dringlichkeit_combined"]
   summaryInfo: any = []
   professionGroup: any = ''
   appointmentOffer: any = []
@@ -185,7 +185,6 @@ export class ETerminDashboardRender implements OnInit {
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
 
     if (result) {
-      console.log(result)
       if (result.stats_angebot) {
         this.summaryInfo = result.stats_angebot.summaryInfo
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal

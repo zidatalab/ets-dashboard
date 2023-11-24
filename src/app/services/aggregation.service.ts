@@ -35,7 +35,8 @@ export class AggregationService {
         toPush['month'] = item['Monat'];
         toPush['calenderWeek'] = fieldItem['KW'] ? fieldItem['KW'] : '';
         // ATTENTION
-        toPush['date'] = fieldItem['Datum'] ? fieldItem['Datum'] : fieldItem['angebot_reference_date']
+        if(fieldname === 'stats_angebot') toPush['date'] = fieldItem['angebot_reference_date']
+        if(fieldname === 'stats_nachfrage') toPush['date'] = fieldItem['nachfrage_reference_date']
         delete fieldItem['KW'];
         toPush['data'] = fieldItem;
         toPush['indicator'] = fieldname;

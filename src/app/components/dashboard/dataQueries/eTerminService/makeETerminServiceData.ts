@@ -47,8 +47,8 @@ export class MakeETerminData {
      * data aggregation condionally depending on theme selection
      */
 
-    let appointments: any = await this.db.listData(
-      'stats_angebot',
+    let dbData: any = await this.db.listData(
+      ['stats_angebot', 'stats_nachfrage'],
       'KV',
       levelSettings['levelValues'],
       levelSettings['start'],
@@ -57,22 +57,22 @@ export class MakeETerminData {
       levelSettings["resolution"]
     )
 
-    // console.log(appointments)
+    console.log(levelSettings)
+    console.log(dbData)
 
-    if (appointments) {
+    if (dbData) {
+      console.log(dbData['nachfrage_Anzahl'])
       let dataAvailableOffer = 0
       let dataBookedAppointments = 0
       let dataUnarrangedAppointments = 0
 
-      for (const item of appointments) {
+      for (const item of dbData) {
         if (item.angebot_group_status === "available") {
-          console.log('avail', item)
           appointmentOffer.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
           dataAvailableOffer += item.angebot_Anzahl
         }
         
         if (item.angebot_group_status === 'booked') {
-          console.log('booked', item)
           appointmentBooked.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
           dataBookedAppointments += item.angebot_Anzahl
         }
@@ -84,24 +84,24 @@ export class MakeETerminData {
         dataUnarrangedAppointments = dataAvailableOffer - dataBookedAppointments
       }
 
-      summaryInfo['Anzahl Terminanfragen'] = 0
-      summaryInfo['Anzahl nicht vermittelte Terminanfragen'] = 0
-      summaryInfo['Anzahl vermittelte Terminanfragen'] = 0
+      summaryInfo['Anzahl Terminnachfrage'] = 0
+      summaryInfo['Anzahl nicht vermittelte Terminnachfrage'] = 0
+      summaryInfo['Anzahl vermittelte Terminnachfrage'] = 0
       summaryInfo['Anzahl fristgerecht vermittelt'] = 0
       summaryInfo['Anzahl Angebot'] = dataAvailableOffer
       summaryInfo['Anzahl nicht vermittelt Termine'] = dataUnarrangedAppointments
       summaryInfo['Anzahl Termine vermittelt'] = dataBookedAppointments
 
-      appointments.appointmentByProfessionGroups = this.api.groupBySum(appointments, 'fg', 'test', 'Anzahl')
-      appointments.appointmentOffer = this.flattenArray(appointmentOffer)
-      appointments.appointmentBooked = this.flattenArray(appointmentBooked)
-      appointments.appointmentUnarranged = this.flattenArray(appointmentUnarranged)
+      dbData.appointmentByProfessionGroups = this.api.groupBySum(dbData, 'fg', 'test', 'Anzahl')
+      dbData.appointmentOffer = this.flattenArray(appointmentOffer)
+      dbData.appointmentBooked = this.flattenArray(appointmentBooked)
+      dbData.appointmentUnarranged = this.flattenArray(appointmentUnarranged)
     }
 
     return {
       summaryInfo: summaryInfo,
-      appointmentOfferTotal: appointments.appointmentOffer,
-      appointmentBookedTotal: appointments.appointmentBooked
+      appointmentOfferTotal: dbData.appointmentOffer,
+      appointmentBookedTotal: dbData.appointmentBooked
     }
   }
 

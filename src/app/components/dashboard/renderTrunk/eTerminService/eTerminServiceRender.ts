@@ -76,13 +76,13 @@ export class ETerminDashboardRender implements OnInit {
   ];
   resolutionOptions = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
-  themes = ["Gesamt", "Terminangebote", "Terminanfragen"]
+  themes = ["Gesamt", "Terminangebote", "Terminnachfrage"]
   urgencies = ["Akut", "Dringend", "Nicht Dringend", "Sonstige"]
   levelSettings: any = {};
   data: any;
   currentUser: any;
   colorScheme: any;
-  allPublicFields = ["stats_angebot", "stats_stats_nachfrage", "dringlichkeit", "status_dringlichkeit_combined"]
+  allPublicFields = ["stats_angebot", "stats_nachfrage", "dringlichkeit", "status_dringlichkeit_combined"]
   summaryInfo: any = []
   professionGroup: any = ''
   appointmentOffer: any = []
@@ -102,10 +102,10 @@ export class ETerminDashboardRender implements OnInit {
     },
     {
       key: "demand",
-      name: "Anfrage",
-      firstTile: "Terminanfragen",
+      name: "Nachfrage",
+      firstTile: "Terminnachfrage",
       firstTileColor: "#EB9F47",
-      secondTile: "unvermittelte Terminanfragen",
+      secondTile: "unvermittelte Terminnachfrage",
       secondTileColor: "#EB9F47",
       thirdTile: "Termine vermittelt",
       thirdTileColor: "#C8D42B",
@@ -113,7 +113,7 @@ export class ETerminDashboardRender implements OnInit {
     {
       key: "overview",
       name: "Gesamt",
-      firstTile: "unvermittelte Terminanfragen",
+      firstTile: "unvermittelte Terminnachfrage",
       firstTileColor: "#EB9F47",
       secondTile: "fristgerecht vermittelte Termine",
       secondTileColor: "#C8D42B",
@@ -164,24 +164,6 @@ export class ETerminDashboardRender implements OnInit {
    * fixing reactivity on change filter values
    */
   async setData(input: any = '') {
-    // if (this.levelSettings.thema === 'Gesamt') {
-    //   let _levelSettings = structuredClone(this.levelSettings)
-
-    //   for (let group of this.professionGroups) {
-    //     let test = []
-
-    //     if (group !== 'Gesamt') {
-    //       _levelSettings['fg'] = group
-    //       test = await this.queryETerminData.getQueryData(input, _levelSettings, this.allPublicFields)
-    //     }
-
-    //     console.log(test)
-
-    //     for (let item of test) {
-    //     }
-    //   }
-    // }
-
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
 
     if (result) {

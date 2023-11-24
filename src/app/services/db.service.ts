@@ -34,34 +34,46 @@ export class DBService {
       .equals([level, levelId, indicator, resolution]).first()
   }
 
-  async listData(indicator: any, level: any, levelId: any, start = '', stop = '', expand = true, resolution: any) {
+  async listData(indicators: any, level: any, levelId: any, start = '', stop = '', expand = true, resolution: any) {
     const search = {
-      indicator: indicator,
+      indicator: indicators,
       level: level,
       levelId: levelId
     }
 
     if (start !== '' && stop !== '' && expand) {
-      console.log(level, levelId, indicator, resolution, start, stop)
-      const data = await db.dataDB
-        .where('[level+levelId+indicator+timeframe+date]')
-        .between([level, levelId, indicator, resolution, start], [level, levelId, indicator, resolution, stop])
-        .toArray()
+      let data: any = []
 
-        console.log(this.api.objectKeysToColumns(data, 'data'))
+      if (indicators.length > 0) {
+        for (let indicator of indicators) {
+            data = await db.dataDB
+              .where('[level+levelId+indicator+timeframe+date]')
+              .between([level, levelId, indicator, resolution, start], [level, levelId, indicators, resolution, stop])
+              .toArray()
+            console.log(indicator)
+            console.log(data)
+        }
+
+        return this.api.objectKeysToColumns(data, 'data')
+      }
+
+      data = await db.dataDB
+        .where('[level+levelId+indicator+timeframe+date]')
+        .between([level, levelId, indicators, resolution, start], [level, levelId, indicators, resolution, stop])
+        .toArray()
 
       return this.api.objectKeysToColumns(data, 'data')
     }
 
     if (expand === true) {
       const data = await db.dataDB
-        .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicator, resolution]).toArray()
+        .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicators, resolution]).toArray()
       return this.api.objectKeysToColumns(data, 'data')
     }
 
     if (expand === false) {
       return db.dataDB
-        .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicator, resolution]).toArray();
+        .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicators, resolution]).toArray();
     };
 
     // subject of change for error handling

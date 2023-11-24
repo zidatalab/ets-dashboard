@@ -64,7 +64,7 @@
         Blick </span><span class="textThird">seit 2022</span>
     </div>
   </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Terminanfragen'">
+  <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
       <span class="textFirstDemand">Nachfrage</span><span class="textSecond"> auf einen
         Blick </span><span class="textThird">seit 2022</span>
@@ -90,26 +90,26 @@
           </app-key-data-container>
         </mat-grid-tile>
       </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Terminanfragen'">
+      <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl Terminanfragen']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl Terminnachfrage']"
             [title]="keyDataContainerStrings[1].firstTile" [color]="keyDataContainerStrings[1].firstTileColor">
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminanfragen']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminnachfrage']"
             [title]="keyDataContainerStrings[1].secondTile" [color]="keyDataContainerStrings[1].secondTileColor">
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl vermittelte Terminanfragen']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl vermittelte Terminnachfrage']"
             [title]="keyDataContainerStrings[1].thirdTile" [color]="keyDataContainerStrings[1].thirdTileColor">
           </app-key-data-container>
         </mat-grid-tile>
       </div>
       <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminanfragen']"
+          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminnachfrage']"
             [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[2].firstTileColor">
           </app-key-data-container>
         </mat-grid-tile>
@@ -138,7 +138,7 @@
         class="textThird">seit 2022</span>
     </div>
   </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Terminanfragen'">
+  <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
       <span class="textFirstDemand">Nachfrage</span><span class="textSecond">entwicklung </span><span
         class="textThird">seit 2022</span>
@@ -248,7 +248,7 @@
         class="textThird">bis 31.12.2023</span>
     </div>
   </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Terminanfragen'">
+  <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
       <span class="textSecond">ein Blick in die Zukunft der</span><span class="textFirstDemand"> Nachfrage </span><span
         class="textThird">bis 31.12.2023</span>

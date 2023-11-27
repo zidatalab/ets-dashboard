@@ -24,8 +24,12 @@
   box-sizing: border-box;
 }
 
+.mat-drawer {
+  background-color: #212121 !important;
+}
+
 .mat-list-item:hover {
-  background: rgba(0, 0, 0, 0.04);
+  background: #212121;
 }
 
 .mat-list-base {
@@ -46,6 +50,5 @@
 }
 
 .active {
-  background: #94a5ff33 !important;
   border-left: 4px solid #3f51b5;
 }

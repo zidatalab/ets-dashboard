@@ -34,32 +34,13 @@ export class DBService {
       .equals([level, levelId, indicator, resolution]).first()
   }
 
-  async listData(indicators: any, level: any, levelId: any, start = '', stop = '', expand = true, resolution: any) {
-    const search = {
-      indicator: indicators,
-      level: level,
-      levelId: levelId
-    }
-
+  async listData(indicator: any, level: any, levelId: any, start = '', stop = '', expand = true, resolution: any) {
     if (start !== '' && stop !== '' && expand) {
       let data: any = []
 
-      if (indicators.length > 0) {
-        for (let indicator of indicators) {
-            data = await db.dataDB
-              .where('[level+levelId+indicator+timeframe+date]')
-              .between([level, levelId, indicator, resolution, start], [level, levelId, indicators, resolution, stop])
-              .toArray()
-            console.log(indicator)
-            console.log(data)
-        }
-
-        return this.api.objectKeysToColumns(data, 'data')
-      }
-
       data = await db.dataDB
         .where('[level+levelId+indicator+timeframe+date]')
-        .between([level, levelId, indicators, resolution, start], [level, levelId, indicators, resolution, stop])
+        .between([level, levelId, indicator, resolution, start], [level, levelId, indicator, resolution, stop])
         .toArray()
 
       return this.api.objectKeysToColumns(data, 'data')
@@ -67,13 +48,13 @@ export class DBService {
 
     if (expand === true) {
       const data = await db.dataDB
-        .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicators, resolution]).toArray()
+        .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicator, resolution]).toArray()
       return this.api.objectKeysToColumns(data, 'data')
     }
 
     if (expand === false) {
       return db.dataDB
-        .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicators, resolution]).toArray();
+        .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicator, resolution]).toArray();
     };
 
     // subject of change for error handling

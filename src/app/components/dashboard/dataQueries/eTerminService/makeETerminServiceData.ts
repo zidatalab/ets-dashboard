@@ -30,13 +30,17 @@ export class MakeETerminData {
      * for data structurization and aggregation see Teams Convo 
      */
     if (input === 'stats_angebot') {
-      return await this.createStats(this.levelSettings)
+      return await this.createStats(this.levelSettings, input)
+    }
+
+    if (input === 'stats_nachfrage') {
+      return await this.createStats(this.levelSettings, input)
     }
 
     return
   }
 
-  async createStats(levelSettings: any) {
+  async createStats(levelSettings: any, input: any) {
     let appointmentOffer = []
     let appointmentBooked = []
     let appointmentUnarranged = []
@@ -48,7 +52,7 @@ export class MakeETerminData {
      */
 
     let dbData: any = await this.db.listData(
-      ['stats_angebot', 'stats_nachfrage'],
+      input,
       'KV',
       levelSettings['levelValues'],
       levelSettings['start'],
@@ -57,11 +61,7 @@ export class MakeETerminData {
       levelSettings["resolution"]
     )
 
-    console.log(levelSettings)
-    console.log(dbData)
-
     if (dbData) {
-      console.log(dbData['nachfrage_Anzahl'])
       let dataAvailableOffer = 0
       let dataBookedAppointments = 0
       let dataUnarrangedAppointments = 0

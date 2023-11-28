@@ -21,7 +21,7 @@ import { Menu } from '../models/menu.model'
 })
 
 export class LayoutComponent {
-  opened = true
+  opened = false
 
   toggle(): void {
     this.opened = !this.opened
@@ -33,15 +33,15 @@ export class LayoutComponent {
       icon: '',
       link: '/',
     },
-    {
-      title: 'Erweiterte Analysen',
-      icon: '',
-      link: '/private',
-    },
-    {
-      title: 'Adminbereich',
-      icon: '',
-      link: '/admin',
-    }
+    // {
+    //   title: 'Erweiterte Analysen',
+    //   icon: '',
+    //   link: '/private',
+    // },
+    // {
+    //   title: 'Adminbereich',
+    //   icon: '',
+    //   link: '/admin',
+    // }
   ]
 }

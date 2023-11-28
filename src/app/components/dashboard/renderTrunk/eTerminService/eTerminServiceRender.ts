@@ -167,8 +167,11 @@ export class ETerminDashboardRender implements OnInit {
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
 
     if (result) {
+      this.summaryInfo = {
+        ...result.stats_angebot.summaryInfo,
+        ...result.stats_nachfrage.summaryInfo
+      }
       if (result.stats_angebot) {
-        this.summaryInfo = result.stats_angebot.summaryInfo
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal
         this.appointmentBooked = result.stats_angebot.appointmentBookedTotal
         this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged

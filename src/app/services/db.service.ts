@@ -24,7 +24,7 @@ export class DBService {
       'indicator': indicator,
       'startDate': minDate,
       'stopDate': maxDate,
-      'timeframe': resolution
+      'timeframe': resolution,
     })
   }
 
@@ -61,7 +61,7 @@ export class DBService {
     return null
   }
 
-  async queryDataDates(level: any, levelId: any, indicator: any, resolution = 'monthly') {
+  async queryDataDates(level: any, levelId: any, indicator: any, resolution = 'weekly') {
     const result = await db.standDB
       .where('[level+levelId+indicator+timeframe]')
       .equals([level, levelId, indicator, resolution])
@@ -70,7 +70,7 @@ export class DBService {
     return result
   }
 
-  deleteWhere(indicator: any, level: any, levelId: any, resolution = 'monthly', start = '', stop = '') {
+  deleteWhere(indicator: any, level: any, levelId: any, resolution = 'weekly', start = '', stop = '') {
     const search = {
       indicator: indicator,
       level: level,
@@ -95,7 +95,7 @@ export class DBService {
     return db.dataDB.bulkPut(array)
   }
 
-  async addData(level: any, levelId: any, year: any, month: any, calenderWeek: any, date: any, indicator: any, data: any, resolution: any, KM6Versicherte: any, BEVSTAND: any) {
+  async addData(level: any, levelId: any, year: any, month: any, calenderWeek: any, date: any, indicator: any, data: any, resolution: any) {
     return await db.dataDB
       .put({
         indicator: indicator,
@@ -107,8 +107,6 @@ export class DBService {
         date: date,
         data: data,
         timeframe: resolution,
-        KM6Versicherte: KM6Versicherte,
-        BEVSTAND: BEVSTAND
       })
   }
 

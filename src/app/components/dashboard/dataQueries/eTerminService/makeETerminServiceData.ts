@@ -48,12 +48,18 @@ export class MakeETerminData {
       levelSettings['start'],
       levelSettings['stop'],
       true,
-      levelSettings["resolution"]
+      levelSettings["resolution"],
     )
     let summaryInfo: any = []
-    let result : any = []
+    let result: any = []
 
     if (dbData) {
+      if (levelSettings['urgency'] !== -1) {
+        dbData = dbData.filter((item: any) => {
+          return item.angebot_group_dringlichkeit === levelSettings["urgency"]
+        })
+      }
+
       if (input === 'stats_angebot') {
         const resAppointmentOffer = []
         const resAppointmentBooked = []
@@ -84,26 +90,26 @@ export class MakeETerminData {
         summaryInfo['Anzahl Angebot'] = dataAvailableOffer
         summaryInfo['Anzahl nicht vermittelt Termine'] = dataUnarrangedAppointments
         summaryInfo['Anzahl Termine vermittelt'] = dataBookedAppointments
-        
+
         result.appointmentByProfessionGroups = this.api.groupBySum(dbData, 'fg', 'test', 'Anzahl')
         result.appointmentOffer = this.flattenArray(resAppointmentOffer)
         result.appointmentBooked = this.flattenArray(resAppointmentBooked)
         result.appointmentUnarranged = this.flattenArray(resAppointmentUnarranged)
       }
-      
+
       if (input === 'stats_nachfrage') {
         const resAppointmentDemand = []
         const resAppointmentDemandUnarranged = []
         let dataAppointmentDemand = 0
         let dataAppointmentDemandUnarranged = 0
 
-        for(const item of dbData) {
-          if(item.nachfrage_group_result === "WithDemandBasedSlotsAvailable") {
+        for (const item of dbData) {
+          if (item.nachfrage_group_result === "WithDemandBasedSlotsAvailable") {
             resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: item['nachfrage_reference_date'] })
             dataAppointmentDemand += item.nachfrage_Anzahl
           }
 
-          if(item.nachfrage_group_result === "noDemandBasedSlotsAvailable") {
+          if (item.nachfrage_group_result === "noDemandBasedSlotsAvailable") {
             resAppointmentDemandUnarranged.push({ total: item['nachfrage_Anzahl'], date: item['nachfrage_reference_date'] })
             dataAppointmentDemandUnarranged += item.nachfrage_Anzahl
           }

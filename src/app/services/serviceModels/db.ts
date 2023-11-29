@@ -10,8 +10,6 @@ export class DataItem {
   indicator: string = '';
   timeframe: string = '';
   data:any;
-  KM6Versicherte: any
-  BEVSTAND: any
 }
 
 export class StandItem {

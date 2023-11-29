@@ -77,7 +77,7 @@ export class ETerminDashboardRender implements OnInit {
   resolutionOptions = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Gesamt", "Terminangebote", "Terminnachfrage"]
-  urgencies = ["Akut", "Dringend", "Nicht Dringend", "Sonstige"]
+  urgencies = [{ key: "Akut", value: "AKUT"}, { key: "Dringend", value: "DRINGEND"}, { key: "Nicht Dringend", value: "NICHT_DRINGEND"}, { key: "Sonstige", value: 'else'}]
   levelSettings: any = {};
   data: any;
   currentUser: any;
@@ -171,6 +171,7 @@ export class ETerminDashboardRender implements OnInit {
         ...result.stats_angebot.summaryInfo,
         ...result.stats_nachfrage.summaryInfo
       }
+      
       if (result.stats_angebot) {
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal
         this.appointmentBooked = result.stats_angebot.appointmentBookedTotal

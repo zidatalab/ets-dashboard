@@ -45,9 +45,9 @@
     </ng-template>
     <h3>Dringlichkeit</h3>
     <mat-chip-listbox>
-      <mat-chip-option (click)="this.setLevelData('urgency',item);" *ngFor="let item of this.urgencies" color="primary"
-        [selected]="(this.levelSettings['urgency']==item)">
-        {{ item }}
+      <mat-chip-option (click)="this.setLevelData('urgency',item.value);" *ngFor="let item of this.urgencies" color="primary"
+        [selected]="(this.levelSettings['urgency']==item.value)">
+        {{ item.key }}
       </mat-chip-option>
     </mat-chip-listbox>
     <h3>Zeitraum</h3>

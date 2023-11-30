@@ -354,6 +354,8 @@ export class PlotContainerComponent implements OnInit {
       type: type,
     }
 
+    console.log(trace)
+
     if (this.plotType === "stackedarea") {
       trace['stackgroup'] = "one";
     }

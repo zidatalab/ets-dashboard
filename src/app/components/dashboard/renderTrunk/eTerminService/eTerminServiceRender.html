@@ -159,7 +159,7 @@
               [showlegend]="false" [outcomes]="['Anzahl']" [custommargins]="{ l: 50, r: 50, b: 150, t: 0 }"
               plottype="stackedbar" [colorby]="'POCsmed_text'">
             </app-plot> -->
-              <app-plot-container title="Terminangebot und Inanspruchnahme" [data]="appointmentOffer" [xValue]="'date'"
+              <app-plot-container title="Terminangebot und Inanspruchnahme" [data]="appointmentOffer" [xValue]="'date'" [showLegend]="false"
                 [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
               </app-plot-container>
             </mat-card-content>
@@ -175,8 +175,8 @@
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="dashboard-card-content">
-              <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'date'"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+              <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'angebot_reference_date'"
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area" xtickformat="%d.%m.<br>%Y">
               </app-plot-container>
             </mat-card-content>
           </mat-card>

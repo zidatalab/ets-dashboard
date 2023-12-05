@@ -171,12 +171,25 @@
           <mat-card class="dashboard-card">
             <mat-card-header>
               <mat-card-title>
+                Terminangebot und Inanspruchnahme
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="dashboard-card-content">
+              <app-line-chart [data]="constructChartData(appointmentOffer)"></app-line-chart>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+        <!-- <mat-grid-tile colspan="1" rowspan="2">
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>
                 Terminangebot Insgesamt
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="dashboard-card-content">
+            {{ appointmentOffer | json}}
               <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'angebot_reference_date'"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area" xtickformat="%d.%m.<br>%Y">
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area" xtickformat="'%d.%m.<br>%Y'">
               </app-plot-container>
             </mat-card-content>
           </mat-card>
@@ -190,7 +203,7 @@
             </mat-card-header>
             <mat-card-content class="dashboard-card-content">
               <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
+                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area" xTickFormat="%d.%m.<br>%Y">
               </app-plot-container>
             </mat-card-content>
           </mat-card>
@@ -208,7 +221,7 @@
               </app-plot-container>
             </mat-card-content>
           </mat-card>
-        </mat-grid-tile>
+        </mat-grid-tile> -->
       </div>
       <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
         <mat-grid-tile colspan="1" rowspan="2">

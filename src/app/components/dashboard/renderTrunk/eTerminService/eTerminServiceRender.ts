@@ -181,6 +181,22 @@ export class ETerminDashboardRender implements OnInit {
     }
   }
 
+  constructChartData(data:any) {
+    const result : any = {
+      labels: [],
+      datasets: [ {
+        data: []
+      }]
+    }
+    
+    for(let item of data) {
+      result.labels.push(item['date'])
+      result.datasets[0].data.push(item['total'])
+    }
+
+    return result
+  }
+
   setKeyDataString() {
     let [res] = this.keyDataContainerStrings.filter((item) => {
       return item.name === this.levelSettings["thema"]

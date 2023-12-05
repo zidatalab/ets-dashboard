@@ -12,7 +12,7 @@ import { ApiService } from 'src/app/services/api.service';
 
 export class PlotContainerComponent implements OnInit {
   @Input() data: any;
-  @Input() xValue : string = '';
+  @Input() xValue: string = '';
   @Input() colorBy: string = '';
   @Input() outcomes: any;
   @Input() outcomeLabels: any = [];
@@ -35,26 +35,26 @@ export class PlotContainerComponent implements OnInit {
   @Input() plotSubtitle = "";
   @Input() plotCaption = "";
   @Input() yTicks = 8;
-  @Input() xTickFormat : any = "";
+  @Input() xTickFormat: any = "";
   @Input() xTitle = "";
   @Input() yTitle = "";
   @Input() id = "";
   @Input() divId = "";
   @Input() fontFamily = "Lato, sans-serif";
   @Input() fontSize = ".85rem";
-  @Input() fontColor : any = "black";
+  @Input() fontColor: any = "black";
   @Input() legendBackgroundColor = 'ffffff20';
   @Input() legendXPos = 'right';
   @Input() legendYpos = 1;
-  @Input() title : any = ''
-  @Input() isAbsoluteNumbers : boolean = false
+  @Input() title: any = ''
+  @Input() isAbsoluteNumbers: boolean = false
   @Output() clicked = new EventEmitter<string>();
   @Output() emitAbsoluteNumber = new EventEmitter<string>()
-  
+
   constructor(
     private api: ApiService
-    ) { }
-    
+  ) { }
+
   plotLayout: any
   plotData: any
   mainConfig: any
@@ -92,7 +92,7 @@ export class PlotContainerComponent implements OnInit {
     this.clickedValue = input
   }
 
-  emitIsAbsoluteNumber(event : any) {
+  emitIsAbsoluteNumber(event: any) {
     this.emitAbsoluteNumber.emit(event.checked)
   }
 
@@ -157,7 +157,6 @@ export class PlotContainerComponent implements OnInit {
         margin: { l: 50, r: 50, b: 0, t: 50 },
         paper_bgcolor: "transparent", plot_bgcolor: "transparent",
       };
-
 
       plotData['type'] = "heatmap";
       plotData['colorscale'] = [
@@ -263,7 +262,7 @@ export class PlotContainerComponent implements OnInit {
       this.plotLayout['showlegend'] = true;
     }
 
-    if (this.xTickFormat != '') {
+    if (this.xTickFormat !== '') {
       this.plotLayout['xaxis']['tickformat'] = this.xTickFormat;
     }
 
@@ -304,7 +303,7 @@ export class PlotContainerComponent implements OnInit {
         plotData = this.api.sortArray(plotData, this.outcomes[0]);
       }
 
-      if (this.sort) {
+      if (this.xSort) {
         plotData = this.api.sortArray(plotData, this.xValue);
       }
 
@@ -353,8 +352,6 @@ export class PlotContainerComponent implements OnInit {
       name: name,
       type: type,
     }
-
-    console.log(trace)
 
     if (this.plotType === "stackedarea") {
       trace['stackgroup'] = "one";

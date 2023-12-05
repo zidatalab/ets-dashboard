@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, importProvidersFrom  } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
@@ -29,12 +29,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KeyDataContainerComponent } from './components/key-data-container/key-data-container.component';
 import { ETerminDashboardRender } from './components/dashboard/renderTrunk/eTerminService/eTerminServiceRender';
 import { DashComponent } from './components/dash_comp/dash.component';
+import { LineChartComponent } from './components/plots/line-chart/line-chart.component';
+
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
+import { NgChartsModule } from 'ng2-charts';
 
 PlotlyModule.plotlyjs = PlotlyJS
 
@@ -87,7 +90,8 @@ const routes: Routes = [
     PlotContainerComponent,
     KeyDataContainerComponent,
     ETerminDashboardRender,
-    DashComponent
+    DashComponent,
+    LineChartComponent
   ],
   imports: [
     CommonModule,
@@ -105,6 +109,7 @@ const routes: Routes = [
     MatIconModule,
     MatButtonModule,
     LayoutModule,
+    NgChartsModule,
   ],
   providers: [
     {

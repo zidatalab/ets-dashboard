@@ -1,19 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter, ContentChild, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, } from '@angular/core';
 
 @Component({
-  selector: 'app-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.scss']
+  selector: 'app-bar-chart',
+  templateUrl: './bar-chart.component.html',
+  styleUrls: ['./bar-chart.component.scss']
 })
-export class LineChartComponent {
+
+export class BarChartComponent {
   // public lineChartOptions: ChartOptions<'line'> = {
   //   responsive: true
   // };
-
+  
   @Input() data: any = { }
   @Input() options: any = {
     scaleShowVerticalLines: false,
-    responsive: true,
+    responsive: true
   }
   @Input() labels: any = []
   @Input() hasLegend : boolean = false

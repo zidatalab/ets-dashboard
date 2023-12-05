@@ -89,6 +89,8 @@ export class ETerminDashboardRender implements OnInit {
   appointmentBooked: any = []
   appointmentUnarranged: any = []
   appointmentByProfessionGroups: any = []
+  appointmentDemandUnarranged: any = []
+  appointmentDemandTotal: any = []
   keyDataContainerStrings = [
     {
       key: "offer",
@@ -178,21 +180,40 @@ export class ETerminDashboardRender implements OnInit {
         this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged
         this.appointmentByProfessionGroups = result.stats_angebot.appointmentByProfessionGroups
       }
+
+      if(result.stats_nachfrage) {
+        this.appointmentDemandTotal = result.stats_nachfrage.appointmentDemandTotal
+        this.appointmentDemandUnarranged = result.stats_nachfrage.appointmentDemandUnarranged
+      }
     }
   }
 
-  constructChartData(data:any) {
+  /**
+   * 
+   * @param data array of objects
+   * @param style byDate; byTheme
+   * @returns 
+   */
+  constructChartData(data:any, style : any) {
     const result : any = {
       labels: [],
+      fill: true,
       datasets: [ {
         data: []
       }]
     }
-    
-    for(let item of data) {
-      result.labels.push(item['date'])
-      result.datasets[0].data.push(item['total'])
+
+    if(style === 'byDate') {
+      for(let item of data) {
+        result.labels.push(item['date'])
+        result.datasets[0].data.push(item['total'])
+      }
     }
+
+    if(style === 'byTheme') {
+      console.log(data)
+    }
+    
 
     return result
   }

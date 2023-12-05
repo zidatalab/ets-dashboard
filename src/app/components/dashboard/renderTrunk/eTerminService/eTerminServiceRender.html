@@ -155,13 +155,7 @@
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="dashboard-card-content">
-              <!-- example <app-plot [(data)]="this.decisions_pocvsttt" [xvalue]="'TTTsmed_text'" [fontcolor]="'white'"
-              [showlegend]="false" [outcomes]="['Anzahl']" [custommargins]="{ l: 50, r: 50, b: 150, t: 0 }"
-              plottype="stackedbar" [colorby]="'POCsmed_text'">
-            </app-plot> -->
-              <app-plot-container title="Terminangebot und Inanspruchnahme" [data]="appointmentOffer" [xValue]="'date'" [showLegend]="false"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
-              </app-plot-container>
+              <app-bar-chart [data]="constructChartData(appointmentByProfessionGroups, 'byTheme')"></app-bar-chart>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>
@@ -171,11 +165,23 @@
           <mat-card class="dashboard-card">
             <mat-card-header>
               <mat-card-title>
-                Terminangebot und Inanspruchnahme
+                Terminangebot Insgesamt
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="dashboard-card-content">
-              <app-line-chart [data]="constructChartData(appointmentOffer)"></app-line-chart>
+              <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate')"></app-line-chart>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="2">
+          <mat-card class="dashboard-card">
+            <mat-card-header>
+              <mat-card-title>
+                Termine vermittelt
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="dashboard-card-content">
+              <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate')"></app-line-chart>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>
@@ -183,42 +189,11 @@
           <mat-card class="dashboard-card">
             <mat-card-header>
               <mat-card-title>
-                Terminangebot Insgesamt
+                nicht vermittelte Termine
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="dashboard-card-content">
-            {{ appointmentOffer | json}}
-              <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'angebot_reference_date'"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area" xtickformat="'%d.%m.<br>%Y'">
-              </app-plot-container>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="1" rowspan="2">
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>
-                Terminangebot vermittelt
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="dashboard-card-content">
-              <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area" xTickFormat="%d.%m.<br>%Y">
-              </app-plot-container>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="1" rowspan="2">
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>
-                Terminangebot nicht vermittelt
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="dashboard-card-content">
-              <app-plot-container title="Terminangebot vermittelt" [data]="appointmentUnarranged" [xValue]="'date'"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-              </app-plot-container>
+              <app-line-chart [data]="constructChartData(appointmentUnarranged, 'byDate')"></app-line-chart>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile> -->
@@ -232,9 +207,7 @@
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="dashboard-card-content">
-              <app-plot-container title="Terminangebot Gesamt" [data]="appointmentOffer" [xValue]="'date'"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="stackedbar">
-              </app-plot-container>
+              <app-line-chart [data]="constructChartData(appointmentDemandTotal, 'byDate')"></app-line-chart>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>
@@ -242,13 +215,11 @@
           <mat-card class="dashboard-card">
             <mat-card-header>
               <mat-card-title>
-                Terminangebot vermittelt
+                Terminangebot nicht vermittelt
               </mat-card-title>
             </mat-card-header>
             <mat-card-content class="dashboard-card-content">
-              <app-plot-container title="Terminangebot vermittelt" [data]="appointmentBooked" [xValue]="'date'"
-                [outcomes]="['total']" [xSort]="true" [fontColor]="'white'" plotType="area">
-              </app-plot-container>
+              <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate')"></app-line-chart>
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>

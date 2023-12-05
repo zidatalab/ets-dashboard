@@ -38,6 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgChartsModule } from 'ng2-charts';
+import { BarChartComponent } from './components/plots/bar-chart/bar-chart.component';
 
 PlotlyModule.plotlyjs = PlotlyJS
 
@@ -91,7 +92,8 @@ const routes: Routes = [
     KeyDataContainerComponent,
     ETerminDashboardRender,
     DashComponent,
-    LineChartComponent
+    LineChartComponent,
+    BarChartComponent
   ],
   imports: [
     CommonModule,

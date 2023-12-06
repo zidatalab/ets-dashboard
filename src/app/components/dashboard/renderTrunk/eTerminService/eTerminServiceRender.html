@@ -1,4 +1,4 @@
-<div style="padding: 0 20px;">
+<div class="dashboard-container" style="padding: 0 20px;">
   <header>
     <div class="head-container">
       <h2>eTS Reporting</h2>
@@ -144,7 +144,7 @@
     </div>
   </div>
   <div class="grid-container">
-    <div *ngIf="this.levelSettings['thema'] === 'Gesamt'"
+    <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Gesamt'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
       <div class="grid-tile">
         <h3>Terminangebot und Inanspruchnahme</h3>
@@ -156,7 +156,7 @@
         <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate')"></app-line-chart>
       </div>
     </div>
-    <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'"
+    <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminangebote'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
       <div class="grid-tile">
         <h3>Terminangebot Insgesamt</h3>
@@ -167,7 +167,7 @@
         <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate')"></app-line-chart>
       </div>
     </div>
-    <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'"
+    <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
       <div class="grid-tile">
         <h3>Terminnachfrage Insgesamt</h3>

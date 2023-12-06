@@ -3,6 +3,12 @@ import { PlotlyService } from 'angular-plotly.js';
 
 import { ApiService } from 'src/app/services/api.service';
 
+/**
+ * @deprecated
+ * !!! DEPRECATED !!!
+ * Do not use - please see folder "plots" working with chartsjs
+ */
+
 @Component({
   selector: 'app-plot-container',
   templateUrl: './plot-container.component.html',

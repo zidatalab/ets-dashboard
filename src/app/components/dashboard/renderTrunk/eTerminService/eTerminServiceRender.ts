@@ -74,10 +74,10 @@ export class ETerminDashboardRender implements OnInit {
     'Schleswig-Holstein',
     'Thüringen'
   ];
-  resolutionOptions = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
+  resolutionOptions = [{ key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Gesamt", "Terminangebote", "Terminnachfrage"]
-  urgencies = [ { key: "Gesamt", value: -1}, { key: "Akut", value: "AKUT"}, { key: "Dringend", value: "DRINGEND"}, { key: "Nicht Dringend", value: "NICHT_DRINGEND"},]
+  urgencies = [{ key: "Gesamt", value: -1 }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
   data: any;
   currentUser: any;
@@ -115,15 +115,17 @@ export class ETerminDashboardRender implements OnInit {
     {
       key: "overview",
       name: "Gesamt",
-      firstTile: "unvermittelte Terminnachfrage",
+      firstTile: "nicht vermittelte Terminnachfrage",
       firstTileColor: "#EB9F47",
       secondTile: "fristgerecht vermittelte Termine",
       secondTileColor: "#C8D42B",
-      thirdTile: "unvermittelte Termine",
+      thirdTile: "nicht vermittelte Termine",
       thirdTileColor: "#FF879E",
     },
   ]
   selectedContainerStringObject: any
+  dataYearSince: any = ''
+  dataDateUntil: any = ''
 
   async ngOnInit(): Promise<void> {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'weekly', 'thema': 'Gesamt', 'urgency': -1 }
@@ -173,17 +175,26 @@ export class ETerminDashboardRender implements OnInit {
         ...result.stats_angebot.summaryInfo,
         ...result.stats_nachfrage.summaryInfo
       }
-      
+
+      this.dataYearSince = result.stats_angebot.dataYearSince
+      this.dataDateUntil = result.stats_angebot.dataDateUntil
+
       if (result.stats_angebot) {
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal
         this.appointmentBooked = result.stats_angebot.appointmentBookedTotal
         this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged
         this.appointmentByProfessionGroups = result.stats_angebot.appointmentByProfessionGroups
+
+        this.dataYearSince = result.stats_angebot.dataYearSince
+        this.dataDateUntil = result.stats_angebot.dataDateUntil
       }
 
-      if(result.stats_nachfrage) {
+      if (result.stats_nachfrage) {
         this.appointmentDemandTotal = result.stats_nachfrage.appointmentDemandTotal
         this.appointmentDemandUnarranged = result.stats_nachfrage.appointmentDemandUnarranged
+
+        this.dataYearSince = result.stats_nachfrage.dataYearSince
+        this.dataDateUntil = result.stats_nachfrage.dataDateUntil
       }
     }
   }
@@ -191,29 +202,34 @@ export class ETerminDashboardRender implements OnInit {
   /**
    * 
    * @param data array of objects
-   * @param style byDate; byTheme
+   * @param style byDate; byTheme; byPie
    * @returns 
    */
-  constructChartData(data:any, style : any) {
-    const result : any = {
+  constructChartData(data: any, style: any) {
+    const result: any = {
       labels: [],
       fill: true,
-      datasets: [ {
+      datasets: [{
         data: []
-      }]
+      }],
     }
 
-    if(style === 'byDate') {
-      for(let item of data) {
+    if (style === 'byDate') {
+      for (let item of data) {
         result.labels.push(item['date'])
         result.datasets[0].data.push(item['total'])
       }
     }
 
-    if(style === 'byTheme') {
-      console.log(data)
+    if (style === 'byTheme') {
     }
-    
+
+    if (style === 'byPie') {
+      for (let [key, item] of Object.entries(data)) {
+        result.labels.push(key)
+        result.datasets[0].data.push(item)
+      }
+    }
 
     return result
   }

@@ -60,6 +60,9 @@ export class MakeETerminData {
         })
       }
 
+      result.dataYearSince = dbData[0].year
+      result.dataDateUntil = dbData[0].date
+
       if (input === 'stats_angebot') {
         const resAppointmentOffer = []
         const resAppointmentBooked = []
@@ -95,6 +98,9 @@ export class MakeETerminData {
         result.appointmentOffer = this.flattenArray(resAppointmentOffer)
         result.appointmentBooked = this.flattenArray(resAppointmentBooked)
         result.appointmentUnarranged = this.flattenArray(resAppointmentUnarranged)
+
+        result.dataYearSince = dbData[0].year
+        result.dataDateUntil = dbData[0].date
       }
 
       if (input === 'stats_nachfrage') {
@@ -122,6 +128,9 @@ export class MakeETerminData {
 
         result.resAppointmentDemand = this.flattenArray(resAppointmentDemand)
         result.appointmentDemandUnarranged = this.flattenArray(resAppointmentDemandUnarranged)
+
+        result.dataYearSince = dbData[0].year
+        result.dataDateUntil = dbData[0].date
       }
     }
 
@@ -130,7 +139,9 @@ export class MakeETerminData {
       appointmentDemandTotal: result.resAppointmentDemand,
       appointmentDemandUnarranged: result.appointmentDemandUnarranged,
       appointmentOfferTotal: result.appointmentOffer,
-      appointmentBookedTotal: result.appointmentBooked
+      appointmentBookedTotal: result.appointmentBooked,
+      dataYearSince: result.dataYearSince,
+      dataDateUntil: result.dataDateUntil
     }
   }
 

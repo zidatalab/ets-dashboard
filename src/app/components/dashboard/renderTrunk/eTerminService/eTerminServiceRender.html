@@ -40,13 +40,13 @@
     <ng-template #elseBlock>
       <div class="textOverviewContainer">
         <span class="textFirst">eTS</span><span class="textSecond"> auf einen
-          Blick </span><span class="textThird">seit 2022</span>
+          Blick </span><span class="textThird">seit {{dataYearSince}}</span>
       </div>
     </ng-template>
     <h3>Dringlichkeit</h3>
     <mat-chip-listbox>
-      <mat-chip-option (click)="this.setLevelData('urgency',item.value);" *ngFor="let item of this.urgencies" color="primary"
-        [selected]="(this.levelSettings['urgency']==item.value)">
+      <mat-chip-option (click)="this.setLevelData('urgency',item.value);" *ngFor="let item of this.urgencies"
+        color="primary" [selected]="(this.levelSettings['urgency']==item.value)">
         {{ item.key }}
       </mat-chip-option>
     </mat-chip-listbox>
@@ -61,16 +61,15 @@
   <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
     <div class="textOverviewContainer">
       <span class="textFirstOffer">Angebote</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit 2022</span>
+        Blick </span><span class="textThird">seit {{dataYearSince}}</span>
     </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
       <span class="textFirstDemand">Nachfrage</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit 2022</span>
+        Blick </span><span class="textThird">seit {{dataYearSince}}</span>
     </div>
   </div>
-  <!-- <div>Loading...</div> -->
   <div class="grid-container">
     <mat-grid-list cols="3" rowHeight="200px">
       <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
@@ -129,113 +128,66 @@
   <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
     <div class="textOverviewContainer">
       <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit 2022</span>
+        Blick </span><span class="textThird">seit {{dataYearSince}}</span>
     </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
     <div class="textOverviewContainer">
       <span class="textFirstOffer">Angebots</span><span class="textSecond">entwicklung </span><span
-        class="textThird">seit 2022</span>
+        class="textThird">seit {{dataYearSince}}</span>
     </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
       <span class="textFirstDemand">Nachfrage</span><span class="textSecond">entwicklung </span><span
-        class="textThird">seit 2022</span>
+        class="textThird">seit {{dataYearSince}}</span>
     </div>
   </div>
   <div class="grid-container">
-    <mat-grid-list cols="2" rowHeight="350px">
-      <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
-        <mat-grid-tile colspan="1" rowspan="2">
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>
-                Terminangebot und Inanspruchnahme
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="dashboard-card-content">
-              <app-bar-chart [data]="constructChartData(appointmentByProfessionGroups, 'byTheme')"></app-bar-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
+    <div *ngIf="this.levelSettings['thema'] === 'Gesamt'"
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+      <div class="grid-tile">
+        <h3>Terminangebot und Inanspruchnahme</h3>
+        <app-pie-chart style="max-height: 320px;" [data]="constructChartData(this.summaryInfo, 'byPie')"
+          [hasLegend]="true"></app-pie-chart>
       </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
-        <mat-grid-tile colspan="1" rowspan="2">
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>
-                Terminangebot Insgesamt
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="dashboard-card-content">
-              <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate')"></app-line-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="1" rowspan="2">
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>
-                Termine vermittelt
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="dashboard-card-content">
-              <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate')"></app-line-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-        <!-- <mat-grid-tile colspan="1" rowspan="2">
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>
-                nicht vermittelte Termine
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="dashboard-card-content">
-              <app-line-chart [data]="constructChartData(appointmentUnarranged, 'byDate')"></app-line-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile> -->
+      <div class="grid-tile">
+        <h3>Terminangebot</h3>
+        <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate')"></app-line-chart>
       </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
-        <mat-grid-tile colspan="1" rowspan="2">
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>
-                Terminangebot Insgesamt
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="dashboard-card-content">
-              <app-line-chart [data]="constructChartData(appointmentDemandTotal, 'byDate')"></app-line-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="1" rowspan="2">
-          <mat-card class="dashboard-card">
-            <mat-card-header>
-              <mat-card-title>
-                Terminangebot nicht vermittelt
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content class="dashboard-card-content">
-              <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate')"></app-line-chart>
-            </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
+    </div>
+    <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'"
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+      <div class="grid-tile">
+        <h3>Terminangebot Insgesamt</h3>
+        <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate')"></app-line-chart>
       </div>
-    </mat-grid-list>
-  </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
-    <div class="textOverviewContainer">
-      <span class="textSecond">ein Blick in die Zukunft des</span><span class="textFirstOffer"> Angebots </span><span
-        class="textThird">bis 31.12.2023</span>
+      <div class="grid-tile">
+        <h3>Termine vermittelt</h3>
+        <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate')"></app-line-chart>
+      </div>
+    </div>
+    <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'"
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+      <div class="grid-tile">
+        <h3>Terminnachfrage Insgesamt</h3>
+        <app-line-chart [data]="constructChartData(appointmentDemandTotal, 'byDate')"></app-line-chart>
+      </div>
+      <div class="grid-tile">
+        <h3>Terminnachfrage nicht vermittelt</h3>
+        <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate')"></app-line-chart>
+      </div>
+    </div>
+    <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
+      <div class="textOverviewContainer">
+        <span class="textSecond">ein Blick in die Zukunft des</span><span class="textFirstOffer"> Angebots </span><span
+          class="textThird">bis {{dataDateUntil}}</span>
+      </div>
+    </div>
+    <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
+      <div class="textOverviewContainer">
+        <span class="textSecond">ein Blick in die Zukunft der</span><span class="textFirstDemand"> Nachfrage
+        </span><span class="textThird">bis {{dataDateUntil}}</span>
+      </div>
     </div>
   </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
-    <div class="textOverviewContainer">
-      <span class="textSecond">ein Blick in die Zukunft der</span><span class="textFirstDemand"> Nachfrage </span><span
-        class="textThird">bis 31.12.2023</span>
-    </div>
-  </div>
-</div>

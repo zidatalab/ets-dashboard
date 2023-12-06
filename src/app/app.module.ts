@@ -30,6 +30,8 @@ import { KeyDataContainerComponent } from './components/key-data-container/key-d
 import { ETerminDashboardRender } from './components/dashboard/renderTrunk/eTerminService/eTerminServiceRender';
 import { DashComponent } from './components/dash_comp/dash.component';
 import { LineChartComponent } from './components/plots/line-chart/line-chart.component';
+import { BarChartComponent } from './components/plots/bar-chart/bar-chart.component';
+import { PieChartComponent } from './components/plots/pie-chart/pie-chart.component';
 
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -38,7 +40,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgChartsModule } from 'ng2-charts';
-import { BarChartComponent } from './components/plots/bar-chart/bar-chart.component';
 
 PlotlyModule.plotlyjs = PlotlyJS
 
@@ -93,7 +94,8 @@ const routes: Routes = [
     ETerminDashboardRender,
     DashComponent,
     LineChartComponent,
-    BarChartComponent
+    BarChartComponent,
+    PieChartComponent
   ],
   imports: [
     CommonModule,

@@ -29,7 +29,7 @@ export class KeyDataContainerComponent implements OnInit {
     this.value = Number(this.value)
 
     if (!this.numberFormat) {
-      this.numberFormat = '1.1-1'
+      this.numberFormat = '1.0-0'
     }
 
     if (!this.mainColor) {

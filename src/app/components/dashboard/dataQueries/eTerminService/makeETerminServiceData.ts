@@ -60,7 +60,7 @@ export class MakeETerminData {
         })
       }
 
-      result.dataYearSince = dbData[0].year
+      result.dataYearSince = dbData[0].date.slice(0,4)
       result.dataDateSince = dbData[0].date
       result.dataDateUntil = dbData[0].date
 
@@ -79,7 +79,7 @@ export class MakeETerminData {
             dataAvailableOffer += item.angebot_Anzahl
           }
 
-          if (item.angebot_group_status === 'booked') {
+          if (item.angebot_group_status === 'booked' || item.angebot_group_status === 'unavailable') {
             resAppointmentBooked.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
             dataBookedAppointments += item.angebot_Anzahl
           }
@@ -100,37 +100,45 @@ export class MakeETerminData {
         result.appointmentBooked = this.flattenArray(resAppointmentBooked)
         result.appointmentUnarranged = this.flattenArray(resAppointmentUnarranged)
 
-        result.dataYearSince = dbData[0].year
+        result.dataYearSince = dbData[0].date.slice(0,4)
         result.dataDateUntil = dbData[0].date
       }
 
       if (input === 'stats_nachfrage') {
         const resAppointmentDemand = []
         const resAppointmentDemandUnarranged = []
+        const resAppointmentDemandArranged = []
         let dataAppointmentDemand = 0
         let dataAppointmentDemandUnarranged = 0
+        let dataAppointmentDemandArranged = 0
 
         for (const item of dbData) {
-          if (item.nachfrage_group_result === "WithDemandBasedSlotsAvailable") {
+          if (item.nachfrage_group_status ) {
             resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: item['nachfrage_reference_date'] })
             dataAppointmentDemand += item.nachfrage_Anzahl
           }
 
-          if (item.nachfrage_group_result === "noDemandBasedSlotsAvailable") {
+          if (item.nachfrage_group_status === "keine_buchung") {
             resAppointmentDemandUnarranged.push({ total: item['nachfrage_Anzahl'], date: item['nachfrage_reference_date'] })
             dataAppointmentDemandUnarranged += item.nachfrage_Anzahl
+          }
+
+          if (item.nachfrage_group_status === "erfolgreich_gebucht") {
+            resAppointmentDemandArranged.push({ total: item['nachfrage_Anzahl'], date: item['nachfrage_reference_date'] })
+            dataAppointmentDemandArranged += item.nachfrage_Anzahl
           }
         }
 
         summaryInfo['Anzahl Terminnachfrage'] = dataAppointmentDemand + dataAppointmentDemandUnarranged
         summaryInfo['Anzahl nicht vermittelte Terminnachfrage'] = dataAppointmentDemandUnarranged
-        summaryInfo['Anzahl vermittelte Terminnachfrage'] = 0
-        summaryInfo['Anzahl fristgerecht vermittelt'] = 0
+        summaryInfo['Anzahl vermittelte Terminnachfrage'] = dataAppointmentDemandArranged
+        summaryInfo['Anzahl fristgerecht vermittelt'] = dataAppointmentDemandArranged
 
         result.resAppointmentDemand = this.flattenArray(resAppointmentDemand)
         result.appointmentDemandUnarranged = this.flattenArray(resAppointmentDemandUnarranged)
+        result.appointmentDemandArranged = this.flattenArray(resAppointmentDemandArranged)
 
-        result.dataYearSince = dbData[0].year
+        result.dataYearSince = dbData[0].date.slice(0,4)
         result.dataDateUntil = dbData[0].date
       }
     }
@@ -139,6 +147,7 @@ export class MakeETerminData {
       summaryInfo: summaryInfo,
       appointmentDemandTotal: result.resAppointmentDemand,
       appointmentDemandUnarranged: result.appointmentDemandUnarranged,
+      appointmentArranged: result.appointmentDemandArranged,
       appointmentOfferTotal: result.appointmentOffer,
       appointmentBookedTotal: result.appointmentBooked,
       dataYearSince: result.dataYearSince,

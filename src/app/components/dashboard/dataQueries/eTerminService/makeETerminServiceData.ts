@@ -61,6 +61,7 @@ export class MakeETerminData {
       }
 
       result.dataYearSince = dbData[0].year
+      result.dataDateSince = dbData[0].date
       result.dataDateUntil = dbData[0].date
 
       if (input === 'stats_angebot') {
@@ -141,7 +142,8 @@ export class MakeETerminData {
       appointmentOfferTotal: result.appointmentOffer,
       appointmentBookedTotal: result.appointmentBooked,
       dataYearSince: result.dataYearSince,
-      dataDateUntil: result.dataDateUntil
+      dataDateUntil: result.dataDateUntil,
+      dataDateSince: result.dataDateSince
     }
   }
 

@@ -125,6 +125,7 @@ export class ETerminDashboardRender implements OnInit {
   ]
   selectedContainerStringObject: any
   dataYearSince: any = ''
+  dataDateSince: any = ''
   dataDateUntil: any = ''
 
   async ngOnInit(): Promise<void> {
@@ -178,6 +179,7 @@ export class ETerminDashboardRender implements OnInit {
 
       this.dataYearSince = result.stats_angebot.dataYearSince
       this.dataDateUntil = result.stats_angebot.dataDateUntil
+      this.dataDateSince = new Date(result.stats_angebot.dataDateSince).toLocaleDateString()
 
       if (result.stats_angebot) {
         this.appointmentOffer = result.stats_angebot.appointmentOfferTotal

@@ -40,7 +40,7 @@
     <ng-template #elseBlock>
       <div class="textOverviewContainer">
         <span class="textFirst">eTS</span><span class="textSecond"> auf einen
-          Blick </span><span class="textThird">seit {{dataYearSince}}</span>
+          Blick </span><span class="textThird">seit {{dataDateSince}}</span>
       </div>
     </ng-template>
     <h3>Dringlichkeit</h3>
@@ -61,13 +61,13 @@
   <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
     <div class="textOverviewContainer">
       <span class="textFirstOffer">Angebote</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit {{dataYearSince}}</span>
+        Blick </span><span class="textThird">seit {{dataDateSince}}</span>
     </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
       <span class="textFirstDemand">Nachfrage</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit {{dataYearSince}}</span>
+        Blick </span><span class="textThird">seit {{dataDateSince}}</span>
     </div>
   </div>
   <div class="grid-container">
@@ -128,19 +128,19 @@
   <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
     <div class="textOverviewContainer">
       <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit {{dataYearSince}}</span>
+        Blick </span><span class="textThird">seit {{dataDateSince}}</span>
     </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
     <div class="textOverviewContainer">
       <span class="textFirstOffer">Angebots</span><span class="textSecond">entwicklung </span><span
-        class="textThird">seit {{dataYearSince}}</span>
+        class="textThird">seit {{dataDateSince}}</span>
     </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
       <span class="textFirstDemand">Nachfrage</span><span class="textSecond">entwicklung </span><span
-        class="textThird">seit {{dataYearSince}}</span>
+        class="textThird">seit {{dataDateSince}}</span>
     </div>
   </div>
   <div class="grid-container">
@@ -178,13 +178,13 @@
         <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate')"></app-line-chart>
       </div>
     </div>
-    <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
+    <div *ngIf="this.levelSettings['thema'] === 'Terminangebote' && false">
       <div class="textOverviewContainer">
         <span class="textSecond">ein Blick in die Zukunft des</span><span class="textFirstOffer"> Angebots </span><span
           class="textThird">bis {{dataDateUntil}}</span>
       </div>
     </div>
-    <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
+    <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage' && false">
       <div class="textOverviewContainer">
         <span class="textSecond">ein Blick in die Zukunft der</span><span class="textFirstDemand"> Nachfrage
         </span><span class="textThird">bis {{dataDateUntil}}</span>

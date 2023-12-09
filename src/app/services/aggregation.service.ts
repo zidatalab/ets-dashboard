@@ -183,7 +183,6 @@ export class AggregationService {
   }
 
   updateStartStop(levelSettings: any) {
-    console.log('updateStartStop',levelSettings);
     let tzOffset = (new Date()).getTimezoneOffset() * 60000;
     let today = new Date();
     let startDate = today.getFullYear() + "-01-01";;

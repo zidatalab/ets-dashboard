@@ -23,6 +23,10 @@ export class ETerminQuery {
   }
 
   async getQueryData(input: any = '', levelSettings: any, allPublicFields: any) {
+    let startYear = new Date(levelSettings['start']).getFullYear();
+    let startMonth = new Date(levelSettings['start']).getMonth();
+    let stopYear = new Date(levelSettings['stop']).getFullYear();
+    let stopMonth = new Date(levelSettings['stop']).getMonth();
     let query: any = {
       'client_id': 'ets_reporting',
       'groupinfo': {
@@ -30,11 +34,15 @@ export class ETerminQuery {
         "fg": levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
         'timeframe': levelSettings['resolution'],
-        'Jahr': {
+        /* 'Jahr': {
           '$gte': parseInt(levelSettings['start'].slice(0, 4)),
           '$lte': parseInt(levelSettings['stop'].slice(0, 4))
-        }
-      },
+        } */
+        '$or': [
+          {'$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } }]},
+          {'$and': [{ 'Jahr': { '$gt': startYear,'$lt': stopYear } }]},
+          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }]}]
+        },
       "showfields": ["stats_angebot", "stats_nachfrage"]
     }
 

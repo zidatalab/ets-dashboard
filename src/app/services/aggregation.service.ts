@@ -183,14 +183,30 @@ export class AggregationService {
   }
 
   updateStartStop(levelSettings: any) {
+    console.log('updateStartStop',levelSettings);
     let tzOffset = (new Date()).getTimezoneOffset() * 60000;
     let today = new Date();
-    let startDate = "2019-04-01";
+    let startDate = today.getFullYear() + "-01-01";;
     let endDate = today.getFullYear() + "-12-31";
     let millisecendsPerDay = 1000 * 60 * 60 * 24;
 
-    if (levelSettings["zeitraum"] == "Letzte 12 Monate") {
-      startDate = new Date(today.getFullYear() - 1 + today.toISOString().slice(4, 8) + "01").toISOString().slice(0, 10);
+    if (levelSettings["resolution"] == "monthly") {
+      startDate = "2021-01-01";
+      endDate = today.toISOString().slice(0, 10)
+    };
+
+    
+    if (levelSettings["resolution"] == "weekly") {
+      let newstartDate = new Date();
+      newstartDate.setDate(today.getDate() - 12 * 7);
+      startDate = newstartDate.toISOString().slice(0, 10);
+      endDate = today.toISOString().slice(0, 10)
+    };
+
+    if (levelSettings["resolution"] == "daily") {
+      let newstartDate = new Date();
+      newstartDate.setDate(today.getDate() - 30);
+      startDate = newstartDate.toISOString().slice(0, 10);
       endDate = today.toISOString().slice(0, 10)
     };
 

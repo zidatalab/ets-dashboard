@@ -74,7 +74,7 @@ export class ETerminDashboardRender implements OnInit {
     'Schleswig-Holstein',
     'Thüringen'
   ];
-  resolutionOptions = [{ key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
+  resolutionOptions = [{ key: "Monat", value: 'monthly' },{ key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Gesamt", "Terminangebote", "Terminnachfrage"]
   urgencies = [{ key: "Gesamt", value: -1 }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]

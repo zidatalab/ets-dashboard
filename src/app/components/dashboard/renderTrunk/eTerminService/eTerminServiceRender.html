@@ -156,13 +156,14 @@
         <app-pie-chart style="max-height: 320px;" [data]="constructChartData(this.summaryInfo, 'byPie')"
           [hasLegend]="true"></app-pie-chart>
       </div> -->
+
       <div class="grid-tile">
-        <h3>Terminangebot</h3>
-        <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate')"></app-line-chart>
+        <h3>nicht vermittelte Terminnachfrage</h3>
+        <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[2].firstTileColor)"></app-line-chart>
       </div>
       <div class="grid-tile">
-        <h3>Terminanfragen</h3>
-        <app-line-chart [data]="constructChartData(appointmentDemandTotal, 'byDate')"></app-line-chart>
+        <h3>vermittelte Termine</h3>
+        <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[2].secondTileColor)"></app-line-chart>
       </div>
 
     </div>
@@ -175,22 +176,22 @@
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
       <div class="grid-tile">
         <h3>Terminangebot Insgesamt</h3>
-        <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate')"></app-line-chart>
+        <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate', keyDataContainerStrings[0].firstTileColor)"></app-line-chart>
       </div>
       <div class="grid-tile">
         <h3>Termine vermittelt</h3>
-        <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate')"></app-line-chart>
+        <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[2].secondTileColor)"></app-line-chart>
       </div>
     </div>
     <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
       <div class="grid-tile">
         <h3>Terminnachfrage Insgesamt</h3>
-        <app-line-chart [data]="constructChartData(appointmentDemandTotal, 'byDate')"></app-line-chart>
+        <app-line-chart [data]="constructChartData(appointmentDemandTotal, 'byDate',keyDataContainerStrings[1].firstTileColor)"></app-line-chart>
       </div>
       <div class="grid-tile">
         <h3>Terminnachfrage nicht vermittelt</h3>
-        <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate')"></app-line-chart>
+        <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[1].secondTileColor)"></app-line-chart>
       </div>
     </div>
     <div *ngIf="this.levelSettings['thema'] === 'Terminangebot' && false">

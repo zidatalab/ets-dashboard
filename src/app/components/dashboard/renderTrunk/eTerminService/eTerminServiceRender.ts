@@ -108,7 +108,7 @@ export class ETerminDashboardRender implements OnInit {
       firstTile: "Terminsuchen",
       firstTileColor: "#EB9F47",
       secondTile: "erfolglose Terminsuchen",
-      secondTileColor: "#EB9F47",
+      secondTileColor: "#ebd247",
       thirdTile: "erfolgreiche Buchungen",
       thirdTileColor: "#C8D42B",
     },
@@ -213,12 +213,16 @@ export class ETerminDashboardRender implements OnInit {
    * @param style byDate; byTheme; byPie
    * @returns 
    */
-  constructChartData(data: any, style: any) {
+  constructChartData(data: any, style: any , chartcolor: string ) {
     const result: any = {
       labels: [],
       fill: true,
       datasets: [{
-        data: []
+        data: [],
+        borderColor: chartcolor,
+        backgroundColor: chartcolor,
+        pointBorderColor: chartcolor,
+        pointBackgroundColor: chartcolor
       }],
     }
 
@@ -238,7 +242,6 @@ export class ETerminDashboardRender implements OnInit {
         result.datasets[0].data.push(item)
       }
     }
-
     return result
   }
 

@@ -10,7 +10,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class InterceptorService {
-  private refreshTokenInProgress = false;
+  private refreshTokenInProgress = true;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
@@ -34,22 +34,23 @@ export class InterceptorService {
     if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh') && this.auth.getUserDetails()) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.auth.refreshTocken()}`
+          Authorization: `Bearer ${this.auth.getRefreshToken()}`
         }
       })
     }
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (request.url.includes(this.api.apiServer) && (this.auth.getUserDetails()["email"]) &&
-          error.status == 401 && window.location.hostname !== 'localhost') {
-          this.auth.refreshTocken();
+        if (request.url.includes(this.api.apiServer) && error.status == 401 && this.auth.getUserDetails() && !this.refreshTokenInProgress && !request.url.includes("login/refresh")) {
+          this.refreshTokenInProgress = true
+          this.auth.refreshToken()
+          this.refreshTokenInProgress = false    
         }
 
-        if (request.url.includes(this.api.apiServer) && request.url.includes("login/refresh") && error.status == 422) {
-          this.refreshTokenInProgress = false;
-          this.auth.logout();
-          this.router.navigate(["/"]);
+        if (request.url.includes(this.api.apiServer) && request.url.includes("/refresh/") && error.status == 422) {
+          this.auth.logout()
+          this.router.navigate(["/"])          
+          this.refreshTokenInProgress = false    
         }
         else {
           this.refreshTokenInProgress = false;

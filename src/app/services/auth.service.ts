@@ -26,7 +26,7 @@ export class AuthService {
     return this.currentUserSubject.value
   }
 
-  public getUserDetails() {
+  public getUserDetails() {    
     return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '{}') : false
   }
 
@@ -95,8 +95,8 @@ export class AuthService {
     return this.api.postTypeRequest('newuser', data)
   }
 
-  refreshTocken() {
-    return this.http.post(`${this.api.apiServer}login/refresh`, { refresh: true }).subscribe(
+  refreshToken() {
+    return this.http.post(`${this.api.apiServer}login/refresh/`, { refresh: true }).subscribe(
       data => {
         const result: any = data
         this.setDataInLocalStorage('access_token', result.access_token)

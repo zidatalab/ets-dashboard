@@ -56,7 +56,7 @@ export class AppComponent {
 
         setInterval(() => {
           if (window.location.hostname !== 'localhost') {
-            this.auth.refreshTocken()
+            this.auth.refreshToken()
           }
           this.checkApiConnection()
         }, 1000 * 60 * 10)

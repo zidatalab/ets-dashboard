@@ -115,7 +115,7 @@ export class ETerminDashboardRender implements OnInit {
     {
       key: "overview",
       name: "Überblick",
-      firstTile: "nicht vermittelte Terminnachfrage",
+      firstTile: "erfolglose Terminsuchen",
       firstTileColor: "#EB9F47",
       secondTile: "vermittelte Termine",
       secondTileColor: "#C8D42B",

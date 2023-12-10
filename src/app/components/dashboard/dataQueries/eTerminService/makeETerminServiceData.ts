@@ -30,14 +30,16 @@ export class MakeETerminData {
      * for data structurization and aggregation see Teams Convo 
      */
     if (input === 'stats_angebot') {
-      return await this.createStats(this.levelSettings, input)
+      let res_angebot = await this.createStats(this.levelSettings, input)
+      return res_angebot
     }
 
     if (input === 'stats_nachfrage') {
-      return await this.createStats(this.levelSettings, input)
+      let res_nachfrage = await this.createStats(this.levelSettings, input)
+      return res_nachfrage 
     }
 
-    return
+    return null
   }
 
   async createStats(levelSettings: any, input: any) {

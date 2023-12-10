@@ -8,7 +8,6 @@ import { DBService } from 'src/app/services/db.service';
 import { Router } from '@angular/router';
 import { MakeETerminData } from '../../dataQueries/eTerminService/makeETerminServiceData';
 import { ETerminQuery } from '../../dataQueries/eTerminService/eTerminQuery';
-
 /**
  * 
  * !INFORMATION-TODO
@@ -199,7 +198,9 @@ export class ETerminDashboardRender implements OnInit {
         this.dataYearSince = result.stats_nachfrage.dataYearSince
         this.dataDateUntil = result.stats_nachfrage.dataDateUntil
       }
+      this.cdr.detectChanges();
     }
+
   }
 
   /**

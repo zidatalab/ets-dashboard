@@ -14,6 +14,11 @@
       </div>
     </div>
   </header>
+  <div *ngIf="!this.currentUser">
+    <p>Aktuell sind keine öffentlichen Informationen verfügbar.</p>
+
+  </div>
+  <div *ngIf="this.currentUser">
   <div>
     <h3>Ansicht</h3>
     <mat-chip-listbox>
@@ -211,3 +216,4 @@
       </div>
     </div>
   </div>
+</div>

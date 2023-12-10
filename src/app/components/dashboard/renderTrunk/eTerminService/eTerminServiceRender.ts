@@ -134,7 +134,7 @@ export class ETerminDashboardRender implements OnInit {
     this.colorScheme = this.api.makeScale(5)
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
     this.metaData = await this.updateMetaData()
-
+    this.currentUser = this.auth.getUserDetails();
     if (this.metaData) {
       this.setLevelData()
     }

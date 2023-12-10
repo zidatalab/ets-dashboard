@@ -55,11 +55,12 @@ export class AppComponent {
         }, 1000);
 
         setInterval(() => {
-          if (window.location.hostname !== 'localhost') {
+          if (this.currentUser) {
             this.auth.refreshToken()
-          }
+                    }
+          
           this.checkApiConnection()
-        }, 1000 * 60 * 10)
+        }, 1000 * 60 * 5)
       } else {
         this.isLoggedIn = false
         this.isAdmin = false

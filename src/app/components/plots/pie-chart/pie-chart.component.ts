@@ -15,6 +15,7 @@ export class PieChartComponent {
   @Input() options: any = {
     scaleShowVerticalLines: false,
     responsive: true,
+    animation : false,
     maintainAspectRatio: false,
     // aspectRatio: 1.45, 
     plugins: {

@@ -1,8 +1,10 @@
 <div class="dashboard-container" style="padding: 0 20px;">
   <header>
     <div class="head-container">
-      <h2>eTS Reporting</h2>
-      <div class="logo-container">
+      <h2>        
+        Zahlen und Fakten zum <span class="textFirst">116117 Terminservice</span>
+      </h2>
+      <div class="logo-container">        
         <div class="logo">
           <img class="logo-img" src="./assets/images/logos/logo-zi-fullversion.svg" alt="">
         </div>
@@ -38,10 +40,7 @@
       </mat-chip-listbox>
     </ng-template>
     <ng-template #elseBlock>
-      <div class="textOverviewContainer">
-        <span class="textFirst">eTS</span><span class="textSecond"> auf einen
-          Blick </span><span class="textThird">seit {{dataDateSince}}</span>
-      </div>
+      
     </ng-template>
     <h3>Dringlichkeit</h3>
     <mat-chip-listbox>
@@ -57,22 +56,31 @@
         {{ item.key }}
       </mat-chip-option>
     </mat-chip-listbox>
+    <div *ngIf="this.inProgress==true">
+    <p><mat-progress-spinner mode="indeterminate"></mat-progress-spinner></p>
+    </div>
   </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
+  <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
+  <div class="textOverviewContainer">
+    <span class="textFirst">Terminservice</span><span class="textSecond"> auf einen
+      Blick </span><span class="textThird">seit {{dataDateSince}}</span>
+  </div>
+  </div>
+  <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
     <div class="textOverviewContainer">
-      <span class="textFirstOffer">Angebote</span><span class="textSecond"> auf einen
+      <span class="textFirstOffer">Terminangebot</span><span class="textSecond"> auf einen
         Blick </span><span class="textThird">seit {{dataDateSince}}</span>
     </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
-      <span class="textFirstDemand">Nachfrage</span><span class="textSecond"> auf einen
+      <span class="textFirstDemand">Terminnachfrage</span><span class="textSecond"> auf einen
         Blick </span><span class="textThird">seit {{dataDateSince}}</span>
     </div>
   </div>
   <div class="grid-container">
     <mat-grid-list cols="3" rowHeight="200px">
-      <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
+      <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
             [title]="keyDataContainerStrings[0].firstTile" [color]="keyDataContainerStrings[0].firstTileColor">
@@ -126,12 +134,9 @@
     </mat-grid-list>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
-    <div class="textOverviewContainer">
-      <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit {{dataDateSince}}</span>
-    </div>
+
   </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Terminangebote'">
+  <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
     <div class="textOverviewContainer">
       <span class="textFirstOffer">Angebots</span><span class="textSecond">entwicklung </span><span
         class="textThird">seit {{dataDateSince}}</span>
@@ -146,17 +151,27 @@
   <div class="grid-container">
     <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Gesamt'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
-      <div class="grid-tile">
+<!--       <div class="grid-tile">
         <h3>Terminangebot und Inanspruchnahme</h3>
         <app-pie-chart style="max-height: 320px;" [data]="constructChartData(this.summaryInfo, 'byPie')"
           [hasLegend]="true"></app-pie-chart>
-      </div>
+      </div> -->
       <div class="grid-tile">
         <h3>Terminangebot</h3>
         <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate')"></app-line-chart>
       </div>
+      <div class="grid-tile">
+        <h3>Terminanfragen</h3>
+        <app-line-chart [data]="constructChartData(appointmentDemandTotal, 'byDate')"></app-line-chart>
+      </div>
+
     </div>
-    <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminangebote'"
+    <div class="textOverviewContainer">
+      <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
+        Blick </span><span class="textThird">seit {{dataDateSince}}</span>
+    </div>
+    
+    <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminangebot'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
       <div class="grid-tile">
         <h3>Terminangebot Insgesamt</h3>
@@ -178,7 +193,7 @@
         <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate')"></app-line-chart>
       </div>
     </div>
-    <div *ngIf="this.levelSettings['thema'] === 'Terminangebote' && false">
+    <div *ngIf="this.levelSettings['thema'] === 'Terminangebot' && false">
       <div class="textOverviewContainer">
         <span class="textSecond">ein Blick in die Zukunft des</span><span class="textFirstOffer"> Angebots </span><span
           class="textThird">bis {{dataDateUntil}}</span>

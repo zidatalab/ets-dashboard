@@ -14,7 +14,8 @@ export class BarChartComponent {
   @Input() data: any = { }
   @Input() options: any = {
     scaleShowVerticalLines: false,
-    responsive: true
+    responsive: true,
+    animation: false
   }
   @Input() labels: any = []
   @Input() hasLegend : boolean = false

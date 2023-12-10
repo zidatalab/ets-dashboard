@@ -75,7 +75,7 @@ export class ETerminDashboardRender implements OnInit {
   ];
   resolutionOptions = [{ key: "Monat", value: 'monthly' },{ key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
-  themes = ["Gesamt", "Terminangebote", "Terminnachfrage"]
+  themes = ["Gesamt", "Terminangebot", "Terminnachfrage"]
   urgencies = [{ key: "Gesamt", value: -1 }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
   data: any;
@@ -129,7 +129,7 @@ export class ETerminDashboardRender implements OnInit {
   dataDateUntil: any = ''
 
   async ngOnInit(): Promise<void> {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'weekly', 'thema': 'Gesamt', 'urgency': -1 }
+    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Gesamt', 'urgency': -1 }
     this.setKeyDataString()
     this.colorScheme = this.api.makeScale(5)
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
@@ -169,8 +169,10 @@ export class ETerminDashboardRender implements OnInit {
    * fixing reactivity on change filter values
    */
   async setData(input: any = '') {
+    this.inProgress=true
+    this.cdr.detectChanges()
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
-
+    
     if (result) {
       this.summaryInfo = {
         ...result.stats_angebot.summaryInfo,
@@ -198,7 +200,9 @@ export class ETerminDashboardRender implements OnInit {
         this.dataYearSince = result.stats_nachfrage.dataYearSince
         this.dataDateUntil = result.stats_nachfrage.dataDateUntil
       }
-      this.cdr.detectChanges();
+      this.inProgress=false;
+      this.cdr.detectChanges()
+      
     }
 
   }

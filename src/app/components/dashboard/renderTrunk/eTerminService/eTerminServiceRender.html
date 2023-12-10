@@ -15,7 +15,7 @@
     </div>
   </header>
   <div>
-    <h3>Thema</h3>
+    <h3>Ansicht</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('thema',item);" *ngFor="let item of this.themes" color="primary"
         [selected]="(this.levelSettings['thema']==item)" (click)="setKeyDataString()">
@@ -29,7 +29,7 @@
         {{ item }}
       </mat-chip-option>
     </mat-chip-listbox>
-    <div *ngIf="this.levelSettings['thema'] !== 'Gesamt'; then thenBlock else elseBlock"></div>
+    <div *ngIf="this.levelSettings['thema'] !== 'Überblick'; then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>
       <h3>Facharztgruppen</h3>
       <mat-chip-listbox>
@@ -49,7 +49,7 @@
         {{ item.key }}
       </mat-chip-option>
     </mat-chip-listbox>
-    <h3>Zeitraum</h3>
+    <h3>Zeitliche Auflösung</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('resolution',item.value);" *ngFor="let item of this.resolutionOptions"
         color="primary" [selected]="(this.levelSettings['resolution']==item.value)">
@@ -60,7 +60,7 @@
     <p><mat-progress-spinner mode="indeterminate"></mat-progress-spinner></p>
     </div>
   </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
+  <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
   <div class="textOverviewContainer">
     <span class="textFirst">Terminservice</span><span class="textSecond"> auf einen
       Blick </span><span class="textThird">seit {{dataDateSince}}</span>
@@ -82,15 +82,15 @@
     <mat-grid-list cols="3" rowHeight="200px">
       <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
         <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
-            [title]="keyDataContainerStrings[0].firstTile" [color]="keyDataContainerStrings[0].firstTileColor">
-          </app-key-data-container>
-        </mat-grid-tile>
-        <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl Termine vermittelt']"
             [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
           </app-key-data-container>
         </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+          <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
+            [title]="keyDataContainerStrings[0].firstTile" [color]="keyDataContainerStrings[0].firstTileColor">
+          </app-key-data-container>
+        </mat-grid-tile>        
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelt Termine']"
             [title]="keyDataContainerStrings[0].secondTile" [color]="keyDataContainerStrings[0].secondTileColor">
@@ -114,15 +114,15 @@
           </app-key-data-container>
         </mat-grid-tile>
       </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
-        <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminnachfrage']"
-            [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[2].firstTileColor">
-          </app-key-data-container>
-        </mat-grid-tile>
+      <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl fristgerecht vermittelt']"
             [title]="keyDataContainerStrings[2].secondTile" [color]="keyDataContainerStrings[2].secondTileColor">
+          </app-key-data-container>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1" rowspan="1">
+          <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminnachfrage']"
+            [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[2].firstTileColor">
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
@@ -133,7 +133,7 @@
       </div>
     </mat-grid-list>
   </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Gesamt'">
+  <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
 
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
@@ -149,25 +149,29 @@
     </div>
   </div>
   <div class="grid-container">
-    <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Gesamt'"
+    <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Überblick'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
 <!--       <div class="grid-tile">
         <h3>Terminangebot und Inanspruchnahme</h3>
         <app-pie-chart style="max-height: 320px;" [data]="constructChartData(this.summaryInfo, 'byPie')"
           [hasLegend]="true"></app-pie-chart>
       </div> -->
-
-      <div class="grid-tile">
-        <h3>nicht vermittelte Terminnachfrage</h3>
-        <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[2].firstTileColor)"></app-line-chart>
-      </div>
       <div class="grid-tile">
         <h3>vermittelte Termine</h3>
         <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[2].secondTileColor)"></app-line-chart>
       </div>
 
+      <div class="grid-tile">
+        <h3>nicht vermittelte Terminnachfrage</h3>
+        <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[2].firstTileColor)"></app-line-chart>
+      </div>
+      <!-- <div class="grid-tile">
+        <h3>nicht vermittelte Terminne</h3>
+        <app-line-chart [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[2].firstTileColor)"></app-line-chart>
+      </div> -->
+
     </div>
-    <div class="textOverviewContainer">
+    <div class="textOverviewContainer" *ngIf="this.levelSettings['thema'] === 'Überblick'">
       <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
         Blick </span><span class="textThird">seit {{dataDateSince}}</span>
     </div>

@@ -73,9 +73,9 @@ export class ETerminDashboardRender implements OnInit {
     'Schleswig-Holstein',
     'Thüringen'
   ];
-  resolutionOptions = [{ key: "Monat", value: 'monthly' },{ key: "Kalenderwoche", value: 'weekly' }, { key: "Tage", value: "daily" }];
+  resolutionOptions = [{ key: "Monate", value: 'monthly' },{ key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
-  themes = ["Gesamt", "Terminangebot", "Terminnachfrage"]
+  themes = ["Überblick", "Terminangebot", "Terminnachfrage"]
   urgencies = [{ key: "Gesamt", value: -1 }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
   data: any;
@@ -114,10 +114,10 @@ export class ETerminDashboardRender implements OnInit {
     },
     {
       key: "overview",
-      name: "Gesamt",
+      name: "Überblick",
       firstTile: "nicht vermittelte Terminnachfrage",
       firstTileColor: "#EB9F47",
-      secondTile: "fristgerecht vermittelte Termine",
+      secondTile: "vermittelte Termine",
       secondTileColor: "#C8D42B",
       thirdTile: "nicht vermittelte Termine",
       thirdTileColor: "#FF879E",
@@ -129,7 +129,7 @@ export class ETerminDashboardRender implements OnInit {
   dataDateUntil: any = ''
 
   async ngOnInit(): Promise<void> {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Gesamt', 'urgency': -1 }
+    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': -1 }
     this.setKeyDataString()
     this.colorScheme = this.api.makeScale(5)
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)

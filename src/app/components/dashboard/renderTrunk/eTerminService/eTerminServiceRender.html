@@ -67,20 +67,32 @@
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
   <div class="textOverviewContainer">
-    <span class="textFirst">Terminservice</span><span class="textSecond"> auf einen
-      Blick </span><span class="textThird">seit {{dataDateSince}}</span>
+    <span class="textFirst">Terminservice</span>
+    <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
+    <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirst">letzten 30 Tagen </span>
+    <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
+    <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirst">letzten 12 Wochen </span> 
+    <span class="textThird"> seit {{dataDateSince}}</span>
   </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
     <div class="textOverviewContainer">
-      <span class="textFirstOffer">Terminangebot</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit {{dataDateSince}}</span>
+      <span class="textFirstOffer">Terminangebot</span>
+      <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
+      <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstOffer"> letzten 30 Tagen </span>
+      <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
+      <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstOffer"> letzte 12 Wochen </span>      
+      <span class="textThird"> seit {{dataDateSince}}</span>
     </div>
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
     <div class="textOverviewContainer">
-      <span class="textFirstDemand">Terminnachfrage</span><span class="textSecond"> auf einen
-        Blick </span><span class="textThird">seit {{dataDateSince}}</span>
+      <span class="textFirstDemand">Terminnachfrage</span>
+      <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
+      <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstDemand"> letzten 30 Tagen </span>
+      <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
+      <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstDemand"> letzten 12 Wochen </span>   
+      <span class="textThird"> seit {{dataDateSince}}</span>   
     </div>
   </div>
   <div class="grid-container">
@@ -176,7 +188,8 @@
       </div> -->
 
     </div>
-    <div class="textOverviewContainer" *ngIf="this.levelSettings['thema'] === 'Überblick'">
+    <!-- Daten fehlen noch -->
+    <div class="textOverviewContainer" *ngIf="this.levelSettings['thema'] === 'Überblick' && false">
       <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
         Blick </span><span class="textThird">seit {{dataDateSince}}</span>
     </div>

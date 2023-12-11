@@ -197,7 +197,7 @@ export class AggregationService {
     
     if (levelSettings["resolution"] == "weekly") {
       let newstartDate = new Date();
-      newstartDate.setDate(today.getDate() - 52 * 7);
+      newstartDate.setDate(today.getDate() - 12 * 7);
       startDate = newstartDate.toISOString().slice(0, 10);
       endDate = today.toISOString().slice(0, 10)
     };

@@ -38,14 +38,37 @@ export class ETerminQuery {
           '$gte': parseInt(levelSettings['start'].slice(0, 4)),
           '$lte': parseInt(levelSettings['stop'].slice(0, 4))
         } */
-        '$or': [
-          {'$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } }]},
-          {'$and': [{ 'Jahr': { '$gt': startYear,'$lt': stopYear } }]},
-          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }]}]
+        '$or': [        
+        ]
         },
       "showfields": ["stats_angebot", "stats_nachfrage"]
     }
 
+    if (startYear==stopYear){
+      query.groupinfo['$or'] = [
+        {'$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+                  { 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }
+                ]}
+        ]
+      }
+    if ((startYear+1)==stopYear){
+        query.groupinfo['$or'] = [
+          {'$and': [
+            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },           
+          ]},          
+          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }]}
+          ]
+        }
+    if ((startYear+1)<stopYear){
+        query.groupinfo['$or'] = [
+          {'$and': [
+            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },           
+          ]},
+          {'$and': [{ 'Jahr': { '$gt': startYear,'$lt': stopYear } }]},
+          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }]}
+          ]
+        }
+      
     let _result: any = []
     let dbDataRange
     let now: Date = new Date();

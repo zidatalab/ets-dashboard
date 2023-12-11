@@ -14,7 +14,11 @@ export class LineChartComponent {
   @Input() options: any = {
     scaleShowVerticalLines: false,
     responsive: true,
-    animation: false
+    animation: false,
+    scales: {     
+    
+    
+  }
   }
   @Input() labels: any = []
   @Input() hasLegend : boolean = false

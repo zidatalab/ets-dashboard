@@ -25,6 +25,10 @@ export class MakeETerminData {
     return result
   }
 
+  datestringparser(input:string){
+    return new Date(input).toLocaleDateString()
+  }
+
   async getETerminData(input: any) {
     /**
      * for data structurization and aggregation see Teams Convo 
@@ -77,17 +81,17 @@ export class MakeETerminData {
 
         for (const item of dbData) {
           if (item.angebot_group_status === "available") {
-            resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
+            resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
             dataAvailableOffer += item.angebot_Anzahl
           }
 
           if (item.angebot_group_status === 'booked' || item.angebot_group_status === 'unavailable') {
-            resAppointmentBooked.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
+            resAppointmentBooked.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
             dataBookedAppointments += item.angebot_Anzahl
           }
 
           if (item.angebot_group_status === 'unavailable') {
-            resAppointmentUnarranged.push({ total: item['angebot_Anzahl'], date: item['angebot_reference_date'] })
+            resAppointmentUnarranged.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
           }
 
           dataUnarrangedAppointments = dataAvailableOffer - dataBookedAppointments
@@ -116,17 +120,17 @@ export class MakeETerminData {
 
         for (const item of dbData) {
           if (item.nachfrage_group_status ) {
-            resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: item['nachfrage_reference_date'] })
+            resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
             dataAppointmentDemand += item.nachfrage_Anzahl
           }
 
           if (item.nachfrage_group_status === "keine_buchung") {
-            resAppointmentDemandUnarranged.push({ total: item['nachfrage_Anzahl'], date: item['nachfrage_reference_date'] })
+            resAppointmentDemandUnarranged.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
             dataAppointmentDemandUnarranged += item.nachfrage_Anzahl
           }
 
           if (item.nachfrage_group_status === "erfolgreich_gebucht") {
-            resAppointmentDemandArranged.push({ total: item['nachfrage_Anzahl'], date: item['nachfrage_reference_date'] })
+            resAppointmentDemandArranged.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
             dataAppointmentDemandArranged += item.nachfrage_Anzahl
           }
         }

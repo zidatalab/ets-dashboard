@@ -32,8 +32,14 @@ export class ApiService {
     }))
   }
 
+  public postTypeRequestRetry(url: any, payload: any) {
+    return this.httpClient.post(`${this.apiServer}${url}`, payload).pipe(map(result => {
+      return result
+    })).pipe(retry(3))
+  }
+
   public postTypeRequestWithoutObs(url: any, payload: any) {
-    return firstValueFrom(this.httpClient.post(`${this.apiServer}${url}`, payload).pipe())
+    return firstValueFrom(this.httpClient.post(`${this.apiServer}${url}`, payload).pipe((retry(3))))
   }
 
   // user functions

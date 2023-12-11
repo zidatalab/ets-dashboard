@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
-import { Plot } from '../../../models/plot.model'
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AggregationService } from 'src/app/services/aggregation.service';
@@ -130,17 +129,56 @@ export class ETerminDashboardRender implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': -1 }
+    this.currentUser = this.auth.getUserDetails();
     this.setKeyDataString()
     this.colorScheme = this.api.makeScale(5)
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
-    this.metaData = await this.updateMetaData()
-    this.currentUser = this.auth.getUserDetails();
+    this.metaData = await this.updateMetaData()    
     if (this.metaData) {
-      this.setLevelData()
+      // If user is logged in, check access
+      if (this.currentUser){
+        if (!this.currentUser.is_superadmin){
+        this.levelValues= this.identifyaccesslevelids()     
+        }
+        }
+      // else: User has only access to Gesamt
+      else {
+        this.levelValues=['Gesamt']
+      }
+      
+      await this.setLevelData()      
+      console.log("plotdata",this.constructChartData(this.appointmentBooked, 'byDate',this.keyDataContainerStrings[1].firstTileColor))
+     
     }
+    
 
     // this.queryETerminData.getQueryData('',this.levelSettings)
   }
+
+  // function to check for levels, the user has access
+  identifyaccesslevelids(){    
+    let usergroupsfordashboard = Array()
+    let levelsallowed = Array()
+    let levelidmeta:any
+    usergroupsfordashboard= this.auth.getUserDetails().usergroups[this.api.clientApiId]
+    levelidmeta= this.metaData.find((element) => element['type'] === "levelid")
+    let levelrights = levelidmeta?.levelrights  
+    usergroupsfordashboard.push('public')
+    for (let thegroup of usergroupsfordashboard){
+      let theids = Array()
+      if (levelrights[thegroup]){
+        theids=levelrights[thegroup]
+      for (let theid of theids){
+        if (levelsallowed.indexOf(theid) === -1) {      
+          levelsallowed.push(theid);
+        }
+      }
+
+      }
+      
+    }
+    return levelsallowed
+}
 
   async setLevelData(level: any = '', value: any = '') {
     this.levelSettings[level] = value
@@ -252,4 +290,7 @@ export class ETerminDashboardRender implements OnInit {
 
     this.selectedContainerStringObject = res
   }
+  
 }
+
+

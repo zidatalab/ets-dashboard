@@ -62,7 +62,6 @@ export class ETerminDashboardRender implements OnInit {
     'Hessen',
     'Mecklenburg-Vorpommern',
     'Niedersachsen',
-    'Nordrhein-Westfalen',
     'Nordrhein',
     'Westfalen-Lippe',
     'Rheinland-Pfalz',

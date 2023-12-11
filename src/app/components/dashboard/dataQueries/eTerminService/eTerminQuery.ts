@@ -23,7 +23,6 @@ export class ETerminQuery {
   }
 
   async getQueryData(input: any = '', levelSettings: any, allPublicFields: any) {
-    console.log(levelSettings);
     let startYear = new Date(levelSettings['start']).getFullYear();
     let startMonth = new Date(levelSettings['start']).getMonth()+1;
     let stopYear = new Date(levelSettings['stop']).getFullYear();

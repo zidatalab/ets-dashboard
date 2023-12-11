@@ -46,6 +46,15 @@ export class MakeETerminData {
     return null
   }
 
+  urgencyfilter(itemtheurgency:string,urgencylevel:string){
+    if (urgencylevel=="AKUT"){
+      return ['AKUT','PT_AKUTBEHANDLUNG'].includes(itemtheurgency)
+    }
+    else {
+      return urgencylevel==itemtheurgency
+    }
+  }
+
   async createStats(levelSettings: any, input: any) {
     let dbData: any = await this.db.listData(
       input,
@@ -60,11 +69,11 @@ export class MakeETerminData {
     let result: any = []
 
     if (dbData) {
-      if (levelSettings['urgency'] !== -1) {
-        dbData = dbData.filter((item: any) => {
-          return item.angebot_group_dringlichkeit === levelSettings["urgency"]
-        })
-      }
+      // if (levelSettings['urgency'] !== -1) {
+      //   dbData = dbData.filter((item: any) => {
+      //     return item.angebot_group_dringlichkeit === levelSettings["urgency"]
+      //   })
+      // }
 
       result.dataYearSince = dbData[0].date.slice(0,4)
       result.dataDateSince = dbData[0].date
@@ -80,6 +89,11 @@ export class MakeETerminData {
         let dataUnarrangedAppointments = 0
 
         for (const item of dbData) {
+          if (-1!=this.levelSettings.urgency){
+          if (!this.urgencyfilter(item.angebot_group_dringlichkeit,this.levelSettings.urgency)){
+            continue
+          }}
+
           if (item.angebot_group_status === "available" || item.angebot_group_status === 'booked') {
             resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
             dataAvailableOffer += item.angebot_Anzahl
@@ -120,6 +134,11 @@ export class MakeETerminData {
         let dataAppointmentDemandArranged = 0
 
         for (const item of dbData) {
+          if (-1!=this.levelSettings.urgency){
+          if (!this.urgencyfilter(item.nachfrage_group_dringlichkeit,this.levelSettings.urgency)){
+            continue
+          }}
+
           if (
             (item.nachfrage_group_status === "keine_buchung")
           || (item.nachfrage_group_status === "gebucht_arzt_abgesagt" ) 

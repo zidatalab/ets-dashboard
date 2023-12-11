@@ -22,15 +22,16 @@
   <div>
     <h3>Ansicht</h3>
     <mat-chip-listbox>
-      <mat-chip-option (click)="this.setLevelData('thema',item);" *ngFor="let item of this.themes" color="primary"
-        [selected]="(this.levelSettings['thema']==item)" (click)="setKeyDataString()">
+      <mat-chip-option 
+        (click)="this.setLevelData('thema',item);" *ngFor="let item of this.themes" color="primary"
+        [selected]="(this.levelSettings['thema']==item)" (click)="setKeyDataString()" selectable="false">
         {{ item }}
       </mat-chip-option>
     </mat-chip-listbox>
     <h3>Region</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('levelValues',item);" *ngFor="let item of this.levelValues"
-        color="primary" [selected]="(this.levelSettings['levelValues']==item)">
+        color="primary" [selected]="(this.levelSettings['levelValues']==item)" selectable="false">
         {{ item }}
       </mat-chip-option>
     </mat-chip-listbox>
@@ -39,7 +40,7 @@
       <h3>Facharztgruppen</h3>
       <mat-chip-listbox>
         <mat-chip-option (click)="this.setLevelData('fg',item);" *ngFor="let item of this.professionGroups"
-          color="primary" [selected]="(this.levelSettings['fg']==item)">
+          color="primary" [selected]="(this.levelSettings['fg']==item)" selectable="false">
           {{ item }}
         </mat-chip-option>
       </mat-chip-listbox>
@@ -50,14 +51,14 @@
     <h3>Dringlichkeit</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('urgency',item.value);" *ngFor="let item of this.urgencies"
-        color="primary" [selected]="(this.levelSettings['urgency']==item.value)">
+        color="primary" [selected]="(this.levelSettings['urgency']==item.value)" selectable="false">
         {{ item.key }}
       </mat-chip-option>
     </mat-chip-listbox>
     <h3>Zeitliche Auflösung</h3>
     <mat-chip-listbox>
       <mat-chip-option (click)="this.setLevelData('resolution',item.value);" *ngFor="let item of this.resolutionOptions"
-        color="primary" [selected]="(this.levelSettings['resolution']==item.value)">
+        color="primary" [selected]="(this.levelSettings['resolution']==item.value)" selectable="false">
         {{ item.key }}
       </mat-chip-option>
     </mat-chip-listbox>

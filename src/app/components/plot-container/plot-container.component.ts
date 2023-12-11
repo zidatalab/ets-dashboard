@@ -34,7 +34,6 @@ export class PlotContainerComponent implements OnInit {
   @Input() percent: boolean = false;
   @Input() xPercent: boolean = false;
   @Input() baseColor = "";
-  @Input() colorScheme: any = [];
   @Input() annotations: any = [];
   @Input() hoverTemplate = "";
   @Input() plotTitle = "";
@@ -80,9 +79,6 @@ export class PlotContainerComponent implements OnInit {
       this.baseColor = this.api.primarycolor
     }
 
-    if (this.colorScheme.length === 0) {
-      this.colorScheme = [this.baseColor]
-    }
 
     this.makePlot()
   }
@@ -153,8 +149,7 @@ export class PlotContainerComponent implements OnInit {
 
     if (this.plotType === "heatmap") {
       let plotData = this.data;
-      const colors = this.api.makeScale(2);
-
+      
       this.plotType = 'heatmap';
       this.plotLayout = {
         xaxis: { side: 'top' },
@@ -316,10 +311,6 @@ export class PlotContainerComponent implements OnInit {
       if (this.colorBy) {
         outcomes = this.api.getUniqueValues(plotData, this.colorBy);
 
-        if (outcomes.length > 1) {
-          this.colorScheme = this.api.makeScale(outcomes.length);
-        }
-
         plotData = this.makeColorByValues();
       }
 
@@ -366,7 +357,7 @@ export class PlotContainerComponent implements OnInit {
     return trace;
   }
 
-  makePlotData(source = [], xAxis = "", yList = [], type = "bar", colors = this.colorScheme) {
+  makePlotData(source = [], xAxis = "", yList = [], type = "bar") {
     let xData: any = this.api.getValues(source, xAxis)
     let list = []
     let i = 0

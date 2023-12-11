@@ -79,7 +79,6 @@ export class ETerminDashboardRender implements OnInit {
   levelSettings: any = {};
   data: any;
   currentUser: any;
-  colorScheme: any;
   allPublicFields = ["stats_angebot", "stats_nachfrage", "dringlichkeit", "status_dringlichkeit_combined"]
   summaryInfo: any = []
   professionGroup: any = ''
@@ -132,7 +131,6 @@ export class ETerminDashboardRender implements OnInit {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': -1 }
     this.currentUser = this.auth.getUserDetails();
     this.setKeyDataString()
-    this.colorScheme = this.api.makeScale(5)
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
     this.metaData = await this.updateMetaData()    
     if (this.metaData) {

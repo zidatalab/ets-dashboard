@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { retry, timeout } from 'rxjs/operators';
-import * as chroma from "chroma-js";
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -255,10 +254,6 @@ export class ApiService {
     }
 
     return result
-  }
-
-  public makeScale(bins = 5) {
-    return chroma.scale([chroma(this.primarycolor).set('hsl.h', +70), this.primarycolor]).colors(bins);
   }
 
   public stringWrap(string: string, maxLength = 30) {

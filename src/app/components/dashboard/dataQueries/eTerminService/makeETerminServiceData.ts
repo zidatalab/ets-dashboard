@@ -80,21 +80,22 @@ export class MakeETerminData {
         let dataUnarrangedAppointments = 0
 
         for (const item of dbData) {
-          if (item.angebot_group_status === "available") {
+          if (item.angebot_group_status === "available" || item.angebot_group_status === 'booked') {
             resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
             dataAvailableOffer += item.angebot_Anzahl
           }
 
-          if (item.angebot_group_status === 'booked' || item.angebot_group_status === 'unavailable') {
+          if (item.angebot_group_status === 'booked' ) {
             resAppointmentBooked.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
             dataBookedAppointments += item.angebot_Anzahl
           }
 
-          if (item.angebot_group_status === 'unavailable') {
+          if (item.angebot_group_status === 'available') {
             resAppointmentUnarranged.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
+            dataUnarrangedAppointments += item.angebot_Anzahl            
           }
 
-          dataUnarrangedAppointments = dataAvailableOffer - dataBookedAppointments
+          
         }
 
         summaryInfo['Anzahl Angebot'] = dataAvailableOffer
@@ -119,23 +120,33 @@ export class MakeETerminData {
         let dataAppointmentDemandArranged = 0
 
         for (const item of dbData) {
-          if (item.nachfrage_group_status ) {
+          if (
+            (item.nachfrage_group_status === "keine_buchung")
+          || (item.nachfrage_group_status === "gebucht_arzt_abgesagt" ) 
+          || (item.nachfrage_group_status === "erfolgreich_gebucht")
+          || (item.nachfrage_group_status === "gebucht_pat_abgesagt" )
+
+          ) {
             resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
             dataAppointmentDemand += item.nachfrage_Anzahl
           }
 
-          if (item.nachfrage_group_status === "keine_buchung") {
+          if ((item.nachfrage_group_status === "keine_buchung")
+          || (item.nachfrage_group_status === "gebucht_arzt_abgesagt" )
+          ) {
             resAppointmentDemandUnarranged.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
             dataAppointmentDemandUnarranged += item.nachfrage_Anzahl
           }
 
-          if (item.nachfrage_group_status === "erfolgreich_gebucht") {
+          if ((item.nachfrage_group_status === "erfolgreich_gebucht")
+          || (item.nachfrage_group_status === "gebucht_pat_abgesagt" )
+          ) {
             resAppointmentDemandArranged.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
             dataAppointmentDemandArranged += item.nachfrage_Anzahl
           }
         }
 
-        summaryInfo['Anzahl Terminnachfrage'] = dataAppointmentDemand + dataAppointmentDemandUnarranged
+        summaryInfo['Anzahl Terminnachfrage'] = dataAppointmentDemand 
         summaryInfo['Anzahl nicht vermittelte Terminnachfrage'] = dataAppointmentDemandUnarranged
         summaryInfo['Anzahl vermittelte Terminnachfrage'] = dataAppointmentDemandArranged
         summaryInfo['Anzahl fristgerecht vermittelt'] = dataAppointmentDemandArranged
@@ -153,9 +164,10 @@ export class MakeETerminData {
       summaryInfo: summaryInfo,
       appointmentDemandTotal: result.resAppointmentDemand,
       appointmentDemandUnarranged: result.appointmentDemandUnarranged,
-      appointmentArranged: result.appointmentDemandArranged,
+      appointmentDemandArranged: result.appointmentDemandArranged,      
       appointmentOfferTotal: result.appointmentOffer,
-      appointmentBookedTotal: result.appointmentBooked,
+      appointmentBooked: result.appointmentBooked,
+      appointmentUnarranged: result.appointmentUnarranged,
       dataYearSince: result.dataYearSince,
       dataDateUntil: result.dataDateUntil,
       dataDateSince: result.dataDateSince

@@ -96,24 +96,26 @@
     </div>
   </div>
   <div class="grid-container">
-    <mat-grid-list cols="3" rowHeight="200px">
+    <!-- Terminangebot Indikatoren -->
+    <mat-grid-list cols="3" rowHeight="150px">
       <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
-        <mat-grid-tile colspan="1" rowspan="1">
-          <app-key-data-container [value]="this.summaryInfo['Anzahl Termine vermittelt']"
-            [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
-          </app-key-data-container>
-        </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
             [title]="keyDataContainerStrings[0].firstTile" [color]="keyDataContainerStrings[0].firstTileColor">
           </app-key-data-container>
-        </mat-grid-tile>        
+        </mat-grid-tile>  
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelt Termine']"
+            [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
+          </app-key-data-container>
+        </mat-grid-tile>      
+        <mat-grid-tile colspan="1" rowspan="1">
+          <app-key-data-container [value]="this.summaryInfo['Anzahl Termine vermittelt']"
             [title]="keyDataContainerStrings[0].secondTile" [color]="keyDataContainerStrings[0].secondTileColor">
           </app-key-data-container>
         </mat-grid-tile>
       </div>
+      <!-- Terminnachfrage Indikatoren -->
       <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl Terminnachfrage']"
@@ -131,6 +133,7 @@
           </app-key-data-container>
         </mat-grid-tile>
       </div>
+      <!-- Überblicksansicht Indikatoren -->
       <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl fristgerecht vermittelt']"
@@ -139,7 +142,7 @@
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
           <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminnachfrage']"
-            [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[2].firstTileColor">
+            [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[1].secondTileColor">
           </app-key-data-container>
         </mat-grid-tile>
         <mat-grid-tile colspan="1" rowspan="1">
@@ -149,9 +152,6 @@
         </mat-grid-tile>
       </div>
     </mat-grid-list>
-  </div>
-  <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
-
   </div>
   <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
     <div class="textOverviewContainer">
@@ -165,27 +165,23 @@
         class="textThird">seit {{dataDateSince}}</span>
     </div>
   </div>
+  <!-- Überblicksansicht -->
   <div class="grid-container">
     <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Überblick'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
-<!--       <div class="grid-tile">
-        <h3>Terminangebot und Inanspruchnahme</h3>
-        <app-pie-chart style="max-height: 320px;" [data]="constructChartData(this.summaryInfo, 'byPie')"
-          [hasLegend]="true"></app-pie-chart>
-      </div> -->
       <div class="grid-tile">
         <h3>vermittelte Termine</h3>
-        <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[2].secondTileColor)"></app-line-chart>
+        <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
       </div>
 
       <div class="grid-tile">
-        <h3>nicht vermittelte Terminnachfrage</h3>
-        <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[2].firstTileColor)"></app-line-chart>
+        <h3>erfolglose Terminsuchen</h3>
+        <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[1].secondTileColor)"></app-line-chart>
       </div>
-      <!-- <div class="grid-tile">
+      <div class="grid-tile">
         <h3>nicht vermittelte Terminne</h3>
-        <app-line-chart [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[2].firstTileColor)"></app-line-chart>
-      </div> -->
+        <app-line-chart [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[0].thirdTileColor)"></app-line-chart>
+      </div>
 
     </div>
     <!-- Daten fehlen noch -->
@@ -193,29 +189,39 @@
       <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
         Blick </span><span class="textThird">seit {{dataDateSince}}</span>
     </div>
-    
+    <!-- PLOTS TERMINANGEBOT -->
     <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminangebot'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
       <div class="grid-tile">
-        <h3>Terminangebot Insgesamt</h3>
-        <app-line-chart [data]="constructChartData(appointmentOffer, 'byDate', keyDataContainerStrings[0].firstTileColor)"></app-line-chart>
+        <h3>Termine im Angebot</h3>
+        <app-line-chart [data]="constructChartData(appointmentOfferTotal, 'byDate', keyDataContainerStrings[0].firstTileColor)"></app-line-chart>
       </div>
       <div class="grid-tile">
-        <h3>Termine vermittelt</h3>
-        <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[2].secondTileColor)"></app-line-chart>
+        <h3>nicht vermittelte Terminne</h3>
+        <app-line-chart [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[0].thirdTileColor)"></app-line-chart>
+      </div>
+      <div class="grid-tile">
+        <h3>vermittelte Termine</h3>
+        <app-line-chart [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
       </div>
     </div>
+    <!-- PLOTS Terminnachfrage -->
     <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'"
       style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
       <div class="grid-tile">
-        <h3>Terminnachfrage Insgesamt</h3>
+        <h3>Terminsuchen</h3>
         <app-line-chart [data]="constructChartData(appointmentDemandTotal, 'byDate',keyDataContainerStrings[1].firstTileColor)"></app-line-chart>
       </div>
       <div class="grid-tile">
-        <h3>Terminnachfrage nicht vermittelt</h3>
+        <h3>erfolglose Terminsuchen</h3>
         <app-line-chart [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[1].secondTileColor)"></app-line-chart>
       </div>
+      <div class="grid-tile">
+        <h3>erfolgreiche Buchungen</h3>
+        <app-line-chart [data]="constructChartData(appointmentDemandArranged, 'byDate',keyDataContainerStrings[1].thirdTileColor)"></app-line-chart>
+      </div>
     </div>
+    <!-- Zukunft Angebot -->
     <div *ngIf="this.levelSettings['thema'] === 'Terminangebot' && false">
       <div class="textOverviewContainer">
         <span class="textSecond">ein Blick in die Zukunft des</span><span class="textFirstOffer"> Angebots </span><span

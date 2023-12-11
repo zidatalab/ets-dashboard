@@ -83,11 +83,12 @@ export class ETerminDashboardRender implements OnInit {
   allPublicFields = ["stats_angebot", "stats_nachfrage", "dringlichkeit", "status_dringlichkeit_combined"]
   summaryInfo: any = []
   professionGroup: any = ''
-  appointmentOffer: any = []
+  appointmentOfferTotal: any = []
   appointmentBooked: any = []
   appointmentUnarranged: any = []
   appointmentByProfessionGroups: any = []
   appointmentDemandUnarranged: any = []
+  appointmentDemandArranged: any = []
   appointmentDemandTotal: any = []
   keyDataContainerStrings = [
     {
@@ -147,7 +148,7 @@ export class ETerminDashboardRender implements OnInit {
       }
       
       await this.setLevelData()      
-      console.log("plotdata",this.constructChartData(this.appointmentBooked, 'byDate',this.keyDataContainerStrings[1].firstTileColor))
+      
      
     }
     
@@ -222,8 +223,8 @@ export class ETerminDashboardRender implements OnInit {
       this.dataDateSince = new Date(result.stats_angebot.dataDateSince).toLocaleDateString()
 
       if (result.stats_angebot) {
-        this.appointmentOffer = result.stats_angebot.appointmentOfferTotal
-        this.appointmentBooked = result.stats_angebot.appointmentBookedTotal
+        this.appointmentOfferTotal = result.stats_angebot.appointmentOfferTotal
+        this.appointmentBooked = result.stats_angebot.appointmentBooked
         this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged
         this.appointmentByProfessionGroups = result.stats_angebot.appointmentByProfessionGroups
 
@@ -234,12 +235,13 @@ export class ETerminDashboardRender implements OnInit {
       if (result.stats_nachfrage) {
         this.appointmentDemandTotal = result.stats_nachfrage.appointmentDemandTotal
         this.appointmentDemandUnarranged = result.stats_nachfrage.appointmentDemandUnarranged
+        this.appointmentDemandArranged = result.stats_nachfrage.appointmentDemandArranged
 
         this.dataYearSince = result.stats_nachfrage.dataYearSince
         this.dataDateUntil = result.stats_nachfrage.dataDateUntil
       }
       this.inProgress=false;
-      this.cdr.detectChanges()
+      this.cdr.detectChanges()      
       
     }
 

@@ -16,7 +16,9 @@ export class LineChartComponent {
     responsive: true,
     animation: false,
     scales: {     
-    
+      y: {
+        suggestedMin: 0        
+    }
     
   }
   }

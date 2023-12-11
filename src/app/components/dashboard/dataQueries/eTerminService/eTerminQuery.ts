@@ -23,6 +23,7 @@ export class ETerminQuery {
   }
 
   async getQueryData(input: any = '', levelSettings: any, allPublicFields: any) {
+    console.log(levelSettings);
     let startYear = new Date(levelSettings['start']).getFullYear();
     let startMonth = new Date(levelSettings['start']).getMonth();
     let stopYear = new Date(levelSettings['stop']).getFullYear();
@@ -47,7 +48,7 @@ export class ETerminQuery {
     if (startYear==stopYear){
       query.groupinfo['$or'] = [
         {'$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
-                  { 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }
+                  { 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth+1 } }
                 ]}
         ]
       }
@@ -56,7 +57,7 @@ export class ETerminQuery {
           {'$and': [
             { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },           
           ]},          
-          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }]}
+          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth+1 } }]}
           ]
         }
     if ((startYear+1)<stopYear){
@@ -65,7 +66,7 @@ export class ETerminQuery {
             { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },           
           ]},
           {'$and': [{ 'Jahr': { '$gt': startYear,'$lt': stopYear } }]},
-          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }]}
+          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth+1 } }]}
           ]
         }
       

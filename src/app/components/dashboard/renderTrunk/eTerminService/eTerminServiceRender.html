@@ -3,7 +3,7 @@
     <div class="head-container">
       <h2>        
         Zahlen und Fakten zum <span class="textFirst">116117 Terminservice</span>
-      </h2>
+      </h2>      
       <div class="logo-container">        
         <div class="logo">
           <img class="logo-img" src="./assets/images/logos/logo-zi-fullversion.svg" alt="">
@@ -11,8 +11,9 @@
         <div class="logo">
           <img class="logo-img" src="./assets/images/logos/kvdigital-wort-bild-marke-pos-rgb-b.svg" alt="">
         </div>
-      </div>
+      </div>      
     </div>
+    
   </header>
   <div *ngIf="!this.currentUser">
     <p>Aktuell sind keine öffentlichen Informationen verfügbar.</p>
@@ -235,5 +236,8 @@
         </span><span class="textThird">bis {{dataDateUntil}}</span>
       </div>
     </div>
+    <div class="mat-small textThird"><br>Datenstand: {{this.dataLastAggregation | date :  'dd.MM.yyyy HH:mm'}} Uhr</div>
   </div>
+  
 </div>
+

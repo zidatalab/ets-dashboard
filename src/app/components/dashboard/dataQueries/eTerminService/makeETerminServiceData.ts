@@ -34,7 +34,7 @@ export class MakeETerminData {
      * for data structurization and aggregation see Teams Convo 
      */
     if (input === 'stats_angebot') {
-      let res_angebot = await this.createStats(this.levelSettings, input)
+      let res_angebot = await this.createStats(this.levelSettings, input)      
       return res_angebot
     }
 
@@ -69,15 +69,11 @@ export class MakeETerminData {
     let result: any = []
 
     if (dbData) {
-      // if (levelSettings['urgency'] !== -1) {
-      //   dbData = dbData.filter((item: any) => {
-      //     return item.angebot_group_dringlichkeit === levelSettings["urgency"]
-      //   })
-      // }
+
 
       result.dataYearSince = dbData[0].date.slice(0,4)
       result.dataDateSince = dbData[0].date
-      result.dataDateUntil = dbData[0].date
+      result.dataDateUntil = dbData[dbData.length-1].date
 
       if (input === 'stats_angebot') {
         const resAppointmentOffer = []

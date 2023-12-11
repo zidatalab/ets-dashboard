@@ -100,9 +100,28 @@ export class ETerminQuery {
       if (!input.length && result.length) {
         result = result.map((entry: any) => ({
           ...entry,
-        }))
+        }))        
       }
 
+      // Check for last timestamp of aggregation
+      if (result.length){
+      console.log("A RESULT!")
+      let date_of_aggregation=""
+      let date_of_aggregation_stored = localStorage.getItem('date_of_aggregation')
+      if (!date_of_aggregation_stored){
+      localStorage.setItem('date_of_aggregation',result[0].date_of_aggregation)
+      }
+
+      for (let item of result){          
+        if (date_of_aggregation<item.date_of_aggregation){
+          date_of_aggregation = item.date_of_aggregation
+        }
+      }
+      if (date_of_aggregation > date_of_aggregation_stored!) {
+        localStorage.setItem('date_of_aggregation',date_of_aggregation)
+      }
+      }
+      // END ADD date_of_aggregation
       for (let item of fields) {
         this.db.deleteWhere(item, 'KV', levelSettings['levelValues'], levelSettings['resolution'], levelSettings['start'], levelSettings['stop'])
         _result[item] = await this.updateDB(result, item, levelSettings)

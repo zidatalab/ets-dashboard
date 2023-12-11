@@ -125,10 +125,11 @@ export class ETerminDashboardRender implements OnInit {
   dataYearSince: any = ''
   dataDateSince: any = ''
   dataDateUntil: any = ''
-
+  dataLastAggregation: any = ''  
   async ngOnInit(): Promise<void> {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': -1 }
-    this.currentUser = this.auth.getUserDetails();
+    this.currentUser = this.auth.getUserDetails()
+    this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     this.setKeyDataString()
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
     this.metaData = await this.updateMetaData()    
@@ -239,7 +240,7 @@ export class ETerminDashboardRender implements OnInit {
       }
       this.inProgress=false;
       this.cdr.detectChanges()      
-      
+      this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     }
 
   }

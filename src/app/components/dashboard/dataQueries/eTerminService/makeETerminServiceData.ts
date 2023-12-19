@@ -25,7 +25,7 @@ export class MakeETerminData {
     return result
   }
 
-  datestringparser(input:string){
+  datestringparser(input: string) {
     return new Date(input).toLocaleDateString()
   }
 
@@ -34,24 +34,24 @@ export class MakeETerminData {
      * for data structurization and aggregation see Teams Convo 
      */
     if (input === 'stats_angebot') {
-      let res_angebot = await this.createStats(this.levelSettings, input)      
+      let res_angebot = await this.createStats(this.levelSettings, input)
       return res_angebot
     }
 
     if (input === 'stats_nachfrage') {
       let res_nachfrage = await this.createStats(this.levelSettings, input)
-      return res_nachfrage 
+      return res_nachfrage
     }
 
     return null
   }
 
-  urgencyfilter(itemtheurgency:string,urgencylevel:string){
-    if (urgencylevel=="AKUT"){
-      return ['AKUT','PT_AKUTBEHANDLUNG'].includes(itemtheurgency)
+  urgencyfilter(itemtheurgency: string, urgencylevel: string) {
+    if (urgencylevel == "AKUT") {
+      return ['AKUT', 'PT_AKUTBEHANDLUNG'].includes(itemtheurgency)
     }
     else {
-      return urgencylevel==itemtheurgency
+      return urgencylevel == itemtheurgency
     }
   }
 
@@ -71,9 +71,9 @@ export class MakeETerminData {
     if (dbData) {
 
 
-      result.dataYearSince = dbData[0].date.slice(0,4)
+      result.dataYearSince = dbData[0].date.slice(0, 4)
       result.dataDateSince = dbData[0].date
-      result.dataDateUntil = dbData[dbData.length-1].date
+      result.dataDateUntil = dbData[dbData.length - 1].date
 
       if (input === 'stats_angebot') {
         const resAppointmentOffer = []
@@ -85,27 +85,26 @@ export class MakeETerminData {
         let dataUnarrangedAppointments = 0
 
         for (const item of dbData) {
-          if (-1!=this.levelSettings.urgency){
-          if (!this.urgencyfilter(item.angebot_group_dringlichkeit,this.levelSettings.urgency)){
-            continue
-          }}
+          if (-1 != this.levelSettings.urgency) {
+            if (!this.urgencyfilter(item.angebot_group_dringlichkeit, this.levelSettings.urgency)) {
+              continue
+            }
+          }
 
           if (item.angebot_group_status === "available" || item.angebot_group_status === 'booked') {
             resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
             dataAvailableOffer += item.angebot_Anzahl
           }
 
-          if (item.angebot_group_status === 'booked' ) {
+          if (item.angebot_group_status === 'booked') {
             resAppointmentBooked.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
             dataBookedAppointments += item.angebot_Anzahl
           }
 
           if (item.angebot_group_status === 'available') {
             resAppointmentUnarranged.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
-            dataUnarrangedAppointments += item.angebot_Anzahl            
+            dataUnarrangedAppointments += item.angebot_Anzahl
           }
-
-          
         }
 
         summaryInfo['Anzahl Angebot'] = dataAvailableOffer
@@ -117,7 +116,7 @@ export class MakeETerminData {
         result.appointmentBooked = this.flattenArray(resAppointmentBooked)
         result.appointmentUnarranged = this.flattenArray(resAppointmentUnarranged)
 
-        result.dataYearSince = dbData[0].date.slice(0,4)
+        result.dataYearSince = dbData[0].date.slice(0, 4)
         result.dataDateUntil = dbData[0].date
       }
 
@@ -130,16 +129,17 @@ export class MakeETerminData {
         let dataAppointmentDemandArranged = 0
 
         for (const item of dbData) {
-          if (-1!=this.levelSettings.urgency){
-          if (!this.urgencyfilter(item.nachfrage_group_dringlichkeit,this.levelSettings.urgency)){
-            continue
-          }}
+          if (-1 != this.levelSettings.urgency) {
+            if (!this.urgencyfilter(item.nachfrage_group_dringlichkeit, this.levelSettings.urgency)) {
+              continue
+            }
+          }
 
           if (
             (item.nachfrage_group_status === "keine_buchung")
-          || (item.nachfrage_group_status === "gebucht_arzt_abgesagt" ) 
-          || (item.nachfrage_group_status === "erfolgreich_gebucht")
-          || (item.nachfrage_group_status === "gebucht_pat_abgesagt" )
+            || (item.nachfrage_group_status === "gebucht_arzt_abgesagt")
+            || (item.nachfrage_group_status === "erfolgreich_gebucht")
+            || (item.nachfrage_group_status === "gebucht_pat_abgesagt")
 
           ) {
             resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
@@ -147,21 +147,21 @@ export class MakeETerminData {
           }
 
           if ((item.nachfrage_group_status === "keine_buchung")
-          || (item.nachfrage_group_status === "gebucht_arzt_abgesagt" )
+            || (item.nachfrage_group_status === "gebucht_arzt_abgesagt")
           ) {
             resAppointmentDemandUnarranged.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
             dataAppointmentDemandUnarranged += item.nachfrage_Anzahl
           }
 
           if ((item.nachfrage_group_status === "erfolgreich_gebucht")
-          || (item.nachfrage_group_status === "gebucht_pat_abgesagt" )
+            || (item.nachfrage_group_status === "gebucht_pat_abgesagt")
           ) {
             resAppointmentDemandArranged.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
             dataAppointmentDemandArranged += item.nachfrage_Anzahl
           }
         }
 
-        summaryInfo['Anzahl Terminnachfrage'] = dataAppointmentDemand 
+        summaryInfo['Anzahl Terminnachfrage'] = dataAppointmentDemand
         summaryInfo['Anzahl nicht vermittelte Terminnachfrage'] = dataAppointmentDemandUnarranged
         summaryInfo['Anzahl vermittelte Terminnachfrage'] = dataAppointmentDemandArranged
         summaryInfo['Anzahl fristgerecht vermittelt'] = dataAppointmentDemandArranged
@@ -170,7 +170,7 @@ export class MakeETerminData {
         result.appointmentDemandUnarranged = this.flattenArray(resAppointmentDemandUnarranged)
         result.appointmentDemandArranged = this.flattenArray(resAppointmentDemandArranged)
 
-        result.dataYearSince = dbData[0].date.slice(0,4)
+        result.dataYearSince = dbData[0].date.slice(0, 4)
         result.dataDateUntil = dbData[0].date
       }
     }
@@ -179,7 +179,7 @@ export class MakeETerminData {
       summaryInfo: summaryInfo,
       appointmentDemandTotal: result.resAppointmentDemand,
       appointmentDemandUnarranged: result.appointmentDemandUnarranged,
-      appointmentDemandArranged: result.appointmentDemandArranged,      
+      appointmentDemandArranged: result.appointmentDemandArranged,
       appointmentOfferTotal: result.appointmentOffer,
       appointmentBooked: result.appointmentBooked,
       appointmentUnarranged: result.appointmentUnarranged,

@@ -24,9 +24,10 @@ export class ETerminQuery {
 
   async getQueryData(input: any = '', levelSettings: any, allPublicFields: any) {
     let startYear = new Date(levelSettings['start']).getFullYear();
-    let startMonth = new Date(levelSettings['start']).getMonth()+1;
+    let startMonth = new Date(levelSettings['start']).getMonth() + 1;
     let stopYear = new Date(levelSettings['stop']).getFullYear();
-    let stopMonth = new Date(levelSettings['stop']).getMonth()+1;
+    let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
+    
     let query: any = {
       'client_id': 'ets_reporting',
       'groupinfo': {
@@ -34,41 +35,45 @@ export class ETerminQuery {
         "fg": levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
         'timeframe': levelSettings['resolution'],
-        /* 'Jahr': {
-          '$gte': parseInt(levelSettings['start'].slice(0, 4)),
-          '$lte': parseInt(levelSettings['stop'].slice(0, 4))
-        } */
-        '$or': [        
+        '$or': [
         ]
-        },
+      },
       "showfields": ["stats_angebot", "stats_nachfrage"]
     }
 
-    if (startYear==stopYear){
+    if (startYear == stopYear) {
       query.groupinfo['$or'] = [
-        {'$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
-                  { 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }
-                ]}
-        ]
-      }
-    if ((startYear+1)==stopYear){
-        query.groupinfo['$or'] = [
-          {'$and': [
-            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },           
-          ]},          
-          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }]}
+        {
+          '$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+          { 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }
           ]
         }
-    if ((startYear+1)<stopYear){
-        query.groupinfo['$or'] = [
-          {'$and': [
-            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },           
-          ]},
-          {'$and': [{ 'Jahr': { '$gt': startYear,'$lt': stopYear } }]},
-          {'$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }]}
+      ]
+    }
+
+    if ((startYear + 1) == stopYear) {
+      query.groupinfo['$or'] = [
+        {
+          '$and': [
+            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
           ]
-        }
-      
+        },
+        { '$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }] }
+      ]
+    }
+
+    if ((startYear + 1) < stopYear) {
+      query.groupinfo['$or'] = [
+        {
+          '$and': [
+            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+          ]
+        },
+        { '$and': [{ 'Jahr': { '$gt': startYear, '$lt': stopYear } }] },
+        { '$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }] }
+      ]
+    }
+
     let _result: any = []
     let dbDataRange
     let now: Date = new Date();
@@ -100,28 +105,28 @@ export class ETerminQuery {
       if (!input.length && result.length) {
         result = result.map((entry: any) => ({
           ...entry,
-        }))        
+        }))
       }
 
-      // Check for last timestamp of aggregation
-      if (result.length){
-      console.log("A RESULT!")
-      let date_of_aggregation=""
-      let date_of_aggregation_stored = localStorage.getItem('date_of_aggregation')
-      if (!date_of_aggregation_stored){
-      localStorage.setItem('date_of_aggregation',result[0].date_of_aggregation)
-      }
+      if (result.length) {
+        let aggregationDate = ""
+        let aggregationDateStored = localStorage.getItem('date_of_aggregation')
 
-      for (let item of result){          
-        if (date_of_aggregation<item.date_of_aggregation){
-          date_of_aggregation = item.date_of_aggregation
+        if (!aggregationDateStored) {
+          localStorage.setItem('date_of_aggregation', result[0].date_of_aggregation)
+        }
+
+        for (let item of result) {
+          if (aggregationDate < item.date_of_aggregation) {
+            aggregationDate = item.date_of_aggregation
+          }
+        }
+
+        if (aggregationDate > aggregationDateStored!) {
+          localStorage.setItem('date_of_aggregation', aggregationDate)
         }
       }
-      if (date_of_aggregation > date_of_aggregation_stored!) {
-        localStorage.setItem('date_of_aggregation',date_of_aggregation)
-      }
-      }
-      // END ADD date_of_aggregation
+
       for (let item of fields) {
         this.db.deleteWhere(item, 'KV', levelSettings['levelValues'], levelSettings['resolution'], levelSettings['start'], levelSettings['stop'])
         _result[item] = await this.updateDB(result, item, levelSettings)

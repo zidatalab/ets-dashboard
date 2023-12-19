@@ -10,20 +10,20 @@ export class LineChartComponent {
   //   responsive: true
   // };
 
-  @Input() data: any = { }
+  @Input() data: any = {}
   @Input() options: any = {
     scaleShowVerticalLines: false,
     responsive: true,
     animation: false,
-    scales: {     
+    scales: {
       y: {
-        suggestedMin: 0        
+        suggestedMin: 0
+      }
+
     }
-    
-  }
   }
   @Input() labels: any = []
-  @Input() hasLegend : boolean = false
+  @Input() hasLegend: boolean = false
 
   constructor() { }
 }

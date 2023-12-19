@@ -71,7 +71,7 @@ export class ETerminDashboardRender implements OnInit {
     'Schleswig-Holstein',
     'Thüringen'
   ];
-  resolutionOptions = [{ key: "Monate", value: 'monthly' },{ key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
+  resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Überblick", "Terminangebot", "Terminnachfrage"]
   urgencies = [{ key: "Gesamt", value: -1 }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
@@ -98,7 +98,7 @@ export class ETerminDashboardRender implements OnInit {
       secondTileColor: "#C8D42B",
       thirdTile: "freie Termine",
       thirdTileColor: "#FF879E",
-      numberformat:""
+      numberformat: ""
     },
     {
       key: "demand",
@@ -125,59 +125,58 @@ export class ETerminDashboardRender implements OnInit {
   dataYearSince: any = ''
   dataDateSince: any = ''
   dataDateUntil: any = ''
-  dataLastAggregation: any = ''  
+  dataLastAggregation: any = ''
   async ngOnInit(): Promise<void> {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': -1 }
     this.currentUser = this.auth.getUserDetails()
     this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     this.setKeyDataString()
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
-    this.metaData = await this.updateMetaData()    
+    this.metaData = await this.updateMetaData()
     if (this.metaData) {
-      // If user is logged in, check access
-      if (this.currentUser){
-        if (!this.currentUser.is_superadmin){
-        this.levelValues= this.identifyaccesslevelids()     
+      if (this.currentUser) {
+        if (!this.currentUser.is_superadmin) {
+          this.levelValues = this.identifyaccesslevelids()
         }
-        }
-      // else: User has only access to Gesamt
-      else {
-        this.levelValues=['Gesamt']
       }
-      
-      await this.setLevelData()      
-      
-     
-    }
-    
+      else {
+        this.levelValues = ['Gesamt']
+      }
 
+      await this.setLevelData()
+    }
     // this.queryETerminData.getQueryData('',this.levelSettings)
   }
 
   // function to check for levels, the user has access
-  identifyaccesslevelids(){    
-    let usergroupsfordashboard = Array()
-    let levelsallowed = Array()
-    let levelidmeta:any
-    usergroupsfordashboard= this.auth.getUserDetails().usergroups[this.api.clientApiId]
-    levelidmeta= this.metaData.find((element) => element['type'] === "levelid")
-    let levelrights = levelidmeta?.levelrights  
-    usergroupsfordashboard.push('public')
-    for (let thegroup of usergroupsfordashboard){
-      let theids = Array()
-      if (levelrights[thegroup]){
-        theids=levelrights[thegroup]
-      for (let theid of theids){
-        if (levelsallowed.indexOf(theid) === -1) {      
-          levelsallowed.push(theid);
+  identifyaccesslevelids() {
+    let userGroups = Array()
+    let levelsAllowed = Array()
+    let levelIdMeta: any
+
+    userGroups = this.auth.getUserDetails().usergroups[this.api.clientApiId]
+    levelIdMeta = this.metaData.find((element) => element['type'] === "levelid")
+
+    let levelrights = levelIdMeta?.levelrights
+
+    userGroups.push('public')
+
+    for (let group of userGroups) {
+      let idArray = Array()
+
+      if (levelrights[group]) {
+        idArray = levelrights[group]
+
+        for (let id of idArray) {
+          if (levelsAllowed.indexOf(id) === -1) {
+            levelsAllowed.push(id);
+          }
         }
       }
-
-      }
-      
     }
-    return levelsallowed
-}
+
+    return levelsAllowed
+  }
 
   async setLevelData(level: any = '', value: any = '') {
     this.levelSettings[level] = value
@@ -206,10 +205,10 @@ export class ETerminDashboardRender implements OnInit {
    * fixing reactivity on change filter values
    */
   async setData(input: any = '') {
-    this.inProgress=true
+    this.inProgress = true
     this.cdr.detectChanges()
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
-    
+
     if (result) {
       this.summaryInfo = {
         ...result.stats_angebot.summaryInfo,
@@ -238,8 +237,8 @@ export class ETerminDashboardRender implements OnInit {
         this.dataYearSince = result.stats_nachfrage.dataYearSince
         this.dataDateUntil = result.stats_nachfrage.dataDateUntil
       }
-      this.inProgress=false;
-      this.cdr.detectChanges()      
+      this.inProgress = false;
+      this.cdr.detectChanges()
       this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     }
 
@@ -251,7 +250,7 @@ export class ETerminDashboardRender implements OnInit {
    * @param style byDate; byTheme; byPie
    * @returns 
    */
-  constructChartData(data: any, style: any , chartcolor: string ) {
+  constructChartData(data: any, style: any, chartcolor: string) {
     const result: any = {
       labels: [],
       fill: true,
@@ -290,7 +289,6 @@ export class ETerminDashboardRender implements OnInit {
 
     this.selectedContainerStringObject = res
   }
-  
 }
 
 

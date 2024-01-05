@@ -35,6 +35,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgChartsModule } from 'ng2-charts';
+import { NoDataComponent } from './no-data/no-data.component';
 
 
 registerLocaleData(locales, 'de');
@@ -88,7 +89,8 @@ const routes: Routes = [
     DashComponent,
     LineChartComponent,
     BarChartComponent,
-    PieChartComponent
+    PieChartComponent,
+    NoDataComponent
   ],
   imports: [
     CommonModule,

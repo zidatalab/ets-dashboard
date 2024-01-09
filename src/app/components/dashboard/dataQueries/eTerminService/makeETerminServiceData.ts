@@ -46,12 +46,12 @@ export class MakeETerminData {
     return null
   }
 
-  urgencyfilter(itemtheurgency: string, urgencylevel: string) {
-    if (urgencylevel == "AKUT") {
-      return ['AKUT', 'PT_AKUTBEHANDLUNG'].includes(itemtheurgency)
+  urgencyFilter(urgency: string, urgencyLevel: string) {
+    if (urgencyLevel == "AKUT") {
+      return ['AKUT', 'PT_AKUTBEHANDLUNG'].includes(urgency)
     }
     else {
-      return urgencylevel == itemtheurgency
+      return urgencyLevel === urgency
     }
   }
 
@@ -68,9 +68,7 @@ export class MakeETerminData {
     let summaryInfo: any = []
     let result: any = []
 
-    if (dbData) {
-
-
+    if (dbData.length > 0) {
       result.dataYearSince = dbData[0].date.slice(0, 4)
       result.dataDateSince = dbData[0].date
       result.dataDateUntil = dbData[dbData.length - 1].date
@@ -86,7 +84,7 @@ export class MakeETerminData {
 
         for (const item of dbData) {
           if (-1 != this.levelSettings.urgency) {
-            if (!this.urgencyfilter(item.angebot_group_dringlichkeit, this.levelSettings.urgency)) {
+            if (!this.urgencyFilter(item.angebot_group_dringlichkeit, this.levelSettings.urgency)) {
               continue
             }
           }
@@ -130,7 +128,7 @@ export class MakeETerminData {
 
         for (const item of dbData) {
           if (-1 != this.levelSettings.urgency) {
-            if (!this.urgencyfilter(item.nachfrage_group_dringlichkeit, this.levelSettings.urgency)) {
+            if (!this.urgencyFilter(item.nachfrage_group_dringlichkeit, this.levelSettings.urgency)) {
               continue
             }
           }
@@ -173,20 +171,21 @@ export class MakeETerminData {
         result.dataYearSince = dbData[0].date.slice(0, 4)
         result.dataDateUntil = dbData[0].date
       }
+      return {
+        summaryInfo: summaryInfo,
+        appointmentDemandTotal: result.resAppointmentDemand,
+        appointmentDemandUnarranged: result.appointmentDemandUnarranged,
+        appointmentDemandArranged: result.appointmentDemandArranged,
+        appointmentOfferTotal: result.appointmentOffer,
+        appointmentBooked: result.appointmentBooked,
+        appointmentUnarranged: result.appointmentUnarranged,
+        dataYearSince: result.dataYearSince,
+        dataDateUntil: result.dataDateUntil,
+        dataDateSince: result.dataDateSince
+      }
     }
 
-    return {
-      summaryInfo: summaryInfo,
-      appointmentDemandTotal: result.resAppointmentDemand,
-      appointmentDemandUnarranged: result.appointmentDemandUnarranged,
-      appointmentDemandArranged: result.appointmentDemandArranged,
-      appointmentOfferTotal: result.appointmentOffer,
-      appointmentBooked: result.appointmentBooked,
-      appointmentUnarranged: result.appointmentUnarranged,
-      dataYearSince: result.dataYearSince,
-      dataDateUntil: result.dataDateUntil,
-      dataDateSince: result.dataDateSince
-    }
+    return {}
   }
 
   private flattenArray(array: { total: any; date: any; }[]) {

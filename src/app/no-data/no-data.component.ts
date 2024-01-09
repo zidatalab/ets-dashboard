@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-no-data',
@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./no-data.component.scss']
 })
 export class NoDataComponent {
+
+  onReload() {
+    // emit event to reload data
+  }
 
 }

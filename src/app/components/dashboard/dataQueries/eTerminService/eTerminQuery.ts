@@ -102,6 +102,10 @@ export class ETerminQuery {
     } else {
       let { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
+      if(!result.length) {
+        return new Error("No data available for given query")
+      }
+
       if (!input.length && result.length) {
         result = result.map((entry: any) => ({
           ...entry,

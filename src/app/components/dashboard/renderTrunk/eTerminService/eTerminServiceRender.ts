@@ -7,6 +7,7 @@ import { DBService } from 'src/app/services/db.service';
 import { Router } from '@angular/router';
 import { MakeETerminData } from '../../dataQueries/eTerminService/makeETerminServiceData';
 import { ETerminQuery } from '../../dataQueries/eTerminService/eTerminQuery';
+import { catchError } from 'rxjs';
 /**
  * 
  * !INFORMATION-TODO
@@ -43,7 +44,7 @@ export class ETerminDashboardRender implements OnInit {
   ) { }
 
   metaData = [];
-  inProgress: boolean = true;
+  isInProgress: boolean = true;
   isMetaDataOk: boolean = false;
   mapData: any;
   mapDataFor: any;
@@ -126,6 +127,8 @@ export class ETerminDashboardRender implements OnInit {
   dataDateSince: any = ''
   dataDateUntil: any = ''
   dataLastAggregation: any = ''
+  hasNoData = false;
+
   async ngOnInit(): Promise<void> {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': -1 }
     this.currentUser = this.auth.getUserDetails()
@@ -200,48 +203,57 @@ export class ETerminDashboardRender implements OnInit {
     // this.subGroups = ['Keine'].concat(this.api.getValues(this.api.filterArray(this.metaData, 'type', 'group'), 'varname'))
   }
 
+
   /**
    * 
    * fixing reactivity on change filter values
    */
   async setData(input: any = '') {
-    this.inProgress = true
+    this.isInProgress = true
     this.cdr.detectChanges()
+
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
 
-    if (result) {
-      this.summaryInfo = {
-        ...result.stats_angebot.summaryInfo,
-        ...result.stats_nachfrage.summaryInfo
-      }
+    if (result instanceof Error) {
+      this.isInProgress = false
+      this.hasNoData = true
+      return
+    }
 
-      this.dataYearSince = result.stats_angebot.dataYearSince
-      this.dataDateUntil = result.stats_angebot.dataDateUntil
-      this.dataDateSince = new Date(result.stats_angebot.dataDateSince).toLocaleDateString()
-
-      if (result.stats_angebot) {
-        this.appointmentOfferTotal = result.stats_angebot.appointmentOfferTotal
-        this.appointmentBooked = result.stats_angebot.appointmentBooked
-        this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged
-        this.appointmentByProfessionGroups = result.stats_angebot.appointmentByProfessionGroups
+      if (result) {
+        this.summaryInfo = {
+          ...result.stats_angebot.summaryInfo,
+          ...result.stats_nachfrage.summaryInfo
+        }
 
         this.dataYearSince = result.stats_angebot.dataYearSince
         this.dataDateUntil = result.stats_angebot.dataDateUntil
+        this.dataDateSince = new Date(result.stats_angebot.dataDateSince).toLocaleDateString()
+
+        if (result.stats_angebot) {
+          this.appointmentOfferTotal = result.stats_angebot.appointmentOfferTotal
+          this.appointmentBooked = result.stats_angebot.appointmentBooked
+          this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged
+          this.appointmentByProfessionGroups = result.stats_angebot.appointmentByProfessionGroups
+
+          this.dataYearSince = result.stats_angebot.dataYearSince
+          this.dataDateUntil = result.stats_angebot.dataDateUntil
+        }
+
+        if (result.stats_nachfrage) {
+          this.appointmentDemandTotal = result.stats_nachfrage.appointmentDemandTotal
+          this.appointmentDemandUnarranged = result.stats_nachfrage.appointmentDemandUnarranged
+          this.appointmentDemandArranged = result.stats_nachfrage.appointmentDemandArranged
+
+          this.dataYearSince = result.stats_nachfrage.dataYearSince
+          this.dataDateUntil = result.stats_nachfrage.dataDateUntil
+        }
+
+        this.isInProgress = false;
+        this.hasNoData = false
+        this.cdr.detectChanges()
+        this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
       }
-
-      if (result.stats_nachfrage) {
-        this.appointmentDemandTotal = result.stats_nachfrage.appointmentDemandTotal
-        this.appointmentDemandUnarranged = result.stats_nachfrage.appointmentDemandUnarranged
-        this.appointmentDemandArranged = result.stats_nachfrage.appointmentDemandArranged
-
-        this.dataYearSince = result.stats_nachfrage.dataYearSince
-        this.dataDateUntil = result.stats_nachfrage.dataDateUntil
-      }
-      this.inProgress = false;
-      this.cdr.detectChanges()
-      this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
-    }
-
   }
 
   /**

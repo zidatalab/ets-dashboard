@@ -14,7 +14,6 @@
       </div>
     </div>
   </header>
-  <app-skeleton-loader></app-skeleton-loader>
   <div *ngIf="!this.currentUser">
     <p>Aktuell sind keine öffentlichen Informationen verfügbar.</p>
   </div>
@@ -61,9 +60,7 @@
           {{ item.key }}
         </mat-chip-option>
       </mat-chip-listbox>
-      <div *ngIf="this.isInProgress === true">
-        <p><mat-progress-spinner mode="indeterminate"></mat-progress-spinner></p>
-      </div>
+      <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     </div>
     <div *ngIf="hasNoData">
       No Data

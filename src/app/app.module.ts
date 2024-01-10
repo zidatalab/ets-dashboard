@@ -27,6 +27,8 @@ import { DashComponent } from './components/dash_comp/dash.component';
 import { LineChartComponent } from './components/plots/line-chart/line-chart.component';
 import { BarChartComponent } from './components/plots/bar-chart/bar-chart.component';
 import { PieChartComponent } from './components/plots/pie-chart/pie-chart.component';
+import { NoDataComponent } from './components/no-data/no-data.component';
+import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -35,7 +37,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgChartsModule } from 'ng2-charts';
-import { NoDataComponent } from './no-data/no-data.component';
 
 
 registerLocaleData(locales, 'de');
@@ -90,7 +91,8 @@ const routes: Routes = [
     LineChartComponent,
     BarChartComponent,
     PieChartComponent,
-    NoDataComponent
+    NoDataComponent,
+    SkeletonLoaderComponent
   ],
   imports: [
     CommonModule,

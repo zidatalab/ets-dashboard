@@ -1,0 +1,53 @@
+.skeleton-dashboard {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.skeleton-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skeleton-search {
+  height: 40px;
+  width: 300px;
+  border-radius: 4px;
+  background-color: #ddd;
+}
+
+.skeleton-avatar {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+.skeleton-chart {
+  height: 300px;
+  border-radius: 4px;
+  background-color: #ddd;
+}
+
+.skeleton-modules {
+  display: flex;
+  justify-content: space-between;
+}
+
+.skeleton-module {
+  height: 150px;
+  width: 30%;
+  border-radius: 4px;
+  background-color: #ddd;
+}
+
+.skeleton-table {
+  width: 100%;
+}
+
+.skeleton-row {
+  height: 40px;
+  border-radius: 4px;
+  background-color: #ddd;
+  margin-bottom: 10px;
+}

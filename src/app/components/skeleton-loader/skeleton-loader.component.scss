@@ -1,53 +1,53 @@
-.skeleton-dashboard {
+.skeleton {
   max-width: 1000px;
   margin: 0 auto;
+  padding: 20px;
 }
 
 .skeleton-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: center; 
+  padding-bottom: 20px;
 }
 
-.skeleton-search {
-  height: 40px;
-  width: 300px;
-  border-radius: 4px;
-  background-color: #ddd;
+.skeleton-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+  padding-top: 20px; 
+}
+
+/* Element styling */
+
+.skeleton-element {
+  border-radius: 8px;
+  background-color: #ddd; 
 }
 
 .skeleton-avatar {
-  height: 40px;
-  width: 40px;
+  @extend .skeleton-element;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background-color: #ddd;
+}
+
+.skeleton-search {
+  @extend .skeleton-element;
+  height: 40px;
 }
 
 .skeleton-chart {
-  height: 300px;
-  border-radius: 4px;
-  background-color: #ddd;
-}
-
-.skeleton-modules {
-  display: flex;
-  justify-content: space-between;
+  @extend .skeleton-element;
+  padding-bottom: 60%;
 }
 
 .skeleton-module {
-  height: 150px;
-  width: 30%;
-  border-radius: 4px;
-  background-color: #ddd;
-}
-
-.skeleton-table {
-  width: 100%;
+  @extend .skeleton-element;
+  height: 150px; 
 }
 
 .skeleton-row {
+  @extend .skeleton-element;
   height: 40px;
-  border-radius: 4px;
-  background-color: #ddd;
   margin-bottom: 10px;
 }

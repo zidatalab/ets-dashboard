@@ -164,8 +164,7 @@
         </div>
       </div>
       <div class="grid-container">
-        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Überblick'"
-          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Überblick'">
           <div class="grid-tile">
             <h3>vermittelte Termine</h3>
             <app-line-chart
@@ -186,8 +185,7 @@
           <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
             Blick </span><span class="textThird">seit {{dataDateSince}}</span>
         </div>
-        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminangebot'"
-          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
           <div class="grid-tile">
             <h3>Termine im Angebot</h3>
             <app-line-chart
@@ -204,8 +202,7 @@
               [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
           </div>
         </div>
-        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'"
-          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
           <div class="grid-tile">
             <h3>Terminsuchen</h3>
             <app-line-chart

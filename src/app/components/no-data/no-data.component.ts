@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./no-data.component.scss']
 })
 export class NoDataComponent {
-
+  
   onReload() {
     // emit event to reload data
   }

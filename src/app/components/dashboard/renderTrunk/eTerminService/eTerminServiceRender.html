@@ -60,12 +60,10 @@
           {{ item.key }}
         </mat-chip-option>
       </mat-chip-listbox>
-      <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     </div>
-    <div *ngIf="hasNoData">
-      No Data
-    </div>
-    <div *ngIf="!hasNoData">
+    <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
+    <app-no-data *ngIf="this.hasNoData"></app-no-data>
+    <div *ngIf="!this.hasNoData && !this.isInProgress">
       <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
         <div class="textOverviewContainer">
           <span class="textFirst">Terminservice</span>

@@ -75,7 +75,7 @@ export class ETerminDashboardRender implements OnInit {
   resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Überblick", "Terminangebot", "Terminnachfrage"]
-  urgencies = [{ key: "Gesamt", value: -1 }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
+  urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
   data: any;
   currentUser: any;
@@ -130,7 +130,7 @@ export class ETerminDashboardRender implements OnInit {
   hasNoData = false;
 
   async ngOnInit(): Promise<void> {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': -1 }
+    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt' }
     this.currentUser = this.auth.getUserDetails()
     this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     this.setKeyDataString()

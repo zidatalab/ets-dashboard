@@ -25,7 +25,7 @@ export class MakeETerminData {
     return result
   }
 
-  datestringparser(input: string) {
+  localDateParser(input: string) {
     return new Date(input).toLocaleDateString()
   }
 
@@ -46,13 +46,12 @@ export class MakeETerminData {
     return null
   }
 
-  urgencyFilter(urgency: string, urgencyLevel: string) {
-    if (urgencyLevel == "AKUT") {
-      return ['AKUT', 'PT_AKUTBEHANDLUNG'].includes(urgency)
+  isUrgencyMatch(itemUrgency: string, selectedUrgency: string) {
+    if (selectedUrgency === "AKUT") {
+      return itemUrgency === "AKUT" || itemUrgency === "PT_AKUTBEHANDLUNG";
     }
-    else {
-      return urgencyLevel === urgency
-    }
+
+    return itemUrgency === selectedUrgency;
   }
 
   async createStats(levelSettings: any, input: any) {
@@ -83,24 +82,22 @@ export class MakeETerminData {
         let dataUnarrangedAppointments = 0
 
         for (const item of dbData) {
-          if (-1 != this.levelSettings.urgency) {
-            if (!this.urgencyFilter(item.angebot_group_dringlichkeit, this.levelSettings.urgency)) {
-              continue
-            }
+          if (!this.isUrgencyMatch(item.angebot_group_dringlichkeit, this.levelSettings.urgency)) {
+            continue
           }
 
           if (item.angebot_group_status === "available" || item.angebot_group_status === 'booked') {
-            resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
+            resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: this.localDateParser(item['angebot_reference_date']) })
             dataAvailableOffer += item.angebot_Anzahl
           }
 
           if (item.angebot_group_status === 'booked') {
-            resAppointmentBooked.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
+            resAppointmentBooked.push({ total: item['angebot_Anzahl'], date: this.localDateParser(item['angebot_reference_date']) })
             dataBookedAppointments += item.angebot_Anzahl
           }
 
           if (item.angebot_group_status === 'available') {
-            resAppointmentUnarranged.push({ total: item['angebot_Anzahl'], date: this.datestringparser(item['angebot_reference_date']) })
+            resAppointmentUnarranged.push({ total: item['angebot_Anzahl'], date: this.localDateParser(item['angebot_reference_date']) })
             dataUnarrangedAppointments += item.angebot_Anzahl
           }
         }
@@ -127,10 +124,8 @@ export class MakeETerminData {
         let dataAppointmentDemandArranged = 0
 
         for (const item of dbData) {
-          if (-1 != this.levelSettings.urgency) {
-            if (!this.urgencyFilter(item.nachfrage_group_dringlichkeit, this.levelSettings.urgency)) {
-              continue
-            }
+          if (!this.isUrgencyMatch(item.nachfrage_group_dringlichkeit, this.levelSettings.urgency)) {
+            continue
           }
 
           if (
@@ -140,21 +135,21 @@ export class MakeETerminData {
             || (item.nachfrage_group_status === "gebucht_pat_abgesagt")
 
           ) {
-            resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
+            resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: this.localDateParser(item['nachfrage_reference_date']) })
             dataAppointmentDemand += item.nachfrage_Anzahl
           }
 
           if ((item.nachfrage_group_status === "keine_buchung")
             || (item.nachfrage_group_status === "gebucht_arzt_abgesagt")
           ) {
-            resAppointmentDemandUnarranged.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
+            resAppointmentDemandUnarranged.push({ total: item['nachfrage_Anzahl'], date: this.localDateParser(item['nachfrage_reference_date']) })
             dataAppointmentDemandUnarranged += item.nachfrage_Anzahl
           }
 
           if ((item.nachfrage_group_status === "erfolgreich_gebucht")
             || (item.nachfrage_group_status === "gebucht_pat_abgesagt")
           ) {
-            resAppointmentDemandArranged.push({ total: item['nachfrage_Anzahl'], date: this.datestringparser(item['nachfrage_reference_date']) })
+            resAppointmentDemandArranged.push({ total: item['nachfrage_Anzahl'], date: this.localDateParser(item['nachfrage_reference_date']) })
             dataAppointmentDemandArranged += item.nachfrage_Anzahl
           }
         }

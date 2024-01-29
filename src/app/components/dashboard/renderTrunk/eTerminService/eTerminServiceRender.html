@@ -22,7 +22,7 @@
       <h3>Ansicht</h3>
       <mat-chip-listbox>
         <mat-chip-option (click)="this.setLevelData('thema',item);" *ngFor="let item of this.themes" color="primary"
-          [selected]="(this.levelSettings['thema']==item)" (click)="setKeyDataString()" selectable="false">
+          [selected]="(this.levelSettings['thema']==item)" selectable="false">
           {{ item }}
         </mat-chip-option>
       </mat-chip-listbox>

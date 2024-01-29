@@ -182,6 +182,10 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   async setLevelData(level: any = '', value: any = '') {
+    if(level === 'thema') {
+      this.levelSettings['fg'] = 'Gesamt'
+    }
+    
     this.levelSettings[level] = value
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 

@@ -10,6 +10,20 @@
   padding: 5px;
 }
 
+.dialog-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.menu-button {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
 .backdrop-blur {
   backdrop-filter: blur(5px);
   background-color: rgba(0, 0, 0, 0.5);

@@ -58,9 +58,9 @@
       </mat-form-field>
     </form>
   </mat-card>
-</div>
-<div>
-  <button mat-raised-button (click)="onNoClick()" color="warn">Abbrechen</button>
-  <button [disabled]="this.myRegform.value.password.length<12" mat-raised-button (click)="this.addUser();"
-    color="primary">Hinzufügen</button>
+  <div class="dialog-menu">
+    <button class="menu-button" mat-raised-button (click)="onNoClick()" color="warn">Abbrechen</button>
+    <button class="menu-button" [disabled]="this.myRegform.value.password.length<12" mat-raised-button (click)="this.addUser();"
+      color="primary">Hinzufügen</button>
+  </div>
 </div>

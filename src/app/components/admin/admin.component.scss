@@ -2,4 +2,15 @@
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+}
+
+.container  > * {
+  flex-shrink: 0;
+}
+
+.backdrop-blur {
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5);
 }

@@ -6,7 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
 @Component({
   selector: 'updateUserDialog',
   templateUrl: 'updateUserDialog.html',
-  styleUrls: ['./updateUserDialog.scss']
+  styleUrls: ['./dialog.scss']
 })
 
 export class UpdateUserDialog implements OnInit {

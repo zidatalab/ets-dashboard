@@ -4,7 +4,8 @@ import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'deleteUserDialog',
-  templateUrl: 'deleteUserDialog.html'
+  templateUrl: 'deleteUserDialog.html',
+  styleUrls: ['./dialog.scss']
 })
 
 export class DeleteUserDialog {

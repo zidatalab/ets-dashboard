@@ -39,13 +39,15 @@ export class AdminComponent implements OnInit {
 
   updateUserList() {
     this.api.getTypeRequest('users/').subscribe(data => { 
-      this.users = data; 
+      this.users = data;
       this.ref.detectChanges()
     })
   }
 
   openAddUserDialog(): void {
-    const dialogRef = this.dialog.open(AddUserDialog, {})
+    const dialogRef = this.dialog.open(AddUserDialog, {
+      backdropClass: 'backdrop-blur',
+    })
 
     dialogRef.afterClosed().subscribe(result => {
       this.updateUserList()
@@ -53,6 +55,7 @@ export class AdminComponent implements OnInit {
   }
 
   openUpdateUserDialog(user : any): void {
+    console.log(user)
     const dialogRef = this.dialog.open(UpdateUserDialog, {
       data: user
     })

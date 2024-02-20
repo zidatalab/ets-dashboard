@@ -1,68 +1,66 @@
+<div class="dialog-wrapper">
+  <h2><strong>Nutzer hinzufügen</strong></h2>
+  <mat-card class="dialog-card" appearance="outlined">
+    <form autocomplete="on" [formGroup]="myRegform">
+      <h2><strong>Informationen</strong></h2>
+      <h4><strong>Name</strong>:</h4>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Anrede</mat-label>
+        <mat-select name="anredefeld" formControlName="anrede" required>
+          <mat-option *ngFor="let salutation of salutations" [value]="salutation">
+            {{ salutation === ' ' ? 'keine Anrede' : salutation }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Bitte wählen Sie eine bevorzugte Anrede für sich</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width" required>
+        <mat-label>Vorname</mat-label>
+        <input matInput placeholder="First name" name="fname" formControlName="firstname">
+        <mat-error>Fehler: Wir benötigen den Vornamen für die Registrierung.</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="full-width" required>
+        <mat-label>Nachname</mat-label>
+        <input matInput placeholder="Last Name" name="lname" formControlName="lastname">
+        <mat-error>Fehler: Wir benötigen den Nachnamen für die Registrierung.</mat-error>
+      </mat-form-field>
+      <h4><strong>E-Mail</strong> des neuen Nutzers</h4>
+      <mat-form-field appearance="fill" class="full-width">
+        <input matInput type="email" placeholder="Email" formControlName="email">
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error>Die E-Mail-Adresse ist ungültig</mat-error>
+      </mat-form-field>
+      <h4><strong>Rechte</strong></h4>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-select name="roles" formControlName="roles">
+          <mat-option *ngFor="let rights of userRights" [value]="rights.value">
+            {{ rights.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Bitte wählen Sie eine Bereichtungsstufe aus.</mat-error>
+      </mat-form-field>
+      <h4><strong>Daten-Level</strong></h4>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-select multiple name="dataLevel" formControlName="dataLevel">
+          <mat-option *ngFor="let dataLevel of usergroupoptions" [value]="dataLevel.value">
+            {{ dataLevel.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Bitte wählen Sie mindestens ein Datenlevel aus.</mat-error>
+      </mat-form-field>
+      <h4>Initiales <strong>Passwort</strong>:</h4>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Passwort</mat-label>
+        <mat-error>Passwort zu kurz</mat-error>
+        <input matInput type="string" formControlName="password" required>
+        <mat-hint>Bitte kopieren Sie das Passwort</mat-hint>
+        <mat-hint *ngIf="this.myRegform.value.password.length<12">Ihr Passwort (mindestens 12 Zeichen).
+        </mat-hint>
+      </mat-form-field>
+    </form>
+  </mat-card>
+</div>
 <div>
-  <div>
-    <h2><strong>Nutzer hinzufügen</strong></h2>
-    <mat-card appearance="outlined">
-      <form autocomplete="on" [formGroup]="myRegform">
-        <h2><strong>Informationen</strong></h2>
-        <h4><strong>Name</strong>:</h4>
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Anrede</mat-label>
-          <mat-select name="anredefeld" formControlName="anrede" required>
-            <mat-option *ngFor="let salutation of salutations" [value]="salutation">
-              {{ salutation === ' ' ? 'keine Anrede' : salutation }}
-            </mat-option>
-          </mat-select>
-          <mat-error>Bitte wählen Sie eine bevorzugte Anrede für sich</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="full-width" required>
-          <mat-label>Vorname</mat-label>
-          <input matInput placeholder="First name" name="fname" formControlName="firstname">
-          <mat-error>Fehler: Wir benötigen den Vornamen für die Registrierung.</mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="fill" class="full-width" required>
-          <mat-label>Nachname</mat-label>
-          <input matInput placeholder="Last Name" name="lname" formControlName="lastname">
-          <mat-error>Fehler: Wir benötigen den Nachnamen für die Registrierung.</mat-error>
-        </mat-form-field>
-        <h4><strong>E-Mail</strong> des neuen Nutzers</h4>
-        <mat-form-field appearance="fill" class="full-width">
-          <input matInput type="email" placeholder="Email" formControlName="email">
-          <mat-icon matSuffix>email</mat-icon>
-          <mat-error>Die E-Mail-Adresse ist ungültig</mat-error>
-        </mat-form-field>
-        <h4><strong>Rechte</strong></h4>
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-select name="roles" formControlName="roles">
-            <mat-option *ngFor="let rights of userRights" [value]="rights.value">
-              {{ rights.name }}
-            </mat-option>
-          </mat-select>
-          <mat-error>Bitte wählen Sie eine Bereichtungsstufe aus.</mat-error>
-        </mat-form-field>
-        <h4><strong>Daten-Level</strong></h4>
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-select multiple name="dataLevel" formControlName="dataLevel">
-            <mat-option *ngFor="let dataLevel of usergroupoptions" [value]="dataLevel.value">
-              {{ dataLevel.name }}
-            </mat-option>
-          </mat-select>
-          <mat-error>Bitte wählen Sie mindestens ein Datenlevel aus.</mat-error>
-        </mat-form-field>
-        <h4>Initiales <strong>Passwort</strong>:</h4>
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Passwort</mat-label>
-          <mat-error>Passwort zu kurz</mat-error>
-          <input matInput type="string" formControlName="password" required>
-          <mat-hint>Bitte kopieren Sie das Passwort</mat-hint>
-          <mat-hint *ngIf="this.myRegform.value.password.length<12">Ihr Passwort (mindestens 12 Zeichen).
-          </mat-hint>
-        </mat-form-field>
-      </form>
-    </mat-card>
-  </div>
-  <div>
-    <button mat-raised-button (click)="onNoClick()" color="warn">Abbrechen</button>
-    <button [disabled]="this.myRegform.value.password.length<12" mat-raised-button (click)="this.addUser();"
-      color="primary">Hinzufügen</button>
-  </div>
+  <button mat-raised-button (click)="onNoClick()" color="warn">Abbrechen</button>
+  <button [disabled]="this.myRegform.value.password.length<12" mat-raised-button (click)="this.addUser();"
+    color="primary">Hinzufügen</button>
 </div>

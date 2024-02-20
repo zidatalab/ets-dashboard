@@ -1,6 +1,6 @@
 <div class="container">
-  <h1 ngClass.lt-sm="mobileheading">Administration</h1>
-  <div *ngIf="!this.addUser && !this.addData">
+  <h1>Administration</h1>
+  <div>
     <div>
       <h2>Administrationsaufgaben</h2>
       <p class="mat-caption greycolor">In diesem Bereich können Dashboard Administratoren ("Admin") und
@@ -10,7 +10,7 @@
       <button mat-raised-button (click)="openAddUserDialog()" color="primary">Nutzer hinzufügen</button>
     </div>
   </div>
-  <div *ngIf="!this.addUser && !this.addData">
+  <div>
     <h2>Nutzerliste</h2>
     <p class="mat-caption greycolor">In diesem Bereich können Nutzerberechtigungen geändert werden.</p>
     <mat-card appearance="outlined">

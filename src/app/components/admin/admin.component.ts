@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,7 +16,8 @@ export class AdminComponent implements OnInit {
   constructor(
     private api: ApiService,
     private auth: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private ref: ChangeDetectorRef
   ) { }
 
   users: any;
@@ -32,12 +33,15 @@ export class AdminComponent implements OnInit {
   displayedColumns = ['symbol', 'user', 'rights', 'group', 'actions']
 
   ngOnInit(): void {
-    this.currentuser = this.auth.getUserDetails();
     this.updateUserList();
+    this.currentuser = this.auth.getUserDetails();
   }
 
   updateUserList() {
-    this.api.getTypeRequest('users/').subscribe(data => { this.users = data; })
+    this.api.getTypeRequest('users/').subscribe(data => { 
+      this.users = data; 
+      this.ref.detectChanges()
+    })
   }
 
   openAddUserDialog(): void {

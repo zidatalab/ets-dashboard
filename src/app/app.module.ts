@@ -29,6 +29,9 @@ import { BarChartComponent } from './components/plots/bar-chart/bar-chart.compon
 import { PieChartComponent } from './components/plots/pie-chart/pie-chart.component';
 import { NoDataComponent } from './components/no-data/no-data.component';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
+import { AddUserDialog } from './components/admin/components/addUserDialog';
+import { UpdateUserDialog } from './components/admin/components/updateUserDialog';
+import { DeleteUserDialog } from './components/admin/components/deleteUserDialog';
 
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -92,7 +95,10 @@ const routes: Routes = [
     BarChartComponent,
     PieChartComponent,
     NoDataComponent,
-    SkeletonLoaderComponent
+    SkeletonLoaderComponent,
+    AddUserDialog,
+    UpdateUserDialog,
+    DeleteUserDialog
   ],
   imports: [
     CommonModule,

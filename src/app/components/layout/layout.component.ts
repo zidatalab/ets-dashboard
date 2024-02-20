@@ -38,10 +38,10 @@ export class LayoutComponent {
     //   icon: '',
     //   link: '/private',
     // },
-    // {
-    //   title: 'Adminbereich',
-    //   icon: '',
-    //   link: '/admin',
-    // }
+    {
+      title: 'Adminbereich',
+      icon: '',
+      link: '/admin',
+    }
   ]
 }

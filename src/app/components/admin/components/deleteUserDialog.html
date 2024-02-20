@@ -1,0 +1,8 @@
+<h2><strong>Nutzer Löschen</strong></h2>
+<mat-card appearance="outlined">
+  <p>Sind Sie sicher dass Sie den User {{ data.firstname }} löschen wollen?</p>
+  <div>
+    <button mat-raised-button (click)="onNoClick()">Abrechen</button>
+    <button mat-raised-button (click)="deletUser()">Löschen</button>
+  </div>
+</mat-card>

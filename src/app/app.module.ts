@@ -1,4 +1,4 @@
-import { NgModule  } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
@@ -33,6 +33,7 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
 import { AddUserDialog } from './components/admin/components/addUserDialog';
 import { UpdateUserDialog } from './components/admin/components/updateUserDialog';
 import { DeleteUserDialog } from './components/admin/components/deleteUserDialog';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -73,7 +74,11 @@ const routes: Routes = [
         component: ProfileComponent
       },
     ]
-  }
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent
+  },
 ]
 
 @NgModule({
@@ -100,7 +105,8 @@ const routes: Routes = [
     SkeletonLoaderComponent,
     AddUserDialog,
     UpdateUserDialog,
-    DeleteUserDialog
+    DeleteUserDialog,
+    PageNotFoundComponent
   ],
   imports: [
     CommonModule,
@@ -111,7 +117,7 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    
+
     MatGridListModule,
     MatCardModule,
     MatMenuModule,

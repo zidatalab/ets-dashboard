@@ -111,4 +111,19 @@ export class AuthService {
   setDataInLocalStorage(variableName: any, data: any) {
     localStorage.setItem(variableName, data);
   }
+
+  isAdmin() {
+    const userData = this.getUserDetails()
+
+    if(userData) {
+      console.log('test')
+      if(userData['is_admin'] || userData['is_superadmin']) {
+        return true
+      }
+    }
+
+    this.router.navigate(['/'])
+
+    return false
+  }
 }

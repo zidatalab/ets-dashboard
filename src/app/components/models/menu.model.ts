@@ -2,8 +2,7 @@ export interface MenuItem {
   title?: string;
   icon?: string;
   link?: string;
-
-  hideFor?: string;
+  isShow?: boolean
 
   expanded?: boolean;
 }

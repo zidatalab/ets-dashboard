@@ -1,10 +1,11 @@
-import { NgModule, importProvidersFrom  } from '@angular/core';
+import { NgModule  } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor.service';
 import locales from '@angular/common/locales/de';
+import { AuthGuardService } from './services/auth-guard.service';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -64,7 +65,8 @@ const routes: Routes = [
       },
       {
         path: 'admin',
-        component: AdminComponent
+        component: AdminComponent,
+        canActivate: [AuthGuardService]
       },
       {
         path: 'profile',

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core'
 import { Menu } from '../models/menu.model'
+import { AuthService } from 'src/app/services/auth.service'
 
 @Component({
   selector: 'app-layout',
@@ -21,6 +22,10 @@ import { Menu } from '../models/menu.model'
 })
 
 export class LayoutComponent {
+  constructor(
+    private auth: AuthService,
+  ){}
+
   opened = false
 
   toggle(): void {
@@ -32,6 +37,7 @@ export class LayoutComponent {
       title: 'Startseite',
       icon: '',
       link: '/',
+      isShow: true,
     },
     // {
     //   title: 'Erweiterte Analysen',
@@ -42,6 +48,7 @@ export class LayoutComponent {
       title: 'Adminbereich',
       icon: '',
       link: '/admin',
+      isShow: this.auth.isAdmin(),
     }
   ]
 }

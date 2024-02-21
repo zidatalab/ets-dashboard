@@ -17,6 +17,7 @@ export class AuthGuardService {
     const userData = this.auth.getUserDetails()
 
     if(userData) {
+      console.log('test')
       return true
     }
 
@@ -29,6 +30,7 @@ export class AuthGuardService {
     const userData = this.auth.getUserDetails()
 
     if(userData) {
+      console.log('test')
       if(userData['is_admin'] || userData['is_superadmin']) {
         return true
       }

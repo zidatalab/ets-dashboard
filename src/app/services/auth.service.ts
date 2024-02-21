@@ -116,7 +116,6 @@ export class AuthService {
     const userData = this.getUserDetails()
 
     if(userData) {
-      console.log('test')
       if(userData['is_admin'] || userData['is_superadmin']) {
         return true
       }

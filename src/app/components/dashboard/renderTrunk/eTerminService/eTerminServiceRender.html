@@ -2,7 +2,7 @@
   <header>
     <div class="head-container">
       <h2>
-        Zahlen und Fakten zum <span class="textFirst">116117 Terminservice</span>
+        Zahlen und Fakten zum <span class="textFirst">116117 Terminservice</span> - Beta-Version
       </h2>
       <div class="logo-container">
         <div class="logo">
@@ -12,13 +12,17 @@
           <img class="logo-img" src="./assets/images/logos/kvdigital-wort-bild-marke-pos-rgb-b.svg" alt="">
         </div>
       </div>
+      <div class="information-container">
+        <p>Dieses Dashboard befindet sich noch in der Entwicklung. Aufbau und Darstellung sowie Kennzahlen und deren
+          Operationalisierung können sich noch ändern. Bei Fragen wenden Sie sich bitte an das Zi.</p>
+      </div>
     </div>
   </header>
   <div *ngIf="!this.currentUser">
     <p>Aktuell sind keine öffentlichen Informationen verfügbar.</p>
   </div>
-  <div *ngIf="this.currentUser">
-    <div>
+  <div class="dashboard-content" *ngIf="this.currentUser">
+    <div class="dashboard-content-header">
       <h3>Ansicht</h3>
       <mat-chip-listbox>
         <mat-chip-option (click)="this.setLevelData('thema',item);" *ngFor="let item of this.themes" color="primary"

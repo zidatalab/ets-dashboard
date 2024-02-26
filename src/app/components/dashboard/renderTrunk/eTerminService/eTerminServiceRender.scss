@@ -24,7 +24,6 @@ h2 {
 .head-container {
   display: flex;
   flex-flow: row wrap;
-  flex-wrap: nowrap;
   flex-direction: row;
   align-content: center;
   justify-content: space-between;
@@ -38,6 +37,22 @@ h2 {
   padding-top: 1rem;
 }
 
+.information-container {
+  margin-top: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 2px 16px;
+  border-radius: 5px;
+  background-color: #3b3b3b;
+}
+
+.dashboard-content {
+  display: block;
+  padding-top: 80px;
+}
+
+.dashboard-content-header {
+  display: block;
+}
 
 .dashboard-card {
   position: absolute;

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>ZI Dashboards</title>
-  <base href="https://etsreporting-test.ziapp.de/">
+  <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="index, follow">
   <meta name="og:title" content="Zahlen und Fakten zum 116117 Terminservice">
@@ -64,7 +64,7 @@
       font-weight: 300;
       font-display: swap;
       src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fBxc4AMP6lbBP.woff2) format('woff2');
-      unicode-range: U+0370-03FF;
+      unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
     }
 
     @font-face {
@@ -82,7 +82,7 @@
       font-weight: 300;
       font-display: swap;
       src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmSU5fChc4AMP6lbBP.woff2) format('woff2');
-      unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
     }
 
     @font-face {
@@ -127,7 +127,7 @@
       font-weight: 400;
       font-display: swap;
       src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4WxKKTU1Kvnz.woff2) format('woff2');
-      unicode-range: U+0370-03FF;
+      unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
     }
 
     @font-face {
@@ -145,7 +145,7 @@
       font-weight: 400;
       font-display: swap;
       src: url(https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu7GxKKTU1Kvnz.woff2) format('woff2');
-      unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
     }
 
     @font-face {
@@ -190,7 +190,7 @@
       font-weight: 500;
       font-display: swap;
       src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fBxc4AMP6lbBP.woff2) format('woff2');
-      unicode-range: U+0370-03FF;
+      unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
     }
 
     @font-face {
@@ -208,7 +208,7 @@
       font-weight: 500;
       font-display: swap;
       src: url(https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9fChc4AMP6lbBP.woff2) format('woff2');
-      unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
     }
 
     @font-face {
@@ -245,8 +245,34 @@
     }
   </style>
   <style>
+    @font-face {
+      font-family: Lato;
+      font-style: italic;
+      font-weight: 400;
+      src: url(Lato-Italic.e1f83a0590516452.ttf) format("truetype")
+    }
+
+    @font-face {
+      font-family: Lato;
+      font-style: normal;
+      font-weight: 400;
+      src: url(Lato-Regular.a439e7a5b243dca9.ttf) format("truetype")
+    }
+
+    @font-face {
+      font-family: Lato;
+      font-style: bold;
+      font-weight: 700;
+      src: url(Lato-Bold.43673ef601446c9b.ttf) format("truetype")
+    }
+
     html {
       background-color: #000000de
+    }
+
+    body {
+      margin: 0;
+      font-family: Lato, sans-serif
     }
 
     html,
@@ -259,8 +285,8 @@
       font-family: Roboto, Helvetica Neue, sans-serif
     }
   </style>
-  <link rel="stylesheet" href="styles.f3207f562d68f608.css" media="print" onload="this.media='all'"><noscript>
-    <link rel="stylesheet" href="styles.f3207f562d68f608.css">
+  <link rel="stylesheet" href="styles.013a60095a0f171f.css" media="print" onload="this.media='all'"><noscript>
+    <link rel="stylesheet" href="styles.013a60095a0f171f.css">
   </noscript>
 </head>
 
@@ -268,7 +294,7 @@
   <app-root></app-root>
   <script src="runtime.55e9716794963f8f.js" type="module"></script>
   <script src="polyfills.319d17d9fde6e292.js" type="module"></script>
-  <script src="main.5ac60a5035066b59.js" type="module"></script>
+  <script src="main.d451dcf6ec063e4c.js" type="module"></script>
 
 </body>
 

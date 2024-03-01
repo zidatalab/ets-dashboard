@@ -40,7 +40,6 @@ export class AdminComponent implements OnInit {
   updateUserList() {
     this.api.getTypeRequest('users/').subscribe(data => { 
       this.users = data;
-      console.log(data)
       this.ref.detectChanges()
     })
   }

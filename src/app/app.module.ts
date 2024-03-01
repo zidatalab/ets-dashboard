@@ -49,14 +49,14 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'index'
+    redirectTo: 'home'
   },
   {
     path: '',
     component: LayoutComponent,
     children: [
       {
-        path: 'index',
+        path: 'home',
         component: HomeComponent
       },
       {

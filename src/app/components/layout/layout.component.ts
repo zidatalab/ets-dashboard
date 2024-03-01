@@ -36,7 +36,7 @@ export class LayoutComponent {
     {
       title: 'Startseite',
       icon: '',
-      link: '/',
+      link: '/home',
       isShow: true,
     },
     // {

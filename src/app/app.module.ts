@@ -43,7 +43,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgChartsModule } from 'ng2-charts';
 
-
 registerLocaleData(locales, 'de');
 
 const routes: Routes = [
@@ -76,8 +75,12 @@ const routes: Routes = [
     ]
   },
   {
-    path: '**',
+    path: '404',
     component: PageNotFoundComponent
+  },
+  {
+    path: '**',
+    redirectTo: '/404'
   },
 ]
 

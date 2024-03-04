@@ -17,10 +17,8 @@ export class DeleteUserDialog {
   ) { }
 
   deletUser() {
-    alert('delete')
-    // open dialog to reinsure it wasn't a mistake
-    // this.api.deleteuser(user).subscribe(
-    //   data => { this.updateUserList() });
+    this.api.deleteUser(this.data).subscribe();
+    this.dialogRef.close()
   }
 
   onNoClick(): void {

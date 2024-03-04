@@ -36,7 +36,7 @@
         <ng-container matColumnDef="rights">
           <th mat-header-cell *matHeaderCellDef> Rechte </th>
           <td mat-cell *matCellDef="let element">
-            <mat-chip-listbox class="smallchips">
+            <mat-chip-listbox class="smallchips" disabled>
               <span *ngFor="let role of element.roles">
                 <mat-chip-option>{{ toUpperCase(role) }}</mat-chip-option>
               </span>
@@ -47,14 +47,14 @@
           <th mat-header-cell *matHeaderCellDef> Gruppen </th>
           <td mat-cell *matCellDef="let element">
             <ng-container *ngIf="element['usergroups']">
-              <mat-chip-listbox class="smallchips">
+              <mat-chip-listbox class="smallchips" disabled>
                 <span *ngFor="let group of element.usergroups.ets_reporting">
                   <mat-chip-option>{{ toUpperCase(group) }}</mat-chip-option>
                 </span>
               </mat-chip-listbox>
             </ng-container>
             <ng-container *ngIf="!element['usergroups'] || !element['usergroups']['ets_reporting']">
-              <mat-chip-listbox class="smallchips">
+              <mat-chip-listbox class="smallchips" disabled>
                 <mat-chip-option>Public Access</mat-chip-option>
               </mat-chip-listbox>
             </ng-container>

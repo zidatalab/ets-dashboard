@@ -101,12 +101,14 @@ export class UpdateUserDialog implements OnInit {
     }
   }
 
-  updateUserDataLevel(user: any, key: any, value: string) {
+  updateUserDataLevel(user: any, key: any, value: string, event : any) {
     let add = false
 
     if (value !== 'public') {
       add = true
     }
+
+    console.log(user, key, value, event)
 
     this.userGroupOptions.filter(i => { if (i.value === value) i.selected = !i.selected })
 

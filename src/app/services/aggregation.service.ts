@@ -183,6 +183,7 @@ export class AggregationService {
   }
 
   updateStartStop(levelSettings: any) {
+    console.log('Updating start and end date based on resolution');
     let tzOffset = (new Date()).getTimezoneOffset() * 60000;
     let today = new Date();
     let startDate = today.getFullYear() + "-01-01";;

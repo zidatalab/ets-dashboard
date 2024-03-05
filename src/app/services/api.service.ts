@@ -167,7 +167,7 @@ export class ApiService {
     return result
   }
 
-  public async getMetaData(name: string) {
+  public getMetaData(name: string) {
     const metaName: any = localStorage.getItem(name)
 
     return JSON.parse(metaName)

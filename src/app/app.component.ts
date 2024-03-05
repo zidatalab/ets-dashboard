@@ -50,24 +50,27 @@ export class AppComponent {
         this.isLoggedIn = !this.isLoggedIn
         this.isAdmin = this.currentUser["is_admin"] || this.currentUser['is_superadmin']
 
-        setTimeout(() => {
-          this.autoRefreshData()
-        }, 1000);
+        console.log('init')
+        this.autoRefreshData()
 
-        setInterval(() => {
-          if (this.currentUser) {
-            this.auth.refreshToken()
-                    }
+        // setInterval(() => {
+        //   if (this.currentUser) {
+        //     this.auth.refreshToken()
+        //             }
           
-          this.checkApiConnection()
-        }, 1000 * 60 * 5)
-      } else {
-        this.isLoggedIn = false
-        this.isAdmin = false
+        //   this.checkApiConnection()
+        // }, 1000 * 60 * 5)
 
-        setTimeout(() => {
-          this.autoRefreshData()
-        }, 0);
+      //   setTimeout(() => {
+      //   }, 1000);
+
+      // } else {
+      //   this.isLoggedIn = false
+      //   this.isAdmin = false
+
+      //   setTimeout(() => {
+      //     // this.autoRefreshData()
+      //   }, 0);
       }
     })
   }
@@ -92,6 +95,7 @@ export class AppComponent {
   public autoRefreshData() {
     this.updateMetaData().subscribe(
       (data: any) => {
+        console.log(data)
         this.setMetaData('metadata', data['data'])
       }
     )

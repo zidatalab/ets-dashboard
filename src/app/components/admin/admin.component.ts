@@ -55,7 +55,6 @@ export class AdminComponent implements OnInit {
   }
 
   openUpdateUserDialog(user : any): void {
-    console.log('user')
     const dialogRef = this.dialog.open(UpdateUserDialog, {
       data: user
     })

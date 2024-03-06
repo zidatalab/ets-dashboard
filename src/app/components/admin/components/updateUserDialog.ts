@@ -70,7 +70,7 @@ export class UpdateUserDialog implements OnInit {
   }
 
   dataLevel() {
-    for (let group of this.data.usergroups.smed_reporting) {
+    for (let group of this.data.usergroups.ets_reporting) {
       for (let group_ of this.userGroupOptions) {
         if (group === group_.value) {
           group_.selected = true
@@ -101,12 +101,14 @@ export class UpdateUserDialog implements OnInit {
     }
   }
 
-  updateUserDataLevel(user: any, key: any, value: string) {
+  updateUserDataLevel(user: any, key: any, value: string, event : any) {
     let add = false
 
     if (value !== 'public') {
       add = true
     }
+
+    console.log(user, key, value, event)
 
     this.userGroupOptions.filter(i => { if (i.value === value) i.selected = !i.selected })
 
@@ -121,7 +123,7 @@ export class UpdateUserDialog implements OnInit {
       password: new UntypedFormControl('', { validators: [Validators.required, Validators.pattern(this.strongPasswordRegx)] }),
       email: new UntypedFormControl({ value: this.data.email, disabled: true }),
       roles: new UntypedFormControl({ value: this.data.roles[this.data.roles.length - 1], disabled: false }),
-      dataLevel: new UntypedFormControl({ value: this.data.usergroups ? this.data.usergroups.smed_reporting : [], disabled: false }),
+      dataLevel: new UntypedFormControl({ value: this.data.usergroups ? this.data.usergroups.ets_reporting : [], disabled: false }),
     })
   };
 

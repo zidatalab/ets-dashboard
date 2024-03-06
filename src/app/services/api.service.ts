@@ -55,11 +55,13 @@ export class ApiService {
       payload.usergroups = usergroups
     }
 
+    console.log(payload)
+
     return this.postTypeRequest('userstatus/', payload)
   }
 
   public deleteUser(user: any, password = "") {
-    const payload = { 'email': user, password: password }
+    const payload = { 'email': user.email, password: password }
 
     return this.postTypeRequest('deleteuser', payload)
   }

@@ -51,10 +51,11 @@
         </mat-chip-option>
       </mat-chip-listbox>
       <h4><strong>Daten-Level</strong></h4>
-      <mat-chip-listbox class="smallchips">
+      <mat-chip-listbox multiple class="smallchips">
         <mat-chip-option color="primary" *ngFor="let dataLevel of userGroupOptions" [value]="dataLevel.value"
-          (click)="updateUserDataLevel(data.email, 'usergroups', dataLevel.value)">
-          <mat-icon matListIcon *ngIf="dataLevel.selected">check</mat-icon>
+          (click)="updateUserDataLevel(data.email, 'usergroups', dataLevel.value, dataLevel.selected)" selected="{{ dataLevel.selected }}">
+          <!-- {{ dataLevel | json }} -->
+          <!-- <mat-icon matListIcon *ngIf="dataLevel.selected">check</mat-icon> -->
           {{ dataLevel.name }}
         </mat-chip-option>
       </mat-chip-listbox>

@@ -183,7 +183,6 @@ export class AggregationService {
   }
 
   updateStartStop(levelSettings: any) {
-    console.log('Updating start and end date based on resolution');
     let tzOffset = (new Date()).getTimezoneOffset() * 60000;
     let today = new Date();
     let startDate = today.getFullYear() + "-01-01";;
@@ -234,7 +233,6 @@ export class AggregationService {
     if (levelSettings["zeitraum"] == "Detailliert") {
       let newstart = (new Date(levelSettings['start_picker'] - tzOffset)).toISOString().slice(0, 10);
       let newstop = (new Date(levelSettings['stop_picker'] - tzOffset)).toISOString().slice(0, 10);
-      //console.log("Detailliert",levelSettings['start_picker'],newstart,levelSettings['stop_picker'],newstop);
       levelSettings["start"] = newstart;
       levelSettings["stop"] = newstop;
     }

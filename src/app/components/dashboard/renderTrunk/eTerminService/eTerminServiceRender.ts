@@ -145,7 +145,6 @@ export class ETerminDashboardRender implements OnInit {
       else {
         this.levelValues = ['Gesamt']
       }
-      console.log('init')
       await this.setLevelData()
     }
     // this.queryETerminData.getQueryData('',this.levelSettings)
@@ -158,7 +157,6 @@ export class ETerminDashboardRender implements OnInit {
     let levelIdMeta: any
 
     userGroups = this.auth.getUserDetails().usergroups[this.api.clientApiId]
-    console.log(this.metaData)
     levelIdMeta = this.metaData.find((element) => element['type'] === "levelid")
 
     let levelrights = levelIdMeta?.levelrights
@@ -168,8 +166,6 @@ export class ETerminDashboardRender implements OnInit {
     for (let group of userGroups) {
       let idArray = Array()
       
-      console.log(levelrights, group)
-
       if (levelrights[group]) {
         idArray = levelrights[group]
 
@@ -192,9 +188,7 @@ export class ETerminDashboardRender implements OnInit {
     this.levelSettings[level] = value
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 
-    console.log('setLevelData called')
     if (this.levelSettings['start'] && this.levelSettings['stop']) {
-      console.log('start and stop dates provided')
       await this.setData()
     }
   }
@@ -218,7 +212,6 @@ export class ETerminDashboardRender implements OnInit {
    * fixing reactivity on change filter values
    */
   async setData(input: any = '') {
-    console.log('setData')
     this.isInProgress = true
 
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
@@ -260,7 +253,6 @@ export class ETerminDashboardRender implements OnInit {
 
         this.isInProgress = false;
         this.hasNoData = false
-        console.log('change')
         this.cdr.detectChanges()
         this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
       }

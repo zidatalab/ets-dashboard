@@ -75,7 +75,7 @@ export class ETerminDashboardRender implements OnInit {
   resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Überblick", "Terminangebot", "Terminnachfrage"]
-  urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
+  urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
   data: any;
   currentUser: any;
@@ -139,7 +139,7 @@ export class ETerminDashboardRender implements OnInit {
     if (this.metaData) {
       if (this.currentUser) {
         if (!this.currentUser.is_superadmin) {
-          this.levelValues = this.identifyaccesslevelids()
+          this.levelValues = this.setDataLevelForAccess()
         }
       }
       else {
@@ -148,11 +148,10 @@ export class ETerminDashboardRender implements OnInit {
 
       await this.setLevelData()
     }
-    // this.queryETerminData.getQueryData('',this.levelSettings)
   }
 
   // function to check for levels, the user has access
-  identifyaccesslevelids() {
+  setDataLevelForAccess() {
     let userGroups = Array()
     let levelsAllowed = Array()
     let levelIdMeta: any
@@ -206,7 +205,6 @@ export class ETerminDashboardRender implements OnInit {
     this.professionGroup = this.api.filterArray(this.metaData, 'type', 'fg')[0]['varname']
     // this.subGroups = ['Keine'].concat(this.api.getValues(this.api.filterArray(this.metaData, 'type', 'group'), 'varname'))
   }
-
 
   /**
    * 

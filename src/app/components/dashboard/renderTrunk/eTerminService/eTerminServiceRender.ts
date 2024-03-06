@@ -136,10 +136,11 @@ export class ETerminDashboardRender implements OnInit {
     this.setKeyDataString()
     this.metaData = this.updateMetaData()
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
+
     if (this.metaData) {
       if (this.currentUser) {
         if (!this.currentUser.is_superadmin) {
-          this.levelValues = this.identifyaccesslevelids()
+          this.levelValues = await this.identifyaccesslevelids()
         }
       }
       else {
@@ -151,21 +152,27 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   // function to check for levels, the user has access
-  identifyaccesslevelids() {
+  async identifyaccesslevelids() {
     let userGroups = Array()
     let levelsAllowed = Array()
     let levelIdMeta: any
 
     userGroups = this.auth.getUserDetails().usergroups[this.api.clientApiId]
-    levelIdMeta = this.metaData.find((element) => element['type'] === "levelid")
+    console.log(userGroups)
+    this.metaData = await this.updateMetaData()
+    console.log(await this.updateMetaData())
+    levelIdMeta = this.metaData.find((element : any) => element['type'] === "levelid")
+    console.log(levelIdMeta)
 
     let levelrights = levelIdMeta?.levelrights
+    console.log(levelrights)
 
     // userGroups.push('public')
 
     for (let group of userGroups) {
       let idArray = Array()
       
+      console.log(group)
       if (levelrights[group]) {
         idArray = levelrights[group]
 
@@ -205,7 +212,6 @@ export class ETerminDashboardRender implements OnInit {
     this.professionGroup = this.api.filterArray(this.metaData, 'type', 'fg')[0]['varname']
     // this.subGroups = ['Keine'].concat(this.api.getValues(this.api.filterArray(this.metaData, 'type', 'group'), 'varname'))
   }
-
 
   /**
    * 

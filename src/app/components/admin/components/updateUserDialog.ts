@@ -108,8 +108,6 @@ export class UpdateUserDialog implements OnInit {
       add = true
     }
 
-    console.log(user, key, value, event)
-
     this.userGroupOptions.filter(i => { if (i.value === value) i.selected = !i.selected })
 
     this.api.updateUser(user, key, add, value).subscribe()

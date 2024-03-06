@@ -54,7 +54,6 @@ export class AppComponent {
         this.checkApiConnection()
 
         setInterval(() => {
-          console.log('auto refresh')
           this.auth.refreshToken()
           this.autoRefreshData()
           this.checkApiConnection()

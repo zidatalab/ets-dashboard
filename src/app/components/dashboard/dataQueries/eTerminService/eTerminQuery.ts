@@ -3,6 +3,7 @@ import { ApiService } from "src/app/services/api.service";
 import { DBService } from "src/app/services/db.service";
 import { MakeETerminData } from "./makeETerminServiceData";
 import { AggregationService } from 'src/app/services/aggregation.service';
+import { AuthService } from "src/app/services/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class ETerminQuery {
     private db: DBService,
     private makeData: MakeETerminData,
     private aggregation: AggregationService,
+    private auth: AuthService
   ) { }
 
   async updateDB(data: any, input: any, levelSettings: any) {
@@ -100,6 +102,7 @@ export class ETerminQuery {
         _result.push(await this.makeData.getETerminData(item))
       }
     } else {
+      this.auth.refreshToken()
       let { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
       if(!result.length) {

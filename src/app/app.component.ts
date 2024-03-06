@@ -51,11 +51,14 @@ export class AppComponent {
         this.isAdmin = this.currentUser["is_admin"] || this.currentUser['is_superadmin']
 
         this.autoRefreshData()
+        this.checkApiConnection()
 
         setInterval(() => {
-          this.autoRefreshData()
+          console.log('auto refresh')
           this.auth.refreshToken()
-        }, 300000);
+          this.autoRefreshData()
+          this.checkApiConnection()
+        }, 20000);
       }
     })
   }

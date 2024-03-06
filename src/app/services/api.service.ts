@@ -55,8 +55,6 @@ export class ApiService {
       payload.usergroups = usergroups
     }
 
-    console.log(payload)
-
     return this.postTypeRequest('userstatus/', payload)
   }
 

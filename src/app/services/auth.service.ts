@@ -99,8 +99,6 @@ export class AuthService {
     return this.http.post(`${this.api.apiServer}login/refresh/`, { refresh: true }).subscribe(
       data => {
         const result: any = data
-        const decoded = atob(result.access_token.split('.')[1])
-        console.log(JSON.parse(decoded))
         this.setDataInLocalStorage('access_token', result.access_token)
       }, error => { }
     )

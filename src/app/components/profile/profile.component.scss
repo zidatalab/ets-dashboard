@@ -67,9 +67,10 @@ input:disabled {
   align-items: center;
 }
 
+.mat-hint {
+  margin: 5px;
+}
+
 .password-match-error {
-  transition: all 0.2s ease-in-out;
   color: red;
-  font-size: 12px;
-  margin-top: 5px;
 }

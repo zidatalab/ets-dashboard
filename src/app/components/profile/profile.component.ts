@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
   isPasswordMatchError: boolean = false
   passwordMatchError: string = 'Die Passwörter stimmen nicht überein.'
   isPasswordValid: boolean = false
-  passwordValidateError: string = 'Das Passwort muss mindestens 8 Zeichen lang sein, eine Zahl enthalten, einen Großbuchstaben und darf keine Sonderzeichen enthalten.'
+  passwordValidateError: string = 'Das Passwort muss mindestens 8 Zeichen lang sein, eine Zahl, einen Großbuchstaben enthalten'
 
   ngOnInit(): void {
     this.user = this.getUser()

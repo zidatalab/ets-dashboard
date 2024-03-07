@@ -67,7 +67,7 @@ export class ApiService {
   }
 
   public changePassword(user: any, newPassword: any, oldPassword = '') {
-    const payload = { 'email': user, 'newpassword': newPassword, oldPassword: oldPassword }
+    const payload = { email: user, newpassword: newPassword, oldpassword: oldPassword }
 
     return this.postTypeRequest('changepwd', payload)
   }

@@ -64,8 +64,8 @@ export class ProfileComponent implements OnInit {
   }
 
   validatePassword() {
-    // Password must be 8-20 characters long
-    if (this.passwordChangeRequest.newpwd.length < 8 || this.passwordChangeRequest.newpwd.length > 20) {
+    // Password must be atleast 8 characters long
+    if (this.passwordChangeRequest.newpwd.length < 8) {
       this.isPasswordValid = false
       return
     }

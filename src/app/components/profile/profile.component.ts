@@ -21,7 +21,6 @@ export class ProfileComponent implements OnInit {
   passwordChangeRequest: any = { 'oldpwd': '', 'newpwd': '', 'newpwd_confirm': '' }
   deleteAccountRequest: any = { 'pwd': '' }
   error: any = {}
-  passwordVisibilityIcon: string = 'visibility'
   isPasswordMatchError: boolean = false
   passwordMatchError: string = 'Die Passwörter stimmen nicht überein.'
   isPasswordValidateError: boolean = false

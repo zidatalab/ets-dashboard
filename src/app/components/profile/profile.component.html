@@ -22,9 +22,9 @@
       <label for="oldPassword">Altes Passwort:
         <div class="input-wrapper">
           <input type="password" id="password" name="oldPassword" required [(ngModel)]="passwordChangeRequest.oldpwd" />
-          <button mat-icon-button class="icon-button" (click)="showPassword('password')">
+          <button mat-icon-button class="icon-button" (click)="showPassword('password', '1icon')">
             <mat-icon>
-              <span class="material-symbols-rounded">
+              <span id="1icon" class="material-symbols-rounded">
                 {{ passwordVisibilityIcon }}
               </span>
             </mat-icon>
@@ -35,9 +35,9 @@
         <div class="input-wrapper">
           <input type="password" id="new-password" name="password" required (change)="validatePassword()"
             [disabled]="!passwordChangeRequest.oldpwd" [(ngModel)]="passwordChangeRequest.newpwd" />
-          <button mat-icon-button class="icon-button" (click)="showPassword('new-password')">
+          <button mat-icon-button class="icon-button" (click)="showPassword('new-password', '2icon')">
             <mat-icon>
-              <span class="material-symbols-rounded">
+              <span id="2icon" class="material-symbols-rounded">
                 {{ passwordVisibilityIcon }}
               </span>
             </mat-icon>
@@ -50,9 +50,9 @@
           <input type="password" id="repeat-password" name="repeat-password" required
             [disabled]="!passwordChangeRequest.newpwd || isPasswordValidateError"
             [(ngModel)]="passwordChangeRequest.newpwd_confirm" (change)="checkPasswordMatch()" />
-          <button mat-icon-button class="icon-button" (click)="showPassword('repeat-password')">
+          <button mat-icon-button class="icon-button" (click)="showPassword('repeat-password', '3icon')">
             <mat-icon>
-              <span class="material-symbols-rounded">
+              <span id="3icon" class="material-symbols-rounded">
                 {{ passwordVisibilityIcon }}
               </span>
             </mat-icon>

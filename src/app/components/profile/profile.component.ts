@@ -94,14 +94,17 @@ export class ProfileComponent implements OnInit {
     this.isPasswordValidateError = !this.isPasswordValidateError;;
   }
 
-  showPassword(id: string) {
+  showPassword(id: string, iconId: string) {
     const passwordField = document.getElementById(id) as HTMLInputElement;
+    const icon = document.getElementById(iconId) as HTMLInputElement;
 
     if (passwordField.type === "password") {
-      this.passwordVisibilityIcon = 'visibility_off'
+      // this.passwordVisibilityIcon = 'visibility_off'
+      icon.innerText = 'visibility_off'
       passwordField.type = "text";
     } else {
-      this.passwordVisibilityIcon = 'visibility'
+      // this.passwordVisibilityIcon = 'visibility'
+      icon.innerText = 'visibility'
       passwordField.type = "password";
     }
   }

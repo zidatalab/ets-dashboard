@@ -1,1 +1,71 @@
-<p>profile works!</p>
+<div class="profile-wrapper">
+  <mat-card class="profile-container">
+    <mat-card-header class="profile-header">
+      <mat-card-title>Nutzer Profil</mat-card-title>
+      <mat-card-subtitle>Hier kannst du deinen Nutzer Profil bearbeiten</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="profile-content">
+      <label for="username">Name: <input id="username" name="username"
+          [value]="user.anrede + ' ' + user.firstname + ' ' + user.lastname" disabled /></label>
+      <label for="email">E-Mail: <input id="email" name="email" [value]="user.email" disabled /></label>
+      <label for="roles">Rolle(n): <input id="roles" name="roles" [value]="user.roles" disabled /></label>
+    </mat-card-content>
+    <mat-card-actions class="actions">
+      <button mat-raised-button color="primary" (click)="openChangePassword()">Password ändern</button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-card class="change-password-container" *ngIf="isChangePassword">
+    <mat-card-header>
+      <mat-card-title>Passwort ändern</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="change-password-content">
+      <label for="oldPassword">Altes Passwort:
+        <div class="input-wrapper">
+          <input type="password" id="password" name="oldPassword" required [(ngModel)]="passwordChangeRequest.oldpwd" />
+          <button mat-icon-button class="icon-button" (click)="showPassword('password')">
+            <mat-icon>
+              <span class="material-symbols-rounded">
+                {{ passwordVisibilityIcon }}
+              </span>
+            </mat-icon>
+          </button>
+        </div>
+      </label>
+      <label for="password">Neues Passwort:
+        <div class="input-wrapper">
+          <input type="password" id="new-password" name="password" required (change)="validatePassword()"
+            [disabled]="!passwordChangeRequest.oldpwd" [(ngModel)]="passwordChangeRequest.newpwd" />
+          <button mat-icon-button class="icon-button" (click)="showPassword('new-password')">
+            <mat-icon>
+              <span class="material-symbols-rounded">
+                {{ passwordVisibilityIcon }}
+              </span>
+            </mat-icon>
+          </button>
+        </div>
+        <mat-hint *ngIf="isPasswordValidateError">{{ passwordValidateError }}</mat-hint>
+      </label>
+      <label for="repeate-password">Passwort wiederholen:
+        <div class="input-wrapper">
+          <input type="password" id="repeat-password" name="repeat-password" required
+            [disabled]="!passwordChangeRequest.newpwd || isPasswordValidateError"
+            [(ngModel)]="passwordChangeRequest.newpwd_confirm" (change)="checkPasswordMatch()" />
+          <button mat-icon-button class="icon-button" (click)="showPassword('repeat-password')">
+            <mat-icon>
+              <span class="material-symbols-rounded">
+                {{ passwordVisibilityIcon }}
+              </span>
+            </mat-icon>
+          </button>
+        </div>
+      </label>
+      <mat-hint *ngIf="isPasswordMatchError" class="password-match-error">{{ passwordMatchError }}</mat-hint>
+    </mat-card-content>
+    <mat-card-actions class="actions">
+      <button mat-raised-button color="warn" (click)="closeChangePassword()">Abbrechen</button>
+      <button mat-raised-button color="primary"
+        [disabled]="isPasswordMatchError || !(passwordChangeRequest.newpwd_confirm && passwordChangeRequest.oldpwd)"
+        (click)="changePassword()">Änderung bestätigen</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

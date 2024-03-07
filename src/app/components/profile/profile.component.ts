@@ -99,11 +99,9 @@ export class ProfileComponent implements OnInit {
     const icon = document.getElementById(iconId) as HTMLInputElement;
 
     if (passwordField.type === "password") {
-      // this.passwordVisibilityIcon = 'visibility_off'
       icon.innerText = 'visibility_off'
       passwordField.type = "text";
     } else {
-      // this.passwordVisibilityIcon = 'visibility'
       icon.innerText = 'visibility'
       passwordField.type = "password";
     }

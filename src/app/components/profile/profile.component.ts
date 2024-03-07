@@ -65,27 +65,21 @@ export class ProfileComponent implements OnInit {
 
   validatePassword() {
     // Password must be 6-20 characters long
-    // Password must contain at least one uppercase letter
-    // Password must contain at least one number
-    // Password must not contain special characters
-    // Password must not contain whitespace
-
     if (this.passwordChangeRequest.newpwd.length < 6 || this.passwordChangeRequest.newpwd.length > 20) {
       this.isPasswordValidateError = false
     }
 
+    // Password must contain at least one uppercase letter
     if (!/[A-Z]/.test(this.passwordChangeRequest.newpwd)) {
       this.isPasswordValidateError = false
     }
 
+    // Password must contain at least one number
     if (!/\d/.test(this.passwordChangeRequest.newpwd)) {
       this.isPasswordValidateError = false
     }
 
-    if (/[^A-Za-z0-9]/.test(this.passwordChangeRequest.newpwd)) {
-      this.isPasswordValidateError = false
-    }
-
+    // Password must not contain whitespace
     if (/\s/.test(this.passwordChangeRequest.newpwd)) {
       this.isPasswordValidateError = false
     }

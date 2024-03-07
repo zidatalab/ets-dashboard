@@ -72,23 +72,23 @@ export class ProfileComponent implements OnInit {
     // Password must not contain whitespace
 
     if (this.passwordChangeRequest.newpwd.length < 6 || this.passwordChangeRequest.newpwd.length > 20) {
-      this.isPasswordValidateError = !this.isPasswordValidateError;
+      this.isPasswordValidateError = false
     }
 
     if (!/[A-Z]/.test(this.passwordChangeRequest.newpwd)) {
-      this.isPasswordValidateError = !this.isPasswordValidateError;;
+      this.isPasswordValidateError = false
     }
 
     if (!/\d/.test(this.passwordChangeRequest.newpwd)) {
-      this.isPasswordValidateError = !this.isPasswordValidateError;;
+      this.isPasswordValidateError = false
     }
 
     if (/[^A-Za-z0-9]/.test(this.passwordChangeRequest.newpwd)) {
-      this.isPasswordValidateError = !this.isPasswordValidateError;;
+      this.isPasswordValidateError = false
     }
 
     if (/\s/.test(this.passwordChangeRequest.newpwd)) {
-      this.isPasswordValidateError = !this.isPasswordValidateError;;
+      this.isPasswordValidateError = false
     }
 
     this.isPasswordValidateError = !this.isPasswordValidateError;;

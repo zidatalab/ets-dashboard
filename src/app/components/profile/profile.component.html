@@ -43,12 +43,13 @@
             </mat-icon>
           </button>
         </div>
-        <mat-hint *ngIf="isPasswordValidateError">{{ passwordValidateError }}</mat-hint>
+        {{ isPasswordValid }}
+        <mat-hint *ngIf="!isPasswordValid">{{ passwordValidateError }}</mat-hint>
       </label>
       <label for="repeate-password">Passwort wiederholen:
         <div class="input-wrapper">
           <input type="password" id="repeat-password" name="repeat-password" required
-            [disabled]="!passwordChangeRequest.newpwd || isPasswordValidateError"
+            [disabled]="!passwordChangeRequest.newpwd || !isPasswordValid"
             [(ngModel)]="passwordChangeRequest.newpwd_confirm" (change)="checkPasswordMatch()" />
           <button mat-icon-button class="icon-button" (click)="showPassword('repeat-password', '3icon')">
             <mat-icon>

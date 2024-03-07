@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit {
   error: any = {}
   isPasswordMatchError: boolean = false
   passwordMatchError: string = 'Die Passwörter stimmen nicht überein.'
-  isPasswordValidateError: boolean = false
+  isPasswordValid: boolean = false
   passwordValidateError: string = 'Das Passwort muss mindestens 8 Zeichen lang sein, eine Zahl enthalten, einen Großbuchstaben und darf keine Sonderzeichen enthalten.'
 
   ngOnInit(): void {
@@ -65,26 +65,31 @@ export class ProfileComponent implements OnInit {
 
   validatePassword() {
     // Password must be 6-20 characters long
-    if (this.passwordChangeRequest.newpwd.length < 6 || this.passwordChangeRequest.newpwd.length > 20) {
-      this.isPasswordValidateError = false
+    if (this.passwordChangeRequest.newpwd.length < 8 || this.passwordChangeRequest.newpwd.length > 20) {
+      this.isPasswordValid = false
+      return
     }
 
     // Password must contain at least one uppercase letter
     if (!/[A-Z]/.test(this.passwordChangeRequest.newpwd)) {
-      this.isPasswordValidateError = false
+      this.isPasswordValid = false
+      return
     }
 
     // Password must contain at least one number
     if (!/\d/.test(this.passwordChangeRequest.newpwd)) {
-      this.isPasswordValidateError = false
+      this.isPasswordValid = false
+      return
     }
 
     // Password must not contain whitespace
     if (/\s/.test(this.passwordChangeRequest.newpwd)) {
-      this.isPasswordValidateError = false
+      this.isPasswordValid = false
+      return
     }
 
-    this.isPasswordValidateError = !this.isPasswordValidateError;;
+    this.isPasswordValid = true;
+    return
   }
 
   showPassword(id: string, iconId: string) {

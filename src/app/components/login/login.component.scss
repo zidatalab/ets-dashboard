@@ -1,0 +1,45 @@
+h1 {
+  color: #ccc;
+}
+
+.form-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login-card {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.login-content {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.mat-mdc-card {
+  margin: 0px
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}

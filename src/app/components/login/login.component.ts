@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.isLoginPending = false
     this.form = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required]
     })
 
@@ -52,5 +52,18 @@ export class LoginComponent implements OnInit {
     })
 
     this.isLoginPending = false
+  }
+
+  showPassword(id : string, iconId : string) {
+    const passwordField = document.getElementById(id) as HTMLInputElement;
+    const icon = document.getElementById(iconId) as HTMLInputElement;
+
+    if (passwordField.type === "password") {
+      icon.innerText = 'visibility_off'
+      passwordField.type = "text";
+    } else {
+      icon.innerText = 'visibility'
+      passwordField.type = "password";
+    }
   }
 }

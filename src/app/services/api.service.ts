@@ -25,6 +25,12 @@ export class ApiService {
     })).pipe(retry(3))
   }
 
+  public getTypeRequestWithPayload(url: any, payload : any) {
+    return this.httpClient.get(`${this.apiServer}${url}`, { headers: {'Authorization': `Bearer ${payload.token}` }}).pipe(map(result => {
+      return result
+    })).pipe(retry(3))
+  }
+
   public postTypeRequest(url: any, payload: any) {
     return this.httpClient.post(`${this.apiServer}${url}`, payload).pipe(map(result => {
       return result
@@ -55,8 +61,6 @@ export class ApiService {
       payload.usergroups = usergroups
     }
 
-    console.log(payload)
-
     return this.postTypeRequest('userstatus/', payload)
   }
 
@@ -70,6 +74,12 @@ export class ApiService {
     const payload = { email: user, newpassword: newPassword, oldpassword: oldPassword }
 
     return this.postTypeRequest('changepwd', payload)
+  }
+
+  public logout(token : any) {
+    const payload = { 'token': token }
+
+    return this.getTypeRequestWithPayload('logout/', payload)
   }
 
   // local helper functions

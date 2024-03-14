@@ -136,12 +136,12 @@
         <mat-grid-list *ngIf="this.levelSettings['thema'] === 'Überblick'" cols="2" rowHeight="150px">
           <mat-grid-tile colspan="1" rowspan="1">
             <app-key-data-container [value]="this.summaryInfo['Anteil Terminangebot']" [isPercent]="true"
-              [title]="keyDataContainerStrings[2].secondTile" [color]="keyDataContainerStrings[2].secondTileColor">
+              [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[2].firstTileColor">
             </app-key-data-container>
           </mat-grid-tile>
           <mat-grid-tile colspan="1" rowspan="1">
             <app-key-data-container [value]="this.summaryInfo['Anteil Vermittelungswünsche']" [isPercent]="true"
-              [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[1].secondTileColor">
+              [title]="keyDataContainerStrings[2].secondTile" [color]="keyDataContainerStrings[2].secondTileColor">
             </app-key-data-container>
           </mat-grid-tile>
         </mat-grid-list>

@@ -114,9 +114,9 @@ export class ETerminDashboardRender implements OnInit {
     {
       key: "overview",
       name: "Überblick",
-      firstTile: "erfolglose Vermittlungswünsche",
+      firstTile: "des Terminangebots wurden gebucht",
       firstTileColor: "#EB9F47",
-      secondTile: "vermittelte Termine",
+      secondTile: "der Vermittlungswünsche waren erfolgreich",
       secondTileColor: "#C8D42B",
       thirdTile: "nicht vermittelte Termine",
       thirdTileColor: "#FF879E",

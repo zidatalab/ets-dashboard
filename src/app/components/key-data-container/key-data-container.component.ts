@@ -13,7 +13,7 @@ export class KeyDataContainerComponent implements OnInit {
     private api: ApiService
   ) { }
 
-  @Input() value: number = 0
+  @Input() value: any = ''
   @Input() title: string = ''
   @Input() description: string = ''
   @Input() color: any = ''
@@ -22,11 +22,22 @@ export class KeyDataContainerComponent implements OnInit {
   @Input() numberFormat: string = ''
   @Input() matIcon: string = ''
   @Input() isTextBehind: boolean = false
+  @Input() isPercent: boolean = false
 
   itemColor: string = ''
 
   ngOnInit() {
-    this.value = Number(this.value)
+    this.value = Number(this.value).toLocaleString('de-DE', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    })
+    
+    if(this.isPercent) {
+      this.value = Number(this.value).toLocaleString('de-DE', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      }).endsWith('%')? this.value : (`${this.value} %`)
+    }
 
     if (!this.numberFormat) {
       this.numberFormat = '1.0-0'

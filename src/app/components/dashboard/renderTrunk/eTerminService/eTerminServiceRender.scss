@@ -128,3 +128,12 @@ h2 {
   font-weight: 800;
   word-wrap: break-word
 }
+
+.overview-container {
+  display: flex;
+  justify-content: center;
+}
+
+.overview-container mat-grid-tile {
+  margin: 0 1rem; 
+}

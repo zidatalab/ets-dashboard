@@ -97,6 +97,7 @@ export class MakeETerminData {
         summaryInfo['Anzahl Angebot'] = dataAvailableOffer
         summaryInfo['Anzahl nicht vermittelt Termine'] = dataUnarrangedAppointments
         summaryInfo['Anzahl Termine vermittelt'] = dataBookedAppointments
+        summaryInfo['Anteil Terminangebot'] = (dataBookedAppointments / dataAvailableOffer) * 100
 
         result.appointmentByProfessionGroups = this.api.groupBySum(dbData, 'fg', 'test', 'Anzahl')
         result.appointmentOffer = this.flattenArray(resAppointmentOffer)
@@ -150,6 +151,7 @@ export class MakeETerminData {
         summaryInfo['Anzahl nicht vermittelte Terminnachfrage'] = dataAppointmentDemandUnarranged
         summaryInfo['Anzahl vermittelte Terminnachfrage'] = dataAppointmentDemandArranged
         summaryInfo['Anzahl fristgerecht vermittelt'] = dataAppointmentDemandArranged
+        summaryInfo['Anteil Vermittelungswünsche'] = (dataAppointmentDemandArranged / dataAppointmentDemand) * 100
 
         result.resAppointmentDemand = this.flattenArray(resAppointmentDemand)
         result.appointmentDemandUnarranged = this.flattenArray(resAppointmentDemandUnarranged)

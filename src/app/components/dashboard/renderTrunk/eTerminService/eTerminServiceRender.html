@@ -97,7 +97,7 @@
         </div>
       </div>
       <div class="grid-container">
-        <mat-grid-list cols="3" rowHeight="150px">
+        <mat-grid-list *ngIf="this.levelSettings['thema'] !== 'Überblick'" cols="3" rowHeight="150px">
           <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
             <mat-grid-tile colspan="1" rowspan="1">
               <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
@@ -132,23 +132,18 @@
               </app-key-data-container>
             </mat-grid-tile>
           </div>
-          <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl Termine vermittelt']"
-                [title]="keyDataContainerStrings[2].secondTile" [color]="keyDataContainerStrings[2].secondTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminnachfrage']"
-                [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[1].secondTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelt Termine']"
-                [title]="keyDataContainerStrings[2].thirdTile" [color]="keyDataContainerStrings[2].thirdTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
-          </div>
+        </mat-grid-list>
+        <mat-grid-list *ngIf="this.levelSettings['thema'] === 'Überblick'" cols="2" rowHeight="150px">
+          <mat-grid-tile colspan="1" rowspan="1">
+            <app-key-data-container [value]="this.summaryInfo['Anteil Terminangebot']" [isPercent]="true"
+              [title]="keyDataContainerStrings[2].secondTile" [color]="keyDataContainerStrings[2].secondTileColor">
+            </app-key-data-container>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="1" rowspan="1">
+            <app-key-data-container [value]="this.summaryInfo['Anteil Vermittelungswünsche']" [isPercent]="true"
+              [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[1].secondTileColor">
+            </app-key-data-container>
+          </mat-grid-tile>
         </mat-grid-list>
       </div>
       <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
@@ -164,23 +159,6 @@
         </div>
       </div>
       <div class="grid-container">
-        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Überblick'">
-          <div class="grid-tile">
-            <h3>vermittelte Termine</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
-          </div>
-          <div class="grid-tile">
-            <h3>erfolglose Vermittlungswünsche</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[1].secondTileColor)"></app-line-chart>
-          </div>
-          <div class="grid-tile">
-            <h3>nicht vermittelte Termine</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[0].thirdTileColor)"></app-line-chart>
-          </div>
-        </div>
         <div class="textOverviewContainer" *ngIf="this.levelSettings['thema'] === 'Überblick' && false">
           <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
             Blick </span><span class="textThird">seit {{dataDateSince}}</span>

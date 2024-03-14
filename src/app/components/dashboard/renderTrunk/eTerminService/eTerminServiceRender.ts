@@ -74,7 +74,7 @@ export class ETerminDashboardRender implements OnInit {
   ];
   resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
-  themes = ["Überblick", "Terminangebot", "Terminnachfrage"]
+  themes = ["Überblick", "Terminangebot", "Vermittlungswünsche"]
   urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
   data: any;
@@ -104,17 +104,17 @@ export class ETerminDashboardRender implements OnInit {
     {
       key: "demand",
       name: "Nachfrage",
-      firstTile: "Terminsuchen",
+      firstTile: "Vermittlungswünsche",
       firstTileColor: "#EB9F47",
-      secondTile: "erfolglose Terminsuchen",
+      secondTile: "erfolglose Vermittlungswünsche",
       secondTileColor: "#ebd247",
-      thirdTile: "erfolgreiche Buchungen",
+      thirdTile: "erfolgreiche Vermittlungswünsche",
       thirdTileColor: "#C8D42B",
     },
     {
       key: "overview",
       name: "Überblick",
-      firstTile: "erfolglose Terminsuchen",
+      firstTile: "erfolglose Vermittlungswünsche",
       firstTileColor: "#EB9F47",
       secondTile: "vermittelte Termine",
       secondTileColor: "#C8D42B",

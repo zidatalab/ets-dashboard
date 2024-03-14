@@ -86,9 +86,9 @@
           <span class="textThird"> seit {{dataDateSince}}</span>
         </div>
       </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
+      <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
         <div class="textOverviewContainer">
-          <span class="textFirstDemand">Terminnachfrage</span>
+          <span class="textFirstDemand">Vermittlungswünsche</span>
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstDemand"> letzten 30 Tagen </span>
           <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
@@ -115,7 +115,7 @@
               </app-key-data-container>
             </mat-grid-tile>
           </div>
-          <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
+          <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
             <mat-grid-tile colspan="1" rowspan="1">
               <app-key-data-container [value]="this.summaryInfo['Anzahl Terminnachfrage']"
                 [title]="keyDataContainerStrings[1].firstTile" [color]="keyDataContainerStrings[1].firstTileColor">
@@ -157,7 +157,7 @@
             class="textThird">seit {{dataDateSince}}</span>
         </div>
       </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
+      <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
         <div class="textOverviewContainer">
           <span class="textFirstDemand">Nachfrage</span><span class="textSecond">entwicklung </span><span
             class="textThird">seit {{dataDateSince}}</span>
@@ -171,7 +171,7 @@
               [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
           </div>
           <div class="grid-tile">
-            <h3>erfolglose Terminsuchen</h3>
+            <h3>erfolglose Vermittlungswünsche</h3>
             <app-line-chart
               [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[1].secondTileColor)"></app-line-chart>
           </div>
@@ -202,19 +202,19 @@
               [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
           </div>
         </div>
-        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminnachfrage'">
+        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
           <div class="grid-tile">
-            <h3>Terminsuchen</h3>
+            <h3>Vermittlungswünsche</h3>
             <app-line-chart
               [data]="constructChartData(appointmentDemandTotal, 'byDate',keyDataContainerStrings[1].firstTileColor)"></app-line-chart>
           </div>
           <div class="grid-tile">
-            <h3>erfolglose Terminsuchen</h3>
+            <h3>erfolglose Vermittlungswünsche</h3>
             <app-line-chart
               [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[1].secondTileColor)"></app-line-chart>
           </div>
           <div class="grid-tile">
-            <h3>erfolgreiche Buchungen</h3>
+            <h3>erfolgreiche Vermittlungswünsche</h3>
             <app-line-chart
               [data]="constructChartData(appointmentDemandArranged, 'byDate',keyDataContainerStrings[1].thirdTileColor)"></app-line-chart>
           </div>
@@ -225,7 +225,7 @@
             </span><span class="textThird">bis {{dataDateUntil}}</span>
           </div>
         </div>
-        <div *ngIf="this.levelSettings['thema'] === 'Terminnachfrage' && false">
+        <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche' && false">
           <div class="textOverviewContainer">
             <span class="textSecond">ein Blick in die Zukunft der</span><span class="textFirstDemand"> Nachfrage
             </span><span class="textThird">bis {{dataDateUntil}}</span>

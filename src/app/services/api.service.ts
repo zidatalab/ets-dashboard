@@ -25,6 +25,12 @@ export class ApiService {
     })).pipe(retry(3))
   }
 
+  public getTypeRequestWithPayload(url: any, payload : any) {
+    return this.httpClient.get(`${this.apiServer}${url}`, { headers: {'Authorization': `Bearer ${payload.token}` }}).pipe(map(result => {
+      return result
+    })).pipe(retry(3))
+  }
+
   public postTypeRequest(url: any, payload: any) {
     return this.httpClient.post(`${this.apiServer}${url}`, payload).pipe(map(result => {
       return result
@@ -65,9 +71,15 @@ export class ApiService {
   }
 
   public changePassword(user: any, newPassword: any, oldPassword = '') {
-    const payload = { 'email': user, 'newpassword': newPassword, oldPassword: oldPassword }
+    const payload = { email: user, newpassword: newPassword, oldpassword: oldPassword }
 
     return this.postTypeRequest('changepwd', payload)
+  }
+
+  public logout(token : any) {
+    const payload = { 'token': token }
+
+    return this.getTypeRequestWithPayload('logout/', payload)
   }
 
   // local helper functions
@@ -167,10 +179,20 @@ export class ApiService {
     return result
   }
 
-  public getMetaData(name: string) {
-    const metaName: any = localStorage.getItem(name)
+  public setMetaData() {
+    this.getTypeRequest(`get_metadata/${this.clientApiId}`).subscribe((data : any) => {
+      localStorage.setItem('metadata', JSON.stringify(data['data']))
+    })
+  }
 
-    return JSON.parse(metaName)
+  public getMetaData(name: string) {
+    const metaData: any = localStorage.getItem(name)
+
+    if(!metaData) {
+      this.setMetaData()
+    }
+
+    return JSON.parse(metaData)
   }
 
   public sortArray(array: any, key: string | number, order = 'ascending') {
@@ -297,5 +319,10 @@ export class ApiService {
     const intersection = new Set([...setA].filter(x => setB.has(x)))
 
     return Array.from(intersection)
+  }
+
+  public countView(url : any) {
+    // Privacy preserving Webcounter, see Documentation here https://github.com/zidatalab/ziwebcounter
+    this.httpClient.get('https://analytics.api.ziapp.de/view/ets_reporting/data?pageid=' + url + '&cookiedissent=' + true, { withCredentials: false }).subscribe();
   }
 }

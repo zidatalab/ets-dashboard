@@ -26,7 +26,7 @@ export class AuthService {
     return this.currentUserSubject.value
   }
 
-  public getUserDetails() {    
+  public getUserDetails() {
     return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '{}') : false
   }
 
@@ -39,8 +39,11 @@ export class AuthService {
   }
 
   public logout() {
+    const token = this.getToken()
     localStorage.clear();
-    this.currentUserSubject.next(null);
+    this.api.logout(token).subscribe(res => {
+      this.currentUserSubject.next(null);
+    })
   }
 
   public updateUserData() {
@@ -52,8 +55,8 @@ export class AuthService {
     const base64Url = token?.split('.')[1]
     const base64 = base64Url?.replace(/-/g, '+').replace(/_/g, '/');
     // @ts-ignore
-    const payload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    const payload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 
     return JSON.parse(payload)
@@ -115,8 +118,8 @@ export class AuthService {
   isAdmin() {
     const userData = this.getUserDetails()
 
-    if(userData) {
-      if(userData['is_admin'] || userData['is_superadmin']) {
+    if (userData) {
+      if (userData['is_admin'] || userData['is_superadmin']) {
         return true
       }
     }

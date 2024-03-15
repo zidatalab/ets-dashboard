@@ -46,14 +46,6 @@ export class MakeETerminData {
     return null
   }
 
-  isUrgencyMatch(itemUrgency: string, selectedUrgency: string) {
-    if (selectedUrgency === "AKUT") {
-      return itemUrgency === "AKUT" || itemUrgency === "PT_AKUTBEHANDLUNG";
-    }
-
-    return itemUrgency === selectedUrgency;
-  }
-
   async createStats(levelSettings: any, input: any) {
     let dbData: any = await this.db.listData(
       input,
@@ -81,11 +73,11 @@ export class MakeETerminData {
         let dataBookedAppointments = 0
         let dataUnarrangedAppointments = 0
 
-        for (const item of dbData) {
-          if (!this.isUrgencyMatch(item.angebot_group_dringlichkeit, this.levelSettings.urgency)) {
-            continue
-          }
-
+        const filtered = dbData.filter((item : any) => {
+          return item.angebot_group_dringlichkeit === this.levelSettings.urgency
+        })
+        
+        for (const item of filtered) {
           if (item.angebot_group_status === "available" || item.angebot_group_status === 'booked') {
             resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: this.localDateParser(item['angebot_reference_date']) })
             dataAvailableOffer += item.angebot_Anzahl
@@ -105,6 +97,7 @@ export class MakeETerminData {
         summaryInfo['Anzahl Angebot'] = dataAvailableOffer
         summaryInfo['Anzahl nicht vermittelt Termine'] = dataUnarrangedAppointments
         summaryInfo['Anzahl Termine vermittelt'] = dataBookedAppointments
+        summaryInfo['Anteil Terminangebot'] = (dataBookedAppointments / dataAvailableOffer) * 100
 
         result.appointmentByProfessionGroups = this.api.groupBySum(dbData, 'fg', 'test', 'Anzahl')
         result.appointmentOffer = this.flattenArray(resAppointmentOffer)
@@ -123,11 +116,11 @@ export class MakeETerminData {
         let dataAppointmentDemandUnarranged = 0
         let dataAppointmentDemandArranged = 0
 
-        for (const item of dbData) {
-          if (!this.isUrgencyMatch(item.nachfrage_group_dringlichkeit, this.levelSettings.urgency)) {
-            continue
-          }
+        const filtered = dbData.filter((item : any) => {
+          return item.nachfrage_group_dringlichkeit === this.levelSettings.urgency
+        })
 
+        for (const item of filtered) {
           if (
             (item.nachfrage_group_status === "keine_buchung")
             || (item.nachfrage_group_status === "gebucht_arzt_abgesagt")
@@ -158,6 +151,7 @@ export class MakeETerminData {
         summaryInfo['Anzahl nicht vermittelte Terminnachfrage'] = dataAppointmentDemandUnarranged
         summaryInfo['Anzahl vermittelte Terminnachfrage'] = dataAppointmentDemandArranged
         summaryInfo['Anzahl fristgerecht vermittelt'] = dataAppointmentDemandArranged
+        summaryInfo['Anteil Vermittelungswünsche'] = (dataAppointmentDemandArranged / dataAppointmentDemand) * 100
 
         result.resAppointmentDemand = this.flattenArray(resAppointmentDemand)
         result.appointmentDemandUnarranged = this.flattenArray(resAppointmentDemandUnarranged)

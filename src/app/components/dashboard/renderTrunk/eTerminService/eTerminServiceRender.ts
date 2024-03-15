@@ -43,7 +43,7 @@ export class ETerminDashboardRender implements OnInit {
     private cdr: ChangeDetectorRef
   ) { }
 
-  metaData = [];
+  metaData: any;
   isInProgress: boolean = true;
   isMetaDataOk: boolean = false;
   mapData: any;
@@ -74,8 +74,8 @@ export class ETerminDashboardRender implements OnInit {
   ];
   resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
-  themes = ["Überblick", "Terminangebot", "Terminnachfrage"]
-  urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
+  themes = ["Überblick", "Terminangebot", "Vermittlungswünsche"]
+  urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
   data: any;
   currentUser: any;
@@ -104,22 +104,22 @@ export class ETerminDashboardRender implements OnInit {
     {
       key: "demand",
       name: "Nachfrage",
-      firstTile: "Terminsuchen",
+      firstTile: "Vermittlungswünsche",
       firstTileColor: "#EB9F47",
-      secondTile: "erfolglose Terminsuchen",
+      secondTile: "erfolglose Vermittlungswünsche",
       secondTileColor: "#ebd247",
-      thirdTile: "erfolgreiche Buchungen",
+      thirdTile: "erfolgreiche Vermittlungswünsche",
       thirdTileColor: "#C8D42B",
     },
     {
       key: "overview",
       name: "Überblick",
-      firstTile: "erfolglose Terminsuchen",
-      firstTileColor: "#EB9F47",
-      secondTile: "vermittelte Termine",
-      secondTileColor: "#C8D42B",
+      firstTile: "des Terminangebots wurden gebucht",
+      firstTileColor: "#F75F7C",
+      secondTile: "der Vermittlungswünsche waren erfolgreich",
+      secondTileColor: "#EB9F47",
       thirdTile: "nicht vermittelte Termine",
-      thirdTileColor: "#FF879E",
+      thirdTileColor: "#EB9F47",
     },
   ]
   selectedContainerStringObject: any
@@ -129,50 +129,48 @@ export class ETerminDashboardRender implements OnInit {
   dataLastAggregation: any = ''
   hasNoData = false;
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt' }
     this.currentUser = this.auth.getUserDetails()
+    if (!this.currentUser) {
+      this.router.navigate(['/'])
+    }
     this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     this.setKeyDataString()
-    this.metaData = this.updateMetaData()
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 
-    if (this.metaData) {
-      if (this.currentUser) {
-        if (!this.currentUser.is_superadmin) {
-          this.levelValues = await this.identifyaccesslevelids()
+    if (this.currentUser) {
+      setTimeout(() => {
+        this.metaData = localStorage.getItem('metadata')
+        if (this.metaData) {
+          if (this.currentUser) {
+            if (!this.currentUser.is_superadmin) {
+              this.levelValues = this.setDataLevelForAccess()
+            }
+          }
+          else {
+            this.levelValues = ['Gesamt']
+          }
+          this.setLevelData()
         }
-      }
-      else {
-        this.levelValues = ['Gesamt']
-      }
-      await this.setLevelData()
+      }, 100);
     }
-    // this.queryETerminData.getQueryData('',this.levelSettings)
   }
 
-  // function to check for levels, the user has access
-  async identifyaccesslevelids() {
+  setDataLevelForAccess() {
     let userGroups = Array()
     let levelsAllowed = Array()
     let levelIdMeta: any
+    const metaObject = JSON.parse(this.metaData)
 
-    userGroups = this.auth.getUserDetails().usergroups[this.api.clientApiId]
-    console.log(userGroups)
-    this.metaData = await this.updateMetaData()
-    console.log(await this.updateMetaData())
-    levelIdMeta = this.metaData.find((element : any) => element['type'] === "levelid")
-    console.log(levelIdMeta)
+    userGroups = this.currentUser.usergroups[this.api.clientApiId]
+    levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")
 
     let levelrights = levelIdMeta?.levelrights
-    console.log(levelrights)
-
-    // userGroups.push('public')
 
     for (let group of userGroups) {
       let idArray = Array()
-      
-      console.log(group)
+
       if (levelrights[group]) {
         idArray = levelrights[group]
 
@@ -188,10 +186,10 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   async setLevelData(level: any = '', value: any = '') {
-    if(level === 'thema') {
+    if (level === 'thema') {
       this.levelSettings['fg'] = 'Gesamt'
     }
-    
+
     this.levelSettings[level] = value
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 
@@ -228,40 +226,40 @@ export class ETerminDashboardRender implements OnInit {
       return
     }
 
-      if (result) {
-        this.summaryInfo = {
-          ...result.stats_angebot.summaryInfo,
-          ...result.stats_nachfrage.summaryInfo
-        }
+    if (result) {
+      this.summaryInfo = {
+        ...result.stats_angebot.summaryInfo,
+        ...result.stats_nachfrage.summaryInfo
+      }
+
+      this.dataYearSince = result.stats_angebot.dataYearSince
+      this.dataDateUntil = result.stats_angebot.dataDateUntil
+      this.dataDateSince = new Date(result.stats_angebot.dataDateSince).toLocaleDateString()
+
+      if (result.stats_angebot) {
+        this.appointmentOfferTotal = result.stats_angebot.appointmentOfferTotal
+        this.appointmentBooked = result.stats_angebot.appointmentBooked
+        this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged
+        this.appointmentByProfessionGroups = result.stats_angebot.appointmentByProfessionGroups
 
         this.dataYearSince = result.stats_angebot.dataYearSince
         this.dataDateUntil = result.stats_angebot.dataDateUntil
-        this.dataDateSince = new Date(result.stats_angebot.dataDateSince).toLocaleDateString()
-
-        if (result.stats_angebot) {
-          this.appointmentOfferTotal = result.stats_angebot.appointmentOfferTotal
-          this.appointmentBooked = result.stats_angebot.appointmentBooked
-          this.appointmentUnarranged = result.stats_angebot.appointmentUnarranged
-          this.appointmentByProfessionGroups = result.stats_angebot.appointmentByProfessionGroups
-
-          this.dataYearSince = result.stats_angebot.dataYearSince
-          this.dataDateUntil = result.stats_angebot.dataDateUntil
-        }
-
-        if (result.stats_nachfrage) {
-          this.appointmentDemandTotal = result.stats_nachfrage.appointmentDemandTotal
-          this.appointmentDemandUnarranged = result.stats_nachfrage.appointmentDemandUnarranged
-          this.appointmentDemandArranged = result.stats_nachfrage.appointmentDemandArranged
-
-          this.dataYearSince = result.stats_nachfrage.dataYearSince
-          this.dataDateUntil = result.stats_nachfrage.dataDateUntil
-        }
-
-        this.isInProgress = false;
-        this.hasNoData = false
-        this.cdr.detectChanges()
-        this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
       }
+
+      if (result.stats_nachfrage) {
+        this.appointmentDemandTotal = result.stats_nachfrage.appointmentDemandTotal
+        this.appointmentDemandUnarranged = result.stats_nachfrage.appointmentDemandUnarranged
+        this.appointmentDemandArranged = result.stats_nachfrage.appointmentDemandArranged
+
+        this.dataYearSince = result.stats_nachfrage.dataYearSince
+        this.dataDateUntil = result.stats_nachfrage.dataDateUntil
+      }
+
+      this.isInProgress = false;
+      this.hasNoData = false
+      this.cdr.detectChanges()
+      this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
+    }
   }
 
   /**

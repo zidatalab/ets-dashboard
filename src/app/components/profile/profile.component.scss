@@ -1,0 +1,76 @@
+.profile-wrapper {
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 25px;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-header {}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.mdc-button {
+  margin-left: 10px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input:disabled {
+  background-color: #ccc;
+}
+
+.change-password-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.change-password-content {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.mat-hint {
+  margin: 5px;
+}
+
+.password-match-error {
+  color: red;
+}

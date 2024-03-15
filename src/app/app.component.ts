@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { ApiService } from './services/api.service';
 import { AuthService } from './services/auth.service';
@@ -19,6 +19,7 @@ export class AppComponent {
     private api: ApiService,
     private db: DBService,
     private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.router.events.pipe(
       filter((e: any): e is RouterEvent => e instanceof RouterEvent)
@@ -26,6 +27,11 @@ export class AppComponent {
       if (evt instanceof NavigationEnd) {
         this.currentRoute = evt.url
       }
+
+      if (evt.url !== this.currentRoute && evt.url) {
+        this.currentRoute = evt.url;
+        this.api.countView(evt.url);
+      };
     })
   }
 
@@ -39,11 +45,13 @@ export class AppComponent {
   public isAdmin: boolean = false
   public apiConnection: number = 0
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.db.clean()
+    this.api.setMetaData()
     this.checkApiConnection();
 
     this.currentDate = new Date()
+
     this.auth.currentUser.subscribe(data => {
       if (data) {
         this.currentUser = data
@@ -60,6 +68,8 @@ export class AppComponent {
         }, 20000);
       }
     })
+
+    this.cdr.detectChanges()
   }
 
   public checkApiConnection() {
@@ -80,11 +90,7 @@ export class AppComponent {
   }
 
   public autoRefreshData() {
-    this.updateMetaData().subscribe(
-      (data: any) => {
-        this.setMetaData('metadata', data['data'])
-      }
-    )
+    this.api.setMetaData()
   }
 
   logout() {
@@ -102,13 +108,5 @@ export class AppComponent {
 
   getSortData() {
     return this.api.getTypeRequest(`get_sortlevels/${this.api.clientApiId}`)
-  }
-
-  updateMetaData() {
-    return this.api.getTypeRequest(`get_metadata/${this.api.clientApiId}`)
-  }
-
-  setMetaData(name: any, data: any) {
-    localStorage.setItem(name, JSON.stringify(data))
   }
 }

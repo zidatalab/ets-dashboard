@@ -63,7 +63,6 @@
         </mat-chip-option>
       </mat-chip-listbox>
     </div>
-    {{ isInProgress }}
     <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     <app-no-data *ngIf="this.hasNoData"></app-no-data>
     <div *ngIf="!this.hasNoData && !this.isInProgress">

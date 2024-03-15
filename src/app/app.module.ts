@@ -42,6 +42,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgChartsModule } from 'ng2-charts';
+import { MapComponentComponent } from './components/maps/map-component/map-component.component';
 
 registerLocaleData(locales, 'de');
 
@@ -109,7 +110,8 @@ const routes: Routes = [
     AddUserDialog,
     UpdateUserDialog,
     DeleteUserDialog,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    MapComponentComponent
   ],
   imports: [
     CommonModule,

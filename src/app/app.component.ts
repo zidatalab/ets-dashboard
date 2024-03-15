@@ -26,6 +26,11 @@ export class AppComponent {
       if (evt instanceof NavigationEnd) {
         this.currentRoute = evt.url
       }
+
+      if (evt.url !== this.currentRoute && evt.url) {
+        this.currentRoute = evt.url;
+        this.api.countView(evt.url);
+      };
     })
   }
 

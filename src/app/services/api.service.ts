@@ -310,4 +310,9 @@ export class ApiService {
 
     return Array.from(intersection)
   }
+
+  public countView(url : any) {
+    // Privacy preserving Webcounter, see Documentation here https://github.com/zidatalab/ziwebcounter
+    this.httpClient.get('https://analytics.api.ziapp.de/view/ets_reporting/data?pageid=' + url + '&cookiedissent=' + true, { withCredentials: false }).subscribe();
+  }
 }

@@ -7,6 +7,7 @@ import { InterceptorService } from './services/interceptor.service';
 import locales from '@angular/common/locales/de';
 import { AuthGuardService } from './services/auth-guard.service';
 
+
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -42,7 +43,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgChartsModule } from 'ng2-charts';
-import { MapComponentComponent } from './components/maps/map-component/map-component.component';
+import { MapComponent } from './components/maps/map/map.component';
+import { ShapeService } from './services/shape.service';
 
 registerLocaleData(locales, 'de');
 
@@ -111,7 +113,7 @@ const routes: Routes = [
     UpdateUserDialog,
     DeleteUserDialog,
     PageNotFoundComponent,
-    MapComponentComponent
+    MapComponent,
   ],
   imports: [
     CommonModule,
@@ -136,7 +138,8 @@ const routes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
       multi: true
-    }
+    },
+    ShapeService
   ],
   bootstrap: [AppComponent]
 })

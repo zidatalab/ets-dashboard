@@ -45,6 +45,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { NgChartsModule } from 'ng2-charts';
 import { MapComponent } from './components/maps/map/map.component';
 import { ShapeService } from './services/shape.service';
+import { MarkerService } from './services/marker.service';
 
 registerLocaleData(locales, 'de');
 
@@ -124,7 +125,6 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatGridListModule,
     MatCardModule,
     MatMenuModule,
@@ -139,7 +139,8 @@ const routes: Routes = [
       useClass: InterceptorService,
       multi: true
     },
-    ShapeService
+    ShapeService,
+    MarkerService
   ],
   bootstrap: [AppComponent]
 })

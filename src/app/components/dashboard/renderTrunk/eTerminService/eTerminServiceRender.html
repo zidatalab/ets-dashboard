@@ -66,7 +66,7 @@
     <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     <app-no-data *ngIf="this.hasNoData"></app-no-data>
     <div *ngIf="!this.hasNoData && !this.isInProgress" class="plot-container">
-      <app-map></app-map>
+      <app-map [data]="summaryInfo"></app-map>
       <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
         <div class="textOverviewContainer">
           <span class="textFirst">Terminservice</span>

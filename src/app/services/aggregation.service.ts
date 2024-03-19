@@ -185,15 +185,19 @@ export class AggregationService {
   updateStartStop(levelSettings: any) {
     let tzOffset = (new Date()).getTimezoneOffset() * 60000;
     let today = new Date();
+    const oldestDataYear = 2016
     let startDate = today.getFullYear() + "-01-01";;
     let endDate = today.getFullYear() + "-12-31";
     let millisecendsPerDay = 1000 * 60 * 60 * 24;
+
+    if(levelSettings["resolution"] !== "monthly") {
+      levelSettings['zeitraum'] = 'letzten 12 Monate'
+    }
 
     if (levelSettings["resolution"] == "monthly") {
       startDate = "2021-01-01";
       endDate = today.toISOString().slice(0, 10)
     };
-
     
     if (levelSettings["resolution"] == "weekly") {
       let newstartDate = new Date();
@@ -209,6 +213,11 @@ export class AggregationService {
       endDate = today.toISOString().slice(0, 10)
     };
 
+    if(levelSettings['zeitraum'] == 'Gesamt') {
+      startDate = new Date(oldestDataYear + "-01-01").toISOString().slice(0, 10);
+      endDate = new Date(today.getFullYear() + "-12-31").toISOString().slice(0, 10)
+    }
+
     if (levelSettings["zeitraum"] == "Aktuelles Jahr") {
       startDate = new Date(today.getFullYear() + "-01-01").toISOString().slice(0, 10);
       endDate = new Date(today.getFullYear() + "-12-31").toISOString().slice(0, 10)
@@ -219,6 +228,15 @@ export class AggregationService {
       endDate = new Date(today.getFullYear() - 1 + "-12-31").toISOString().slice(0, 10);
     };
 
+    if(levelSettings['zeitraum'] == 'letzten 12 Monate') {
+      startDate = new Date(today.getFullYear() - 1 + today.toISOString().slice(4, 8) + "01").toISOString().slice(0, 10);
+      endDate = today.toISOString().slice(0, 10);
+    }
+
+    if(Number(levelSettings.zeitraum)) {
+      startDate = new Date(Number(levelSettings.zeitraum) + "-01-01").toISOString().slice(0, 10);
+      endDate = new Date(Number(levelSettings.zeitraum) + "-12-31").toISOString().slice(0, 10);
+    }
 
     if (levelSettings["zeitraum"] == "Letzte 4 Wochen") {
       endDate = new Date(today.getTime() - today.getDay() * millisecendsPerDay).toISOString().slice(0, 10);

@@ -72,7 +72,9 @@ export class ETerminDashboardRender implements OnInit {
     'Schleswig-Holstein',
     'Thüringen'
   ];
+
   resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
+  periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr"}, { key: "Letztes Jahr", value: "Letztes Jahr"}, { key: "letzten 12 Monate", value: "letzten 12 Monate" }]
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Überblick", "Terminangebot", "Vermittlungswünsche"]
   urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
@@ -130,11 +132,12 @@ export class ETerminDashboardRender implements OnInit {
   hasNoData = false;
 
   ngOnInit(): void {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt' }
+    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'letzten 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt' }
     this.currentUser = this.auth.getUserDetails()
     if (!this.currentUser) {
       this.router.navigate(['/'])
     }
+    this.fillPeriodOfTime()
     this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     this.setKeyDataString()
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
@@ -154,6 +157,13 @@ export class ETerminDashboardRender implements OnInit {
           this.setLevelData()
         }
       }, 100);
+    }
+  }
+
+  fillPeriodOfTime() {
+    for (let i = 0; i < 3; i++) {
+      let year = new Date().getFullYear() - i-2
+      this.periodOfTime.push({ key: `${year}`, value: `${year}` })
     }
   }
 

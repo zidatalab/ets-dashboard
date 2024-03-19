@@ -62,6 +62,15 @@
           {{ item.key }}
         </mat-chip-option>
       </mat-chip-listbox>
+      <div *ngIf="this.levelSettings['resolution'] === 'monthly'">
+        <h3>Zeitraum</h3>
+        <mat-chip-listbox>
+          <mat-chip-option (click)="this.setLevelData('zeitraum',item.value);" *ngFor="let item of this.periodOfTime"
+            color="primary" [selected]="(this.levelSettings['zeitraum']==item.value)" selectable="false">
+            {{ item.key }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
     </div>
     <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     <app-no-data *ngIf="this.hasNoData"></app-no-data>

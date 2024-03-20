@@ -29,6 +29,8 @@ export class ETerminQuery {
     let startMonth = new Date(levelSettings['start']).getMonth() + 1;
     let stopYear = new Date(levelSettings['stop']).getFullYear();
     let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
+
+    console.log(startYear, startMonth, stopYear, stopMonth)
     
     let query: any = {
       'client_id': 'ets_reporting',
@@ -140,6 +142,7 @@ export class ETerminQuery {
         this.db.store(item, 'KV', levelSettings['levelValues'], now.toISOString(), levelSettings['start'], levelSettings['stop'], levelSettings['resolution'])
       }
 
+      console.log(_result)
       return _result
     }
   }

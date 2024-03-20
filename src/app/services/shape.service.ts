@@ -21,6 +21,5 @@ export class ShapeService {
 
   getPostalCodeShapes() {
     return this.http.get('/assets/data/germany_simple.geojson');
-    // return data
   }
 }

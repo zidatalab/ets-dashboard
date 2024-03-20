@@ -26,7 +26,8 @@
     "useDefineForClassFields": false,
     "types":[
       "node"
-    ]
+    ],
+    "resolveJsonModule": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

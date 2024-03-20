@@ -20,6 +20,7 @@ export class ShapeService {
   }
 
   getPostalCodeShapes() {
-    return this.http.get('/assets/data/germany_postal_codes.json');
+    return this.http.get('/assets/data/germany_simple.geojson');
+    // return data
   }
 }

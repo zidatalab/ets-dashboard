@@ -28,6 +28,7 @@ export class MapComponent implements AfterViewInit {
     private markerService: MarkerService
   ) { }
 
+  @Input() stateFilter: string = ''
   @Input() data: any = []
 
   private map: any = null
@@ -37,16 +38,7 @@ export class MapComponent implements AfterViewInit {
     this.map = L.map('map', {
       center: [51.138, 10.657],
       zoom: 7,
-      maxZoom: 7,
     })
-
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 7,
-      minZoom: 3,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    });
-
-    tiles.addTo(this.map);
   }
 
   private highlightFeature(e: any) {
@@ -82,17 +74,21 @@ export class MapComponent implements AfterViewInit {
         fillOpacity: 0.8,
         fillColor: '#6DB65B'
       }),
+
+      filter: (feature) => {
+        return feature.properties.NAME_1 === 'Baden-Württemberg' || feature.properties.SN_L === '08'
+      },
+
       onEachFeature: (feature, layer) => (
         layer.bindPopup(''),
         layer.on({
           mouseover: (e) => (this.highlightFeature(e)),
           mouseout: (e) => (this.resetFeature(e)),
           click: (e) => {
-            console.log(this.data)
+            this.drill(e)
           }
         })
       )
-      
     });
 
     this.map.addLayer(stateLayer);
@@ -102,6 +98,15 @@ export class MapComponent implements AfterViewInit {
   setPostalCodeShape() {
     this.shapeService.getStateShapes().subscribe((states: any) => {
       this.states = states;
+      this.initStatesLayer();
+    })
+  }
+
+  drill(e : any) {
+    const layer = e.target;
+    const postalCode = layer.feature.properties.postalCode;
+    this.shapeService.getPostalCodeShapes().subscribe((shapes: any) => {
+      this.states = shapes;
       this.initStatesLayer();
     })
   }

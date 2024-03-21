@@ -191,9 +191,6 @@ export class AggregationService {
     if (levelSettings["resolution"] == "weekly") {
       startDate = new Date(today.getFullYear() - 1 + today.toISOString().slice(4, 8) + "01").toISOString().slice(0, 10);
       endDate = today.toISOString().slice(0, 10);
-      console.log(startDate, endDate)
-      // levelSettings["start"] = startDate;
-      // levelSettings["stop"] = endDate;
     };
 
     if (levelSettings["resolution"] == "daily") {
@@ -201,8 +198,6 @@ export class AggregationService {
       newstartDate.setDate(today.getDate() - 31);
       startDate = newstartDate.toISOString().slice(0, 10);
       endDate = today.toISOString().slice(0, 10)
-      // levelSettings["start"] = startDate;
-      // levelSettings["stop"] = endDate;
     };
 
     if (levelSettings["resolution"] == "monthly") {
@@ -224,7 +219,6 @@ export class AggregationService {
       if (levelSettings['zeitraum'] == 'letzten 12 Monate') {
         startDate = new Date(today.getFullYear() - 1 + today.toISOString().slice(4, 8) + "01").toISOString().slice(0, 10);
         endDate = today.toISOString().slice(0, 10);
-        console.log(startDate, endDate)
       }
 
       if (Number(levelSettings.zeitraum)) {

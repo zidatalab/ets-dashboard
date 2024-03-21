@@ -13,3 +13,7 @@
 #map {
   height: 100%;
 }
+
+.leaflet-tile-loaded {
+  filter: grayscale(100%) !important;
+}

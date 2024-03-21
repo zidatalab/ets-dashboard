@@ -129,8 +129,12 @@ export class MapComponent implements OnInit, AfterViewInit {
       center: [GermanStates[this.stateFilter].center[0], GermanStates[this.stateFilter].center[1]],
       zoom: 8,
       minZoom: 7,
-      layers: [this.stateLayer]
+      layers: [this.stateLayer],
     })
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(this.map);
 
     L.control.layers({
       'States': this.stateLayer,
@@ -144,7 +148,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     const layer = e.target;
 
     layer.setStyle({
-      weight: 10,
+      weight: 1,
       opacity: 1.0,
       color: '#DFA612',
       fillOpacity: 1.0,
@@ -156,7 +160,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     const layer = e.target;
 
     layer.setStyle({
-      weight: 3,
+      weight: 1,
       opacity: 0.5,
       color: '#008f68',
       fillOpacity: 0.8,
@@ -167,7 +171,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   private initLayer(data: any, filter: Function) {
     const layer = L.geoJSON(data, {
       style: (feature) => ({
-        weight: 3,
+        weight: 1,
         opacity: 0.5,
         color: '#008f68',
         fillOpacity: 0.8,
@@ -193,10 +197,11 @@ export class MapComponent implements OnInit, AfterViewInit {
     return layer
   }
 
-  stateShape() {
-    this.shapeService.getStateShapes().subscribe(result => {
+  countryShape() {
+    this.shapeService.getCountryShapes().subscribe(result => {
       this.stateLayer = this.initLayer(result, (feature: any) => {
-        return feature.properties.NAME_1 === GermanStates[this.stateFilter].name
+        // lan_name
+        return feature.properties.lan_name[0] === GermanStates[this.stateFilter].name
       });
     });
   }
@@ -204,6 +209,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   postalShape() {
     this.shapeService.getPostalCodeShapes().subscribe(result => {
       this.postalLayer = this.initLayer(result, (feature: any) => {
+        // lan_code
         return feature.properties.SN_L === GermanStates[this.stateFilter].SN_L
       });
     });
@@ -214,8 +220,12 @@ export class MapComponent implements OnInit, AfterViewInit {
       this.map.remove()
       return
     }
-    
-    this.stateShape()
+
+    this.shapeService.getGeoJSON().subscribe(res => {
+      console.log(res)
+    })
+
+    this.countryShape()
     this.postalShape()
   }
 

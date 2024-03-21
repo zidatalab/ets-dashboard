@@ -15,11 +15,19 @@ export class ShapeService {
     return this.http.get('/assets/data/germany_boundaries.geojson');
   }
 
-  getStateShapes() {
-    return this.http.get('/assets/data/germanyGEO.geojson');
+  getCountryShapes() {
+    return this.http.get('/assets/data/germany-countries.geojson');
+  }
+
+  getLocalAuthorityShapes() {
+    return this.http.get('/assets/data/germany_local_authorities.geojson');
   }
 
   getPostalCodeShapes() {
     return this.http.get('/assets/data/germany_simple.geojson');
+  }
+
+  getGeoJSON() {
+    return this.http.get('https://www.openstreetmap.org/api/0.6/map?bbox=7.154,50.746,7.157,50.748');
   }
 }

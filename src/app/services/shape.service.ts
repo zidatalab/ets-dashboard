@@ -11,23 +11,19 @@ export class ShapeService {
     private http: HttpClient
   ) { }
 
-  getGermanyShape() {
-    return this.http.get('/assets/data/germany_boundaries.geojson');
+  getPostalCodeShapes4(state: string) {
+    return this.http.get(`https://s3zide.obs.eu-de.otc.t-systems.com/geojson/kv_plz4_${state}.geojson`);
   }
 
-  getCountryShapes() {
-    return this.http.get('/assets/data/germany-countries.geojson');
+  getPostalCodeShapes3(state: string) {
+    return this.http.get(`https://s3zide.obs.eu-de.otc.t-systems.com/geojson/kv_plz3_${state}.geojson`);
   }
 
-  getLocalAuthorityShapes() {
-    return this.http.get('/assets/data/germany_local_authorities.geojson');
+  getPostalCodeShapes2(state: string) {
+    return this.http.get(`https://s3zide.obs.eu-de.otc.t-systems.com/geojson/kv_plz2_${state}.geojson`);
   }
 
-  getPostalCodeShapes() {
-    return this.http.get('/assets/data/germany_simple.geojson');
-  }
-
-  getDistrictShapes() {
-    return this.http.get('/assets/data/germany-administrative-municipality.geojson');
+  getDistrictShapes(state: string) {
+    return this.http.get(`https://s3zide.obs.eu-de.otc.t-systems.com/geojson/kv_kreise_${state}.geojson`);
   }
 }

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Component, AfterViewInit, Input, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet'
 
@@ -108,8 +109,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   @Input() data: any = []
 
   private map: any = null
-  private stateLayer: any = null
-  private postalLayer: any = null
+  private postalLayer4: any = null
+  private postalLayer3: any = null
+  private postalLayer2: any = null
   private districtLayer: any = null
   private interval: any = null
 
@@ -124,9 +126,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
 
-    this.map.addLayer(this.postalLayer)
+    this.map.addLayer(this.postalLayer4)
 
-    this.map.fitBounds(this.stateLayer.getBounds())
+    this.map.fitBounds(this.postalLayer4.getBounds())
   }
 
   private highlightFeature(e: any) {
@@ -155,7 +157,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     });
   }
 
-  private initLayer(data: any, filter: Function) {
+  private initLayer(data: any, filter: Function = () => true): any {
     const layer = L.geoJSON(data, {
       style: (feature) => ({
         weight: 1,
@@ -164,10 +166,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         fillOpacity: 0.8,
         fillColor: '#6DB65B',
       }),
-
-      filter: (feature) => {
-        return filter(feature)
-      },
 
       onEachFeature: (feature, layer) => (
         layer.bindPopup(''),
@@ -184,29 +182,21 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     return layer
   }
 
-  countryShape() {
-    this.shapeService.getCountryShapes().subscribe(result => {
-      this.stateLayer = this.initLayer(result, (feature: any) => {
-        // lan_name
-        return feature.properties.lan_name[0] === GermanStates[this.stateFilter].name
-      });
+  setShapes() {
+    this.shapeService.getPostalCodeShapes4(GermanStates[this.stateFilter].name).subscribe(result => {
+      this.postalLayer4 = this.initLayer(result)
     });
-  }
 
-  postalShape() {
-    this.shapeService.getPostalCodeShapes().subscribe(result => {
-      this.postalLayer = this.initLayer(result, (feature: any) => {
-        // lan_code
-        return feature.properties.SN_L === GermanStates[this.stateFilter].SN_L
-      });
+    this.shapeService.getPostalCodeShapes3(GermanStates[this.stateFilter].name).subscribe(result => {
+      this.postalLayer3 = this.initLayer(result)
     });
-  }
 
-  districtShape() {
-    this.shapeService.getDistrictShapes().subscribe(result => {
-      this.districtLayer = this.initLayer(result, (feature: any) => {
-        return feature.properties.lan_name[0] === GermanStates[this.stateFilter].name
-      });
+    this.shapeService.getPostalCodeShapes2(GermanStates[this.stateFilter].name).subscribe(result => {
+      this.postalLayer2 = this.initLayer(result)
+    });
+
+    this.shapeService.getDistrictShapes(GermanStates[this.stateFilter].name).subscribe(result => {
+      this.districtLayer = this.initLayer(result)
     })
   }
 
@@ -218,7 +208,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
   switchLayers(changes: any) {
     if (changes.previousValue !== changes.currentValue) {
-      // @ts-ignore
       this.removeAndAddLayers(this[changes.currentValue])
     }
   }
@@ -239,15 +228,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       return
     }
 
-    this.postalShape()
-    this.countryShape()
-    this.districtShape()
+    this.setShapes()
   }
 
   ngAfterViewInit(): void {
-    if (!this.stateLayer && !this.postalLayer) {
+    if (!this[this.layerType]) {
       this.interval = setInterval(() => {
-        if (this.stateLayer && this.postalLayer) {
+        if (this[this.layerType]) {
           this.initMap()
           clearInterval(this.interval);
         }

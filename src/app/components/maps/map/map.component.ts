@@ -5,6 +5,7 @@ import * as L from 'leaflet'
 import { ShapeService } from 'src/app/services/shape.service';
 import { MarkerService } from 'src/app/services/marker.service';
 
+// should be extracted and check
 const GermanStates: any = {
   SchleswigHolstein: {
     name: "Schleswig-Holstein",
@@ -27,12 +28,12 @@ const GermanStates: any = {
     center: [53.08, 8.8]
   },
   Nordrhein: {
-    name: "Nordrhein-Westfalen",
+    name: "Nordrhein",
     SN_L: "05",
     center: [51.45, 7.9]
   },
   'Westfalen-Lippe': {
-    name: "Nordrhein-Westfalen",
+    name: "Westfalen-Lippe",
     SN_L: "05",
     center: [51.45, 7.9]
   },

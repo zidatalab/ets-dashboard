@@ -131,6 +131,31 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.fitBounds(this.postalLayer4.getBounds())
   }
 
+  private initLayer(data: any, filter: Function = () => true): any {
+    const layer = L.geoJSON(data, {
+      style: (feature) => ({
+        weight: 1,
+        opacity: 0.5,
+        color: '#008f68',
+        fillOpacity: 0.8,
+        fillColor: '#6DB65B',
+      }),
+
+      onEachFeature: (feature, layer) => (
+        layer.bindPopup(''),
+        layer.on({
+          mouseover: (e) => (this.highlightFeature(e)),
+          mouseout: (e) => (this.resetFeature(e)),
+          click: (e) => {
+            // this.drill(e)
+          }
+        })
+      )
+    });
+
+    return layer
+  }
+  
   private highlightFeature(e: any) {
     const layer = e.target;
 
@@ -157,32 +182,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     });
   }
 
-  private initLayer(data: any, filter: Function = () => true): any {
-    const layer = L.geoJSON(data, {
-      style: (feature) => ({
-        weight: 1,
-        opacity: 0.5,
-        color: '#008f68',
-        fillOpacity: 0.8,
-        fillColor: '#6DB65B',
-      }),
 
-      onEachFeature: (feature, layer) => (
-        layer.bindPopup(''),
-        layer.on({
-          mouseover: (e) => (this.highlightFeature(e)),
-          mouseout: (e) => (this.resetFeature(e)),
-          click: (e) => {
-            // this.drill(e)
-          }
-        })
-      )
-    });
-
-    return layer
-  }
-
-  setShapes() {
+  private setShapes() {
     this.shapeService.getPostalCodeShapes4(GermanStates[this.stateFilter].name).subscribe(result => {
       this.postalLayer4 = this.initLayer(result)
     });
@@ -200,19 +201,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     })
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (!changes['layerType'].previousValue) return
-
-    this.switchLayers(changes['layerType'])
-  }
-
-  switchLayers(changes: any) {
+  private switchLayers(changes: any) {
     if (changes.previousValue !== changes.currentValue) {
       this.removeAndAddLayers(this[changes.currentValue])
     }
   }
 
-  removeAndAddLayers(layer: any) {
+  private removeAndAddLayers(layer: any) {
     this.map.eachLayer((layer: any) => {
       if (layer instanceof L.GeoJSON) {
         this.map.removeLayer(layer)
@@ -221,6 +216,19 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     this.map.addLayer(layer)
   }
+
+/**
+ * 
+ * Lifecycle Hooks
+ * 
+ */
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes['layerType'].previousValue) return
+
+    this.switchLayers(changes['layerType'])
+  }
+
 
   ngOnInit(): void {
     if (this.map) {

@@ -213,12 +213,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   ngOnChanges(changes: SimpleChanges) {
     if (!changes['layerType'].previousValue) return
 
-    this.switchLayers(this, changes['layerType'])
+    this.switchLayers(changes['layerType'])
   }
 
-  switchLayers(that : any = this, changes: any) {
+  switchLayers(changes: any) {
     if (changes.previousValue !== changes.currentValue) {
-      this.removeAndAddLayers(that[changes.currentValue])
+      // @ts-ignore
+      this.removeAndAddLayers(this[changes.currentValue])
     }
   }
 

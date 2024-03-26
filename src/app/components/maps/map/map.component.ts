@@ -131,7 +131,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.fitBounds(this.postalLayer4.getBounds())
   }
 
-  private initLayer(data: any, filter: Function = () => true): any {
+  private initLayer(data: any): any {
     const layer = L.geoJSON(data, {
       style: (feature) => ({
         weight: 1,
@@ -155,7 +155,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     return layer
   }
-  
+
   private highlightFeature(e: any) {
     const layer = e.target;
 

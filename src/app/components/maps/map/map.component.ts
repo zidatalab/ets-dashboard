@@ -1,7 +1,7 @@
-import { Component, AfterViewInit, Input, OnInit, OnDestroy } from '@angular/core';
-import { ShapeService } from 'src/app/services/shape.service';
-
+import { Component, AfterViewInit, Input, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet'
+
+import { ShapeService } from 'src/app/services/shape.service';
 import { MarkerService } from 'src/app/services/marker.service';
 
 const GermanStates: any = {
@@ -92,36 +92,25 @@ const GermanStates: any = {
   }
 }
 
-const iconRetinaUrl = 'assets/marker-icon.png';
-const iconUrl = 'assets/marker-icon.png';
-const iconDefault = L.icon({
-  iconRetinaUrl,
-  iconUrl,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  tooltipAnchor: [16, -28],
-  shadowSize: [41, 41]
-});
-L.Marker.prototype.options.icon = iconDefault;
-
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, AfterViewInit {
+export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   constructor(
     private shapeService: ShapeService,
     private markerService: MarkerService
   ) { }
 
   @Input() stateFilter: string = ''
+  @Input() layerType: any = null
   @Input() data: any = []
 
   private map: any = null
   private stateLayer: any = null
   private postalLayer: any = null
+  private districtLayer: any = null
   private interval: any = null
 
   private initMap(): void {
@@ -129,17 +118,13 @@ export class MapComponent implements OnInit, AfterViewInit {
       center: [GermanStates[this.stateFilter].center[0], GermanStates[this.stateFilter].center[1]],
       zoom: 8,
       minZoom: 7,
-      layers: [this.stateLayer],
     })
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
 
-    L.control.layers({
-      'States': this.stateLayer,
-      'Postals': this.postalLayer,
-    }, {}, { collapsed: false }).addTo(this.map);
+    this.map.addLayer(this.postalLayer)
 
     this.map.fitBounds(this.stateLayer.getBounds())
   }
@@ -154,6 +139,8 @@ export class MapComponent implements OnInit, AfterViewInit {
       fillOpacity: 1.0,
       fillColor: '#FAE042',
     });
+
+    layer.bringToFront()
   }
 
   private resetFeature(e: any) {
@@ -215,18 +202,45 @@ export class MapComponent implements OnInit, AfterViewInit {
     });
   }
 
+  districtShape() {
+    this.shapeService.getDistrictShapes().subscribe(result => {
+      this.districtLayer = this.initLayer(result, (feature: any) => {
+        return feature.properties.lan_name[0] === GermanStates[this.stateFilter].name
+      });
+    })
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!changes['layerType'].previousValue) return
+
+    this.switchLayers(this, changes['layerType'])
+  }
+
+  switchLayers(that : any = this, changes: any) {
+    if (changes.previousValue !== changes.currentValue) {
+      this.removeAndAddLayers(that[changes.currentValue])
+    }
+  }
+
+  removeAndAddLayers(layer: any) {
+    this.map.eachLayer((layer: any) => {
+      if (layer instanceof L.GeoJSON) {
+        this.map.removeLayer(layer)
+      }
+    })
+
+    this.map.addLayer(layer)
+  }
+
   ngOnInit(): void {
     if (this.map) {
       this.map.remove()
       return
     }
 
-    this.shapeService.getGeoJSON().subscribe(res => {
-      console.log(res)
-    })
-
-    this.countryShape()
     this.postalShape()
+    this.countryShape()
+    this.districtShape()
   }
 
   ngAfterViewInit(): void {

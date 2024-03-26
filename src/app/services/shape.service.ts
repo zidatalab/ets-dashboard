@@ -27,7 +27,7 @@ export class ShapeService {
     return this.http.get('/assets/data/germany_simple.geojson');
   }
 
-  getGeoJSON() {
-    return this.http.get('https://www.openstreetmap.org/api/0.6/map?bbox=7.154,50.746,7.157,50.748');
+  getDistrictShapes() {
+    return this.http.get('/assets/data/germany-administrative-municipality.geojson');
   }
 }

@@ -128,6 +128,8 @@ export class ETerminDashboardRender implements OnInit {
   dataDateUntil: any = ''
   dataLastAggregation: any = ''
   hasNoData = false;
+  regionalLayer : any = [{key: 'Stadtbezirke', value: 'postalLayer'},{key: 'Stadtteile', value: 'districtLayer'},{key: 'Statistische Quartiere', value: 'stateLayer'},{key: 'Sozialräume', value: 'welfareAreas'}];
+  selectedRegionalLayer : any = 'postalLayer';
 
   ngOnInit(): void {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'Letzte 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt' }
@@ -155,6 +157,10 @@ export class ETerminDashboardRender implements OnInit {
         }
       }, 100);
     }
+  }
+
+  setRegionalLayer(selection : any) {
+    this.selectedRegionalLayer = selection;
   }
 
   setDataLevelForAccess() {

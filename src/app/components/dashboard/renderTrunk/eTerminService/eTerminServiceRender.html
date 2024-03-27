@@ -84,8 +84,8 @@
     <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     <app-no-data *ngIf="this.hasNoData"></app-no-data>
     <div *ngIf="!this.hasNoData && !this.isInProgress" class="plot-container">
-      <app-map *ngIf="levelSettings['levelValues'] !== 'Gesamt'" [stateFilter]="levelSettings['levelValues']"
-        [data]="summaryInfo" [layerType]="selectedRegionalLayer"></app-map>
+      <app-map *ngIf="levelSettings['levelValues'] !== 'Gesamt' && levelSettings['thema'] !== 'Überblick'"
+        [stateFilter]="levelSettings['levelValues']" [data]="summaryInfo" [layerType]="selectedRegionalLayer"></app-map>
       <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
         <div class="textOverviewContainer">
           <span class="textFirst">Terminservice</span>
@@ -112,7 +112,8 @@
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstDemand"> letzten 30 Tagen </span>
           <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstDemand"> letzten 12 Monaten </span>
+          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstDemand"> letzten 12 Monaten
+          </span>
           <span class="textThird"> seit {{dataDateSince}}</span>
         </div>
       </div>

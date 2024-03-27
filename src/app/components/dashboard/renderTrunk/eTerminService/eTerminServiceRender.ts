@@ -74,7 +74,7 @@ export class ETerminDashboardRender implements OnInit {
   ];
 
   resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
-  periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr"}, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
+  periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr" }, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Überblick", "Terminangebot", "Vermittlungswünsche"]
   urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
@@ -130,8 +130,8 @@ export class ETerminDashboardRender implements OnInit {
   dataDateUntil: any = ''
   dataLastAggregation: any = ''
   hasNoData = false;
-  regionalLayer: any = [{ key: 'Stadtbezirke 4', value: 'postalLayer4' }, { key: 'Stadtbezirke 3', value: 'postalLayer3' }, { key: 'Stadtbezirke 2', value: 'postalLayer2' }, { key: 'Stadtteile', value: 'districtLayer' }];
-  selectedRegionalLayer: any = 'postalLayer4';
+  regionalLayer: any = [{ key: 'Kreise', value: 'districtLayer' }, { key: 'Stadtbezirke 4', value: 'postalLayer4' }, { key: 'Stadtbezirke 3', value: 'postalLayer3' }, { key: 'Stadtbezirke 2', value: 'postalLayer2' }];
+  selectedRegionalLayer: any = 'districtLayer';
 
   ngOnInit(): void {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'letzten 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt' }
@@ -168,7 +168,7 @@ export class ETerminDashboardRender implements OnInit {
 
   fillPeriodOfTime() {
     for (let i = 0; i < 3; i++) {
-      let year = new Date().getFullYear() - i-1
+      let year = new Date().getFullYear() - i - 1
       this.periodOfTime.push({ key: `${year}`, value: `${year}` })
     }
   }

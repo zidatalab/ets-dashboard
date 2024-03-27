@@ -71,6 +71,15 @@
           {{ item.key }}
         </mat-chip-option>
       </mat-chip-listbox>
+      <div *ngIf="this.levelSettings['resolution'] === 'monthly'">
+        <h3>Zeitraum</h3>
+        <mat-chip-listbox>
+          <mat-chip-option (click)="this.setLevelData('zeitraum',item.value);" *ngFor="let item of this.periodOfTime"
+            color="primary" [selected]="(this.levelSettings['zeitraum']==item.value)" selectable="false">
+            {{ item.key }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
     </div>
     <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     <app-no-data *ngIf="this.hasNoData"></app-no-data>
@@ -83,7 +92,7 @@
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirst">letzten 30 Tagen </span>
           <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirst">letzten 12 Wochen </span>
+          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirst">letzten 12 Monaten </span>
           <span class="textThird"> seit {{dataDateSince}}</span>
         </div>
       </div>
@@ -93,7 +102,7 @@
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstOffer"> letzten 30 Tagen </span>
           <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstOffer"> letzte 12 Wochen </span>
+          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstOffer"> letzte 12 Monaten </span>
           <span class="textThird"> seit {{dataDateSince}}</span>
         </div>
       </div>
@@ -103,10 +112,11 @@
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
           <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstDemand"> letzten 30 Tagen </span>
           <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstDemand"> letzten 12 Wochen </span>
+          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstDemand"> letzten 12 Monaten </span>
           <span class="textThird"> seit {{dataDateSince}}</span>
         </div>
       </div>
+      <!-- <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="hint-text">Abweichendes Datum-Seit möglich </span> -->
       <div class="grid-container">
         <mat-grid-list *ngIf="this.levelSettings['thema'] !== 'Überblick'" cols="3" rowHeight="150px">
           <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">

@@ -29,7 +29,7 @@ export class ETerminQuery {
     let startMonth = new Date(levelSettings['start']).getMonth() + 1;
     let stopYear = new Date(levelSettings['stop']).getFullYear();
     let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
-    
+
     let query: any = {
       'client_id': 'ets_reporting',
       'groupinfo': {

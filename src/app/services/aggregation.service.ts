@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { DBService } from 'src/app/services/db.service';
 import { DataItem } from 'src/app/services/serviceModels/db';
-import { query } from '@angular/animations';
-import { filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,15 +26,15 @@ export class AggregationService {
       }
 
       for (let fieldItem of item[fieldname]) {
-        let toPush : any = new DataItem
+        let toPush: any = new DataItem
         toPush['level'] = item['level'];
         toPush['levelId'] = item['levelid'];
         toPush['year'] = item['Jahr'];
         toPush['month'] = item['Monat'];
         toPush['calenderWeek'] = fieldItem['KW'] ? fieldItem['KW'] : '';
         // ATTENTION
-        if(fieldname === 'stats_angebot') toPush['date'] = fieldItem['angebot_reference_date']
-        if(fieldname === 'stats_nachfrage') toPush['date'] = fieldItem['nachfrage_reference_date']
+        if (fieldname === 'stats_angebot') toPush['date'] = fieldItem['angebot_reference_date']
+        if (fieldname === 'stats_nachfrage') toPush['date'] = fieldItem['nachfrage_reference_date']
         delete fieldItem['KW'];
         toPush['data'] = fieldItem;
         toPush['indicator'] = fieldname;
@@ -183,64 +181,74 @@ export class AggregationService {
   }
 
   updateStartStop(levelSettings: any) {
+    const oldestDataYear = 2016
     let tzOffset = (new Date()).getTimezoneOffset() * 60000;
     let today = new Date();
     let startDate = today.getFullYear() + "-01-01";;
     let endDate = today.getFullYear() + "-12-31";
     let millisecendsPerDay = 1000 * 60 * 60 * 24;
 
-    if (levelSettings["resolution"] == "monthly") {
-      startDate = "2021-01-01";
-      endDate = today.toISOString().slice(0, 10)
+    if (levelSettings["resolution"] === "weekly") {
+      startDate = new Date(today.getFullYear() - 1 + today.toISOString().slice(4, 8) + "01").toISOString().slice(0, 10);
+      endDate = today.toISOString().slice(0, 10);
     };
 
-    
-    if (levelSettings["resolution"] == "weekly") {
-      let newstartDate = new Date();
-      newstartDate.setDate(today.getDate() - 12 * 7);
-      startDate = newstartDate.toISOString().slice(0, 10);
-      endDate = today.toISOString().slice(0, 10)
-    };
-
-    if (levelSettings["resolution"] == "daily") {
+    if (levelSettings["resolution"] === "daily") {
       let newstartDate = new Date();
       newstartDate.setDate(today.getDate() - 31);
       startDate = newstartDate.toISOString().slice(0, 10);
       endDate = today.toISOString().slice(0, 10)
     };
 
-    if (levelSettings["zeitraum"] == "Aktuelles Jahr") {
-      startDate = new Date(today.getFullYear() + "-01-01").toISOString().slice(0, 10);
-      endDate = new Date(today.getFullYear() + "-12-31").toISOString().slice(0, 10)
+    if (levelSettings["resolution"] === "monthly") {
+      if (levelSettings['zeitraum'] === 'Gesamt') {
+        startDate = new Date(oldestDataYear + "-01-01").toISOString().slice(0, 10);
+        endDate = new Date(today.getFullYear() + "-12-31").toISOString().slice(0, 10)
+      }
+
+      if (levelSettings["zeitraum"] === "Aktuelles Jahr") {
+        startDate = new Date(today.getFullYear() + "-01-01").toISOString().slice(0, 10);
+        endDate = new Date(today.getFullYear() + "-12-31").toISOString().slice(0, 10)
+      };
+
+      if (levelSettings["zeitraum"] === "Letztes Jahr") {
+        startDate = new Date(today.getFullYear() - 1 + "-01-01").toISOString().slice(0, 10);
+        endDate = new Date(today.getFullYear() - 1 + "-12-31").toISOString().slice(0, 10);
+      };
+
+      if (levelSettings['zeitraum'] === 'letzten 12 Monate') {
+        startDate = new Date(today.getFullYear() - 1 + today.toISOString().slice(4, 8) + "01").toISOString().slice(0, 10);
+        endDate = today.toISOString().slice(0, 10);
+      }
+
+      if (Number(levelSettings.zeitraum)) {
+        startDate = new Date(Number(levelSettings.zeitraum) + "-01-01").toISOString().slice(0, 10);
+        endDate = new Date(Number(levelSettings.zeitraum) + "-12-31").toISOString().slice(0, 10);
+      }
+
+      if (levelSettings["zeitraum"] === "Letzte 4 Wochen") {
+        endDate = new Date(today.getTime() - today.getDay() * millisecendsPerDay).toISOString().slice(0, 10);
+        startDate = new Date(today.getTime() - ((4 * 7) - 1) * millisecendsPerDay).toISOString().slice(0, 10);
+      };
+
+      if (levelSettings["zeitraum"] === "Letzte Woche") {
+        endDate = new Date(today.getTime() - today.getDay() * millisecendsPerDay).toISOString().slice(0, 10);
+        startDate = new Date(today.getTime() - ((6)) * millisecendsPerDay).toISOString().slice(0, 10);
+      };
+
+      if (levelSettings["zeitraum"] === "Detailliert") {
+        let newstart = (new Date(levelSettings['start_picker'] - tzOffset)).toISOString().slice(0, 10);
+        let newstop = (new Date(levelSettings['stop_picker'] - tzOffset)).toISOString().slice(0, 10);
+        levelSettings["start"] = newstart;
+        levelSettings["stop"] = newstop;
+      }
     };
-
-    if (levelSettings["zeitraum"] == "Letztes Jahr") {
-      startDate = new Date(today.getFullYear() - 1 + "-01-01").toISOString().slice(0, 10);
-      endDate = new Date(today.getFullYear() - 1 + "-12-31").toISOString().slice(0, 10);
-    };
-
-
-    if (levelSettings["zeitraum"] == "Letzte 4 Wochen") {
-      endDate = new Date(today.getTime() - today.getDay() * millisecendsPerDay).toISOString().slice(0, 10);
-      startDate = new Date(today.getTime() - ((4 * 7) - 1) * millisecendsPerDay).toISOString().slice(0, 10);
-    };
-
-    if (levelSettings["zeitraum"] == "Letzte Woche") {
-      endDate = new Date(today.getTime() - today.getDay() * millisecendsPerDay).toISOString().slice(0, 10);
-      startDate = new Date(today.getTime() - ((6)) * millisecendsPerDay).toISOString().slice(0, 10);
-    };
-
-    if (levelSettings["zeitraum"] == "Detailliert") {
-      let newstart = (new Date(levelSettings['start_picker'] - tzOffset)).toISOString().slice(0, 10);
-      let newstop = (new Date(levelSettings['stop_picker'] - tzOffset)).toISOString().slice(0, 10);
-      levelSettings["start"] = newstart;
-      levelSettings["stop"] = newstop;
-    }
 
     if (levelSettings["zeitraum"] != "Detailliert") {
       levelSettings["start"] = startDate;
       levelSettings["stop"] = endDate;
     }
+
 
     return levelSettings;
   }

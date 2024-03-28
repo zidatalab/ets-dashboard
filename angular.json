@@ -29,7 +29,7 @@
               "src/CNAME"
             ],
             "styles": [
-              "src/styles.scss",
+              "styles.scss",
               "./node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []

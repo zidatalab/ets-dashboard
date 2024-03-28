@@ -324,3 +324,15 @@ body {
   border-color: #262626;
   border-style: solid;
 }
+
+.info-container {
+    padding: 6px 8px;
+    background: rgb(255, 255, 255);
+    background: #808080b0;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.leaflet-tile-loaded {
+  filter: grayscale(100%) !important;
+}

@@ -1,5 +1,4 @@
 .map-container {
-  // position: absolute;
   width: 100%;
   aspect-ratio: 16/9;
   margin: 30px;
@@ -12,8 +11,4 @@
 
 #map {
   height: 100%;
-}
-
-.leaflet-tile-loaded {
-  filter: grayscale(100%) !important;
 }

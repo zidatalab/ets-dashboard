@@ -12,6 +12,7 @@ import { GermanStates } from './helpers/dataHelper'
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
+
 export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   constructor(
     private shapeService: ShapeService,
@@ -28,17 +29,22 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   private postalLayer2: any = null
   private districtLayer: any = null
   private interval: any = null
+  private infoHandler = L.control.layers()
+  private infoContainer: any = null
 
   private initMap(): void {
     this.map = L.map('map', {
       center: [GermanStates[this.stateFilter].center[0], GermanStates[this.stateFilter].center[1]],
       zoom: 8,
       minZoom: 7,
+      zoomControl: false,
     })
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
+
+    this.initInfoControl()
 
     this.map.addLayer(this.districtLayer)
 
@@ -70,6 +76,22 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     return layer
   }
 
+  private initInfoControl() {
+    this.infoHandler.onAdd = () => {
+      this.infoContainer = L.DomUtil.create('div', 'info-container')
+      this.infoHandler.update()
+      return this.infoContainer
+    }
+
+    this.infoHandler.update = (props: any) => {
+      this.infoContainer.innerHTML = '<h4>US Population Density</h4>' + (props ?
+        '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+        : 'Hover over a state');
+    }
+
+    this.infoHandler.addTo(this.map)
+  }
+
   private highlightFeature(e: any) {
     const layer = e.target;
 
@@ -80,6 +102,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       fillOpacity: 1.0,
       fillColor: '#FAE042',
     });
+
+    this.infoHandler.update(layer.feature.properties);
 
     layer.bringToFront()
   }
@@ -94,6 +118,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       fillOpacity: 0.8,
       fillColor: '#6DB65B'
     });
+
+    this.infoHandler.update()
   }
 
   private setShapes() {

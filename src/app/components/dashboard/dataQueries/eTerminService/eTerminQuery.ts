@@ -24,6 +24,65 @@ export class ETerminQuery {
     return result
   }
 
+  async getQueryDataMap(levelSettings: any) {
+    let startYear = new Date(levelSettings['start']).getFullYear();
+    let startMonth = new Date(levelSettings['start']).getMonth() + 1;
+    let stopYear = new Date(levelSettings['stop']).getFullYear();
+    let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
+
+    let query: any = {
+      'client_id': 'ets_reporting',
+      'groupinfo': {
+        'level': 'KV',
+        "fg": levelSettings['fg'],
+        'levelid': levelSettings['levelValues'],
+        'timeframe': levelSettings['resolution'],
+        '$or': [
+        ]
+      },
+      "showfields": ["stats_angebot", "stats_nachfrage"]
+    }
+
+    if (startYear == stopYear) {
+      query.groupinfo['$or'] = [
+        {
+          '$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+          { 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }
+          ]
+        }
+      ]
+    }
+
+    if ((startYear + 1) == stopYear) {
+      query.groupinfo['$or'] = [
+        {
+          '$and': [
+            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+          ]
+        },
+        { '$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }] }
+      ]
+    }
+
+    if ((startYear + 1) < stopYear) {
+      query.groupinfo['$or'] = [
+        {
+          '$and': [
+            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+          ]
+        },
+        { '$and': [{ 'Jahr': { '$gt': startYear, '$lt': stopYear } }] },
+        { '$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }] }
+      ]
+    }
+
+    delete query.groupinfo['$or']
+    console.log('Getting map data', query)
+    const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
+
+    return result
+  }
+
   async getQueryData(input: any = '', levelSettings: any, allPublicFields: any) {
     let startYear = new Date(levelSettings['start']).getFullYear();
     let startMonth = new Date(levelSettings['start']).getMonth() + 1;
@@ -97,7 +156,7 @@ export class ETerminQuery {
     const isStartDateValid = new Date(dbDataRange['startdate']) <= new Date(levelSettings['start']);
     const isEndDateValid = new Date(dbDataRange['stopdate']) >= new Date(levelSettings['stop']);
 
-    if (isStartDateValid && isEndDateValid && dataAge < 6) {
+    if ((isStartDateValid && isEndDateValid && dataAge < 6)) {
       for (let item of fields) {
         _result.push(await this.makeData.getETerminData(item))
       }
@@ -105,7 +164,7 @@ export class ETerminQuery {
       this.auth.refreshToken()
       let { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
-      if(!result.length) {
+      if (!result.length) {
         return new Error("No data available for given query")
       }
 

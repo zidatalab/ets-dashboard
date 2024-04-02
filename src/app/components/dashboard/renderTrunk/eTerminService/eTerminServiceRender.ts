@@ -130,8 +130,10 @@ export class ETerminDashboardRender implements OnInit {
   dataDateUntil: any = ''
   dataLastAggregation: any = ''
   hasNoData = false;
-  regionalLayer: any = [{ key: 'Kreise', value: 'districtLayer' }, { key: 'Stadtbezirke 4', value: 'postalLayer4' }, { key: 'Stadtbezirke 3', value: 'postalLayer3' }, { key: 'Stadtbezirke 2', value: 'postalLayer2' }];
-  selectedRegionalLayer: any = 'districtLayer';
+  regionalLayer: any = [{ key: 'Stadtbezirke 4', value: 'postalLayer4' }];
+  // regionalLayer: any = [{ key: 'Kreise', value: 'districtLayer' }, { key: 'Stadtbezirke 4', value: 'postalLayer4' }, { key: 'Stadtbezirke 3', value: 'postalLayer3' }, { key: 'Stadtbezirke 2', value: 'postalLayer2' }];
+  selectedRegionalLayer: any = 'postalLayer4';
+  isLoadingMapData: boolean = false;
 
   ngOnInit(): void {
     this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'letzten 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt' }
@@ -155,6 +157,10 @@ export class ETerminDashboardRender implements OnInit {
           }
           else {
             this.levelValues = ['Gesamt']
+          }
+
+          if(this.levelSettings['levelValues'] !== 'Gesamt' && this.levelSettings['thema'] !== 'Überblick') {
+            // this.setMapData()
           }
           this.setLevelData()
         }
@@ -225,6 +231,27 @@ export class ETerminDashboardRender implements OnInit {
     this.levelId = this.api.filterArray(this.metaData, 'type', 'levelid')[0]['varname']
     this.professionGroup = this.api.filterArray(this.metaData, 'type', 'fg')[0]['varname']
     // this.subGroups = ['Keine'].concat(this.api.getValues(this.api.filterArray(this.metaData, 'type', 'group'), 'varname'))
+  }
+
+  async setMapData(input: any = '') {
+    this.isLoadingMapData = true;
+    const levelSettings = this.levelSettings
+
+    console.log(this.levelSettings)
+
+    levelSettings.resolution = 'upcoming_monthly_plz4'
+
+    const _result = await this.queryETerminData.getQueryDataMap(levelSettings)
+
+    if (_result instanceof Error) {
+      this.isLoadingMapData = false
+      this.hasNoData = true
+      return
+    }
+
+    if (_result) {
+      console.log(_result)
+    }
   }
 
   /**

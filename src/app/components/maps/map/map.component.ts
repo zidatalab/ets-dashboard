@@ -16,7 +16,7 @@ import { GermanStates } from './helpers/dataHelper'
 export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   constructor(
     private shapeService: ShapeService,
-    private markerService: MarkerService
+    private markerService: MarkerService,
   ) { }
 
   @Input() stateFilter: string = ''
@@ -46,9 +46,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     this.initInfoControl()
 
-    this.map.addLayer(this.districtLayer)
+    this.map.addLayer(this.postalLayer4)
 
-    this.map.fitBounds(this.districtLayer.getBounds())
+    this.map.fitBounds(this.postalLayer4.getBounds())
   }
 
   private initLayer(data: any): any {
@@ -84,9 +84,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     }
 
     this.infoHandler.update = (props: any) => {
-      this.infoContainer.innerHTML = '<h4>US Population Density</h4>' + (props ?
-        '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-        : 'Hover over a state');
+      this.infoContainer.innerHTML = props ? `<div class="info-content">
+        <h4>Gebiet: ${props.plz4}</h4>
+        <p>Wert: 123232</p>
+      </div>` : 'Bewegen Sie den Mauszeiger über einen Staat'
     }
 
     this.infoHandler.addTo(this.map)
@@ -103,6 +104,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       fillColor: '#FAE042',
     });
 
+    console.log(layer.feature)
     this.infoHandler.update(layer.feature.properties);
 
     layer.bringToFront()
@@ -165,9 +167,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   ngOnChanges(changes: SimpleChanges) {
     if (!changes['layerType'].previousValue) return
 
+    console.log(changes)
+
     this.switchLayers(changes['layerType'])
   }
-
 
   ngOnInit(): void {
     if (this.map) {
@@ -175,6 +178,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       return
     }
 
+    this.setMapData()
     this.setShapes()
   }
 

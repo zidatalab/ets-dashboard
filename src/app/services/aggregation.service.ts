@@ -224,6 +224,7 @@ export class AggregationService {
       if (Number(levelSettings.zeitraum)) {
         startDate = new Date(Number(levelSettings.zeitraum) + "-01-01").toISOString().slice(0, 10);
         endDate = new Date(Number(levelSettings.zeitraum) + "-12-31").toISOString().slice(0, 10);
+        console.log(endDate)
       }
 
       if (levelSettings["zeitraum"] === "Letzte 4 Wochen") {

@@ -29,21 +29,25 @@ export class MakeETerminData {
     return new Date(input).toLocaleDateString()
   }
 
-  async getETerminData(input: any) {
+  async getETerminData(input: any, isMapData : boolean = false, data : any = []) {
     /**
      * for data structurization and aggregation see Teams Convo 
      */
+
     if (input === 'stats_angebot') {
-      let res_angebot = await this.createStats(this.levelSettings, input)
-      return res_angebot
+      return await this.createStats(this.levelSettings, input)
     }
 
     if (input === 'stats_nachfrage') {
-      let res_nachfrage = await this.createStats(this.levelSettings, input)
-      return res_nachfrage
+      return await this.createStats(this.levelSettings, input)
     }
 
     return null
+  }
+
+  async createStatsForMap(data: any, levelSettings: any, input: any) {
+
+    console.log(data)
   }
 
   async createStats(levelSettings: any, input: any) {

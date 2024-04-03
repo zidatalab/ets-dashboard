@@ -6,7 +6,7 @@ import { ShapeService } from 'src/app/services/shape.service';
 import { MarkerService } from 'src/app/services/marker.service';
 
 import { GermanStates } from './helpers/dataHelper'
-
+import { ApiService } from 'src/app/services/api.service';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -17,11 +17,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   constructor(
     private shapeService: ShapeService,
     private markerService: MarkerService,
+    private api: ApiService
   ) { }
 
   @Input() stateFilter: string = ''
   @Input() layerType: any = null
-  @Input() data: any = []
+  @Input() levelSettings: any = null
 
   private map: any = null
   private postalLayer4: any = null
@@ -31,6 +32,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   private interval: any = null
   private infoHandler = L.control.layers()
   private infoContainer: any = null
+  private data: any = null
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -84,9 +86,15 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     }
 
     this.infoHandler.update = (props: any) => {
+      let plz4Data = null
+
+      if (this.data && props) {
+        plz4Data = this.data.find(item => item.angebot_group_plz4 === props.plz4)
+      }
+
       this.infoContainer.innerHTML = props ? `<div class="info-content">
         <h4>Gebiet: ${props.plz4}</h4>
-        <p>Wert: 123232</p>
+        <p>Wert: ${plz4Data ? plz4Data.angebot_Anzahl : 'Keine Daten vorhanden'}</p>
       </div>` : 'Bewegen Sie den Mauszeiger über einen Staat'
     }
 
@@ -104,7 +112,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       fillColor: '#FAE042',
     });
 
-    console.log(layer.feature)
     this.infoHandler.update(layer.feature.properties);
 
     layer.bringToFront()
@@ -158,6 +165,55 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     this.map.addLayer(layer)
   }
 
+  private async setMapDate(levelSettings: any) {
+    let query: any = {
+      'client_id': 'ets_reporting',
+      'groupinfo': {
+        'level': 'KV',
+        "fg": levelSettings['fg'],
+        'levelid': levelSettings['levelValues'],
+        'timeframe': 'upcoming_monthly_plz4',
+      },
+      "showfields": ["stats_angebot", "stats_nachfrage"]
+    }
+
+    const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
+
+    this.data = this.processMapData(result, levelSettings)
+  }
+
+  private processMapData(result: any, levelSettings: any) {
+    // Process result data
+    const innerResult = result[0]['stats_angebot']
+    const filteredResult = innerResult.filter(item => {
+      return item['angebot_group_dringlichkeit'] === levelSettings['urgency']
+    })
+
+    return this.groupSum(filteredResult)
+  }
+
+  private groupSum(data: any) {
+    const result = [];
+
+    data.reduce(function (res, value) {
+      if (!res[value.angebot_group_plz4]) {
+        res[value.angebot_group_plz4] = {
+          angebot_group_plz4: value.angebot_group_plz4,
+          angebot_Anzahl: 0,
+          angebot_group_dringlichkeit: value.angebot_group_dringlichkeit,
+          angebot_group_status: value.angebot_group_status,
+          angebot_reference_date: value.angebot_reference_date
+        };
+
+        result.push(res[value.angebot_group_plz4])
+      }
+      res[value.angebot_group_plz4].angebot_Anzahl += value.angebot_Anzahl;
+      return res;
+    }, {});
+
+    return result
+  }
+
   /**
    * 
    * Lifecycle Hooks
@@ -165,9 +221,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
    */
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes['layerType'].previousValue) return
+    if (changes['levelSettings'].currentValue.levelValues !== 'Gesamt') {
+      this.setMapDate(changes['levelSettings'].currentValue)
+    }
 
-    console.log(changes)
+    if (!changes['layerType'].previousValue) return
 
     this.switchLayers(changes['layerType'])
   }
@@ -178,7 +236,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       return
     }
 
-    this.setMapData()
     this.setShapes()
   }
 
@@ -186,8 +243,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     if (!this[this.layerType]) {
       this.interval = setInterval(() => {
         if (this[this.layerType]) {
-          this.initMap()
-          clearInterval(this.interval);
+          if (this.data) {
+            this.initMap()
+            clearInterval(this.interval);
+          }
         }
       }, 100);
     }

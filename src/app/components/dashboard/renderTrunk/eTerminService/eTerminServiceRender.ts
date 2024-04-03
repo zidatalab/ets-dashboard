@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnChanges, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AggregationService } from 'src/app/services/aggregation.service';
@@ -157,10 +157,6 @@ export class ETerminDashboardRender implements OnInit {
           }
           else {
             this.levelValues = ['Gesamt']
-          }
-
-          if(this.levelSettings['levelValues'] !== 'Gesamt' && this.levelSettings['thema'] !== 'Überblick') {
-            // this.setMapData()
           }
           this.setLevelData()
         }

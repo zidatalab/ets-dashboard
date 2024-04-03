@@ -100,7 +100,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       this.infoContainer.innerHTML = props ? `<div class="info-content">
         <h4>Gebiet: ${props.plz4}</h4>
         <p>Wert: ${plz4Data ? plz4Data.angebot_Anzahl : 'Keine Daten vorhanden'}</p>
-      </div>` : 'Bewegen Sie den Mauszeiger über einen Staat'
+      </div>` : 'Bewegen Sie den Mauszeiger über einen Bereich'
     }
 
     this.infoHandler.addTo(this.map)
@@ -268,10 +268,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     const dataValue = this.data.find(item => item.angebot_group_plz4 === value.plz4)
 
     if (dataValue) {
-      gradeValue = this.colorGrade.find(item => dataValue.angebot_Anzahl < item.value)
+      gradeValue = this.colorGrade.find(item => dataValue.angebot_Anzahl <= item.value)
 
       if(!gradeValue) {
-        console.log('no value or to high', dataValue)
+        return 'green'
       }
 
       if (gradeValue) {

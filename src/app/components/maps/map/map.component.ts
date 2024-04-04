@@ -7,6 +7,8 @@ import { MarkerService } from 'src/app/services/marker.service';
 
 import { GermanStates } from './helpers/dataHelper'
 import { ApiService } from 'src/app/services/api.service';
+import * as helper from './helpers/helpers';
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -34,7 +36,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   private infoHandler = L.control.layers()
   private infoContainer: any = null
   private data: any = null
-  private isDataLoading: boolean = false
   private colorGrade: any = null
 
   private initMap(): void {
@@ -49,10 +50,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.map);
 
-    if (this.data) {
-      this.generateGrades()
-    }
-
     this.initInfoControl()
     this.generateLegend()
 
@@ -66,9 +63,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       style: (feature) => ({
         weight: 1,
         opacity: 0.5,
-        color: this.getColor(feature?.properties),
         fillOpacity: 0.8,
-        fillColor: this.getColor(feature?.properties),
+        fillColor: helper.getColor(this.data, feature?.properties, this.colorGrade),
       }),
 
       onEachFeature: (feature, layer) => (
@@ -134,7 +130,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
   private setShapes() {
     this.shapeService.getPostalCodeShapes4(GermanStates[this.stateFilter].name).subscribe(result => {
-      console.log('plz4')
       this.postalLayer4 = this.initLayer(result)
     });
 
@@ -150,8 +145,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     // this.shapeService.getDistrictShapes(GermanStates[this.stateFilter].name).subscribe(result => {
     //   this.districtLayer = this.initLayer(result)
     // })
-
-    this.generateGrades()
   }
 
   private switchLayers(changes: any) {
@@ -186,39 +179,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
-    this.data = this.processMapData(result, levelSettings)
-  }
-
-  private processMapData(result: any, levelSettings: any) {
-    // Process result data
-    const innerResult = result[0]['stats_angebot']
-    const filteredResult = innerResult.filter(item => {
-      return item['angebot_group_dringlichkeit'] === levelSettings['urgency']
-    })
-
-    return this.groupSum(filteredResult)
-  }
-
-  private groupSum(data: any) {
-    const result = [];
-
-    data.reduce(function (res, value) {
-      if (!res[value.angebot_group_plz4]) {
-        res[value.angebot_group_plz4] = {
-          angebot_group_plz4: value.angebot_group_plz4,
-          angebot_Anzahl: 0,
-          angebot_group_dringlichkeit: value.angebot_group_dringlichkeit,
-          angebot_group_status: value.angebot_group_status,
-          angebot_reference_date: value.angebot_reference_date
-        };
-
-        result.push(res[value.angebot_group_plz4])
-      }
-      res[value.angebot_group_plz4].angebot_Anzahl += value.angebot_Anzahl;
-      return res;
-    }, {});
-
-    return result
+    this.data = helper.processMapData(result, levelSettings)
   }
 
   private generateLegend() {
@@ -247,61 +208,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     legend.addTo(this.map)
   }
 
-  private setColor() {
-    const colors = [];
-    const startHue = 200;
-    const endHue = 300;
-    const numColors = 11;
-    const hueStep = (endHue - startHue) / (numColors - 1);
-
-    for (let i = 0; i < numColors; i++) {
-      const hue = startHue + i * hueStep;
-
-      colors.push(`hsl(${hue}, 100%, 50%)`);
-    }
-
-    return colors
-  }
-
-  private getColor(value) {
-    let gradeValue
-    const dataValue = this.data.find(item => item.angebot_group_plz4 === value.plz4)
-
-    if (dataValue) {
-      gradeValue = this.colorGrade.find(item => dataValue.angebot_Anzahl <= item.value)
-
-      if(!gradeValue) {
-        return 'green'
-      }
-
-      if (gradeValue) {
-        return gradeValue.color
-      }
-    }
-  }
-
-  private generateGrades() {
-    const steps = []
-    const values = this.data.map(item => item.angebot_Anzahl);
-    const max = Math.max(...values);
-    const min = Math.min(...values);
-    const step = ((max - min) / 10);
-    const colors = this.setColor();
-
-    for (let i = min; i <= max; i += step) {
-      steps.push(Number(i.toFixed(0)))
-    }
-
-    const stepsWithColors = steps.map((step, index) => {
-      return {
-        value: step,
-        color: colors[index]
-      }
-    })
-
-    this.colorGrade = stepsWithColors
-  }
-
   /**
    * 
    * Lifecycle Hooks
@@ -311,7 +217,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   ngOnChanges(changes: SimpleChanges) {
     if (changes['levelSettings'].currentValue.levelValues !== 'Gesamt') {
       this.setMapDate(changes['levelSettings'].currentValue).then(() => {
-        this.generateGrades()
+        this.colorGrade = helper.generateGrades(this.data)
       }).then(() => {
         this.setShapes()
       })

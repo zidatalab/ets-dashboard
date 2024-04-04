@@ -84,8 +84,7 @@
     <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     <app-no-data *ngIf="this.hasNoData"></app-no-data>
     <div *ngIf="!this.hasNoData && !this.isInProgress" class="plot-container">
-      <app-map *ngIf="levelSettings['levelValues'] !== 'Gesamt' && levelSettings['thema'] !== 'Überblick'"
-        [levelSettings]="levelSettings" [stateFilter]="levelSettings['levelValues']" [layerType]="selectedRegionalLayer"></app-map>
+
       <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
         <div class="textOverviewContainer">
           <span class="textFirst">Terminservice</span>
@@ -185,21 +184,31 @@
           <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
             Blick </span><span class="textThird">seit {{dataDateSince}}</span>
         </div>
-        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
-          <div class="grid-tile">
-            <h3>Termine im Angebot</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentOfferTotal, 'byDate', keyDataContainerStrings[0].firstTileColor)"></app-line-chart>
+        <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
+          <div class="tile-container">
+            <div class="grid-tile">
+              <h3>Termine im Angebot</h3>
+              <app-line-chart
+                [data]="constructChartData(appointmentOfferTotal, 'byDate', keyDataContainerStrings[0].firstTileColor)"></app-line-chart>
+            </div>
+            <div class="grid-tile">
+              <h3>nicht vermittelte Termine</h3>
+              <app-line-chart
+                [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[0].thirdTileColor)"></app-line-chart>
+            </div>
+            <div class="grid-tile">
+              <h3>vermittelte Termine</h3>
+              <app-line-chart
+                [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
+            </div>
           </div>
-          <div class="grid-tile">
-            <h3>nicht vermittelte Termine</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[0].thirdTileColor)"></app-line-chart>
-          </div>
-          <div class="grid-tile">
-            <h3>vermittelte Termine</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
+          <div class="large-tile-grid">
+            <div class="grid-tile">
+              <h3>Kartenansicht</h3>
+              <app-map *ngIf="levelSettings['levelValues'] !== 'Gesamt' && levelSettings['thema'] !== 'Überblick'"
+                [levelSettings]="levelSettings" [stateFilter]="levelSettings['levelValues']"
+                [layerType]="selectedRegionalLayer"></app-map>
+            </div>
           </div>
         </div>
         <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
@@ -231,6 +240,7 @@
             </span><span class="textThird">bis {{dataDateUntil}}</span>
           </div>
         </div>
+
         <div class="mat-small textThird"><br>Datenstand: {{this.dataLastAggregation | date : 'dd.MM.yyyy HH:mm'}} Uhr
         </div>
       </div>

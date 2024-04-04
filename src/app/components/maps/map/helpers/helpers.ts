@@ -14,12 +14,20 @@ function setColor() {
   return colors
 }
 
-export function getColor(data : any, value : any, colorGrade : any) {
+/**
+ * Gets the color for a given data point and value based on color grades
+ * 
+ * @param data - The data to search 
+ * @param value - The value to find the color for
+ * @param colorGrade - The color grades to use for mapping values to colors
+ * @returns The color as a string, or 'green' if no match is found
+ */
+export function getColor(data: any, value: any, colorGrade: any) {
   let gradeValue
-  const dataValue = data.find((item : any) => item.angebot_group_plz4 === value.plz4)
+  const dataValue = data.find((item: any) => item.angebot_group_plz4 === value.plz4)
 
   if (dataValue) {
-    gradeValue = colorGrade.find((item : any) => dataValue.angebot_Anzahl <= item.value)
+    gradeValue = colorGrade.find((item: any) => dataValue.angebot_Anzahl <= item.value)
 
     if (!gradeValue) {
       return 'green'
@@ -31,6 +39,18 @@ export function getColor(data : any, value : any, colorGrade : any) {
   }
 }
 
+/**
+ * Generates color grades for mapping data values 
+ * 
+ * This function takes in data with value properties and generates 
+ * discrete color grades to map those values. It calculates min and max
+ * values, number of grades, and assigns a color from the predefined 
+ * palette to each grade.
+ *
+ * @param data - The data to generate grades for 
+ * @returns An array of objects with value and color properties 
+ * for each grade
+*/
 export function generateGrades(data: any) {
   const steps = []
   const values = data.map((item: any) => item.angebot_Anzahl);
@@ -53,8 +73,16 @@ export function generateGrades(data: any) {
   return stepsWithColors
 }
 
+
+/**
+ * Processes map data by filtering for a given urgency level 
+ * and grouping the results.
+ * 
+ * @param result - The raw map data 
+ * @param levelSettings - The settings for the current urgency level
+ * @returns The grouped and filtered results
+*/
 export function processMapData(result: any, levelSettings: any) {
-  // Process result data
   const innerResult = result[0]['stats_angebot']
   const filteredResult = innerResult.filter((item: any) => {
     return item['angebot_group_dringlichkeit'] === levelSettings['urgency']
@@ -63,6 +91,16 @@ export function processMapData(result: any, levelSettings: any) {
   return groupSum(filteredResult)
 }
 
+/**
+ * Groups and sums data by a given property. 
+ * 
+ * Loops through the data and reduces it into an array of grouped objects. 
+ * Each group object contains the sum of a value property as well as 
+ * properties to identify the group.
+ *
+ * @param data - The data to group and sum
+ * @returns An array of grouped objects
+*/
 export function groupSum(data: any) {
   const result: any = [];
 

@@ -81,9 +81,16 @@ h2 {
   gap: 2rem;
 }
 
+.large-tile-grid{
+  padding-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 2rem;
+}
+
 .grid-tile {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  padding: 2px 16px;
+  padding: 5px 16px 16px 16px;
   border-radius: 5px;
   background-color: #3b3b3b;
 }

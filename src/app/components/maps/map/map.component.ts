@@ -64,7 +64,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         weight: 1,
         opacity: 0.5,
         fillOpacity: 0.8,
-        fillColor: helper.getColor(this.data, feature?.properties, this.colorGrade),
+        color: 'white',
+        fillColor: helper.getColor(this.data, feature.properties, this.colorGrade),
       }),
 
       onEachFeature: (feature, layer) => (
@@ -107,8 +108,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     layer.setStyle({
       weight: 1,
-      opacity: 1.0,
-      fillOpacity: 1.0,
+      opacity: 0.6,
+      fillOpacity: 0.9,
     });
 
     this.infoHandler.update(layer.feature.properties);

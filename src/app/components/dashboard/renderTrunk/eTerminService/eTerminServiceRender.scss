@@ -81,7 +81,7 @@ h2 {
   gap: 2rem;
 }
 
-.large-tile-grid{
+.large-tile-grid {
   padding-top: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
@@ -142,10 +142,16 @@ h2 {
 }
 
 .overview-container mat-grid-tile {
-  margin: 0 1rem; 
+  margin: 0 1rem;
 }
 
-.hint-text { 
+.hint-text {
   color: #9c9c9c;
   font-size: small
+}
+
+.map-icon {
+  padding-left: 5px;
+  padding-bottom: 5px;
+  font-size: large;
 }

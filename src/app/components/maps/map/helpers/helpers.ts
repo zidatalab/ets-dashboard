@@ -25,12 +25,17 @@ function setColor() {
 export function getColor(data: any, value: any, colorGrade: any) {
   let gradeValue
   const dataValue = data.find((item: any) => item.angebot_group_plz4 === value.plz4)
-
+  
   if (dataValue) {
-    gradeValue = colorGrade.find((item: any) => dataValue.angebot_Anzahl <= item.value)
+    gradeValue = colorGrade.find((item: any) => dataValue.angebot_Anzahl <= item.value || dataValue.angebot_Anzahl > colorGrade[colorGrade.length - 1].value)
 
-    if (!gradeValue) {
-      return 'green'
+    if(!gradeValue) {
+      return 'white'
+    }
+
+    if (gradeValue.value > colorGrade[colorGrade.length - 1].value) {
+      console.log('value greater than max grade')
+      return colorGrade[colorGrade.length - 1].color
     }
 
     if (gradeValue) {
@@ -92,6 +97,14 @@ export function processMapData(result: any, levelSettings: any) {
 }
 
 /**
+ * group by status - avaiable, booked, unavaiable (?)
+ * group by actual and upcoming (angebot_reference_date)
+ * 
+ * monthly and daily seperation
+ */
+
+/**
+ * @deprecated
  * Groups and sums data by a given property. 
  * 
  * Loops through the data and reduces it into an array of grouped objects. 

@@ -95,7 +95,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       }
 
       this.infoContainer.innerHTML = props ? `<div class="info-content">
-        <h4>Gebiet: ${props.plz4}</h4>
+        <h3>4-stellige Postleitzahl</h3>
+        <h4>ID: ${props.plz4}</h4>
         <p>Wert: ${plz4Data ? plz4Data.angebot_Anzahl : 'Keine Daten vorhanden'}</p>
       </div>` : 'Bewegen Sie den Mauszeiger über einen Bereich'
     }
@@ -193,6 +194,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       const last = grades[grades.length - 1];
 
       div.innerHTML += `Legende: Anzahl <br>`;
+      div.innerHTML += `<i style="background:white"></i> Keine Daten <br>`;
 
       for (let i = 0; i < grades.length - 1; i++) {
         const current = grades[i];

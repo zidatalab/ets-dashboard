@@ -130,7 +130,7 @@ export class ETerminDashboardRender implements OnInit {
   dataDateUntil: any = ''
   dataLastAggregation: any = ''
   hasNoData = false;
-  regionalLayer: any = [{ key: 'Stadtbezirke 4', value: 'postalLayer4' }];
+  regionalLayer: any = [{ key: '4-stellige Postleitzahl', value: 'postalLayer4' }];
   // regionalLayer: any = [{ key: 'Kreise', value: 'districtLayer' }, { key: 'Stadtbezirke 4', value: 'postalLayer4' }, { key: 'Stadtbezirke 3', value: 'postalLayer3' }, { key: 'Stadtbezirke 2', value: 'postalLayer2' }];
   selectedRegionalLayer: any = 'postalLayer4';
   isLoadingMapData: boolean = false;

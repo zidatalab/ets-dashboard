@@ -103,6 +103,10 @@ export function processMapData(result: any, levelSettings: any) {
  * monthly and daily seperation
  */
 
+export function groupFilter(data: any, filterBy: string, filterValue: string) {
+  
+}
+
 /**
  * @deprecated
  * Groups and sums data by a given property. 

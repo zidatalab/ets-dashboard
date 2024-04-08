@@ -73,6 +73,7 @@ export class ETerminDashboardRender implements OnInit {
     'Thüringen'
   ];
 
+  views = ['Planungsansicht', 'Terminsuche']
   resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
   periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr" }, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
@@ -136,7 +137,7 @@ export class ETerminDashboardRender implements OnInit {
   isLoadingMapData: boolean = false;
 
   ngOnInit(): void {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'letzten 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt' }
+    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'letzten 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt', 'view': 'Planungsansicht' };
     this.currentUser = this.auth.getUserDetails()
     if (!this.currentUser) {
       this.router.navigate(['/'])
@@ -347,5 +348,3 @@ export class ETerminDashboardRender implements OnInit {
     this.selectedContainerStringObject = res
   }
 }
-
-

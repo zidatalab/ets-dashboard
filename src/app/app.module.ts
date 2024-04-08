@@ -114,7 +114,7 @@ const routes: Routes = [
     UpdateUserDialog,
     DeleteUserDialog,
     PageNotFoundComponent,
-    MapComponent,
+    MapComponent
   ],
   imports: [
     CommonModule,

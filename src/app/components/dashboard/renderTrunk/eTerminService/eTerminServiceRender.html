@@ -21,14 +21,24 @@
   </div>
   <div class="dashboard-content" *ngIf="this.currentUser">
     <div class="dashboard-content-header">
-      <h3>Ansicht <mat-icon class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon></h3>
+      <h3>Ansicht</h3>
+      <mat-chip-listbox>
+        <mat-chip-option (click)="this.setLevelData('view',item);" *ngFor="let item of this.views" color="primary"
+          [selected]="(this.levelSettings['view']==item)" selectable="false">
+          <div class="chip-wrapper">
+            {{ item }}
+            <mat-icon *ngIf="item === 'Terminsuche'" class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon>
+          </div>
+        </mat-chip-option>
+      </mat-chip-listbox>
+      <h3>Thema </h3>
       <mat-chip-listbox>
         <mat-chip-option (click)="this.setLevelData('thema',item);" *ngFor="let item of this.themes" color="primary"
           [selected]="(this.levelSettings['thema']==item)" selectable="false">
           {{ item }}
         </mat-chip-option>
       </mat-chip-listbox>
-      <h3>Region<mat-icon class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon></h3>
+      <h3>Region</h3>
       <mat-chip-listbox>
         <mat-chip-option (click)="this.setLevelData('levelValues',item);" *ngFor="let item of this.levelValues"
           color="primary" [selected]="(this.levelSettings['levelValues']==item)" selectable="false">
@@ -36,7 +46,7 @@
         </mat-chip-option>
       </mat-chip-listbox>
       <div *ngIf="this.levelSettings['levelValues'] !== 'Gesamt'">
-        <h3>Raumeinheit<mat-icon class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon></h3>
+        <h3>Raumeinheit</h3>
         <mat-chip-listbox>
           <mat-chip-option (click)="setRegionalLayer(item.value)" *ngFor="let item of this.regionalLayer"
             color="primary" [selected]="item.value === selectedRegionalLayer" selectable="false">
@@ -46,7 +56,7 @@
       </div>
       <div *ngIf="this.levelSettings['thema'] !== 'Überblick'; then thenBlock else elseBlock"></div>
       <ng-template #thenBlock>
-        <h3>Facharztgruppen<mat-icon class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon></h3>
+        <h3>Facharztgruppen</h3>
         <mat-chip-listbox>
           <mat-chip-option (click)="this.setLevelData('fg',item);" *ngFor="let item of this.professionGroups"
             color="primary" [selected]="(this.levelSettings['fg']==item)" selectable="false">
@@ -56,7 +66,7 @@
       </ng-template>
       <ng-template #elseBlock>
       </ng-template>
-      <h3>Dringlichkeit<mat-icon class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon></h3>
+      <h3>Dringlichkeit</h3>
       <mat-chip-listbox>
         <mat-chip-option (click)="this.setLevelData('urgency',item.value);" *ngFor="let item of this.urgencies"
           color="primary" [selected]="(this.levelSettings['urgency']==item.value)" selectable="false">
@@ -84,162 +94,166 @@
     <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     <app-no-data *ngIf="this.hasNoData"></app-no-data>
     <div *ngIf="!this.hasNoData && !this.isInProgress" class="plot-container">
-      <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
-        <div class="textOverviewContainer">
-          <span class="textFirst">Terminservice</span>
-          <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirst">letzten 30 Tagen </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirst">letzten 12 Monaten </span>
-          <span class="textThird"> seit {{dataDateSince}}</span>
-        </div>
-      </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
-        <div class="textOverviewContainer">
-          <span class="textFirstOffer">Terminangebot</span>
-          <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstOffer"> letzten 30 Tagen </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstOffer"> letzte 12 Monaten </span>
-          <span class="textThird"> seit {{dataDateSince}}</span>
-        </div>
-      </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
-        <div class="textOverviewContainer">
-          <span class="textFirstDemand">Vermittlungswünsche</span>
-          <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstDemand"> letzten 30 Tagen </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
-          <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstDemand"> letzten 12 Monaten
-          </span>
-          <span class="textThird"> seit {{dataDateSince}}</span>
-        </div>
-      </div>
-      <!-- <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="hint-text">Abweichendes Datum-Seit möglich </span> -->
-      <div class="grid-container">
-        <mat-grid-list *ngIf="this.levelSettings['thema'] !== 'Überblick'" cols="3" rowHeight="150px">
-          <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
-                [title]="keyDataContainerStrings[0].firstTile" [color]="keyDataContainerStrings[0].firstTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelt Termine']"
-                [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl Termine vermittelt']"
-                [title]="keyDataContainerStrings[0].secondTile" [color]="keyDataContainerStrings[0].secondTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
+      <div *ngIf="this.levelSettings['view'] === 'Planungsansicht'">
+        <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
+          <div class="textOverviewContainer">
+            <span class="textFirst">Terminservice</span>
+            <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirst">letzten 30 Tagen </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirst">letzten 12 Monaten </span>
+            <span class="textThird"> seit {{dataDateSince}}</span>
           </div>
-          <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl Terminnachfrage']"
-                [title]="keyDataContainerStrings[1].firstTile" [color]="keyDataContainerStrings[1].firstTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminnachfrage']"
-                [title]="keyDataContainerStrings[1].secondTile" [color]="keyDataContainerStrings[1].secondTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="1" rowspan="1">
-              <app-key-data-container [value]="this.summaryInfo['Anzahl vermittelte Terminnachfrage']"
-                [title]="keyDataContainerStrings[1].thirdTile" [color]="keyDataContainerStrings[1].thirdTileColor">
-              </app-key-data-container>
-            </mat-grid-tile>
-          </div>
-        </mat-grid-list>
-        <mat-grid-list *ngIf="this.levelSettings['thema'] === 'Überblick'" cols="2" rowHeight="150px">
-          <mat-grid-tile colspan="1" rowspan="1">
-            <app-key-data-container [value]="this.summaryInfo['Anteil Terminangebot']" [isPercent]="true"
-              [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[2].firstTileColor">
-            </app-key-data-container>
-          </mat-grid-tile>
-          <mat-grid-tile colspan="1" rowspan="1">
-            <app-key-data-container [value]="this.summaryInfo['Anteil Vermittelungswünsche']" [isPercent]="true"
-              [title]="keyDataContainerStrings[2].secondTile" [color]="keyDataContainerStrings[2].secondTileColor">
-            </app-key-data-container>
-          </mat-grid-tile>
-        </mat-grid-list>
-      </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
-        <div class="textOverviewContainer">
-          <span class="textFirstOffer">Angebots</span><span class="textSecond">entwicklung </span><span
-            class="textThird">seit {{dataDateSince}}</span>
-        </div>
-      </div>
-      <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
-        <div class="textOverviewContainer">
-          <span class="textFirstDemand">Nachfrage</span><span class="textSecond">entwicklung </span><span
-            class="textThird">seit {{dataDateSince}}</span>
-        </div>
-      </div>
-      <div class="grid-container">
-        <div class="textOverviewContainer" *ngIf="this.levelSettings['thema'] === 'Überblick' && false">
-          <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
-            Blick </span><span class="textThird">seit {{dataDateSince}}</span>
         </div>
         <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
-          <div class="tile-container">
-            <div class="grid-tile">
-              <h3>Termine im Angebot</h3>
-              <app-line-chart
-                [data]="constructChartData(appointmentOfferTotal, 'byDate', keyDataContainerStrings[0].firstTileColor)"></app-line-chart>
-            </div>
-            <div class="grid-tile">
-              <h3>nicht vermittelte Termine</h3>
-              <app-line-chart
-                [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[0].thirdTileColor)"></app-line-chart>
-            </div>
-            <div class="grid-tile">
-              <h3>vermittelte Termine</h3>
-              <app-line-chart
-                [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
-            </div>
-          </div>
-          <div *ngIf="levelSettings['levelValues'] !== 'Gesamt' && levelSettings['thema'] !== 'Überblick'"
-            class="large-tile-grid">
-            <div class="grid-tile">
-              <h3>Kartenansicht</h3>
-              <app-map [levelSettings]="levelSettings" [stateFilter]="levelSettings['levelValues']"
-                [layerType]="selectedRegionalLayer"></app-map>
-            </div>
-          </div>
-        </div>
-        <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
-          <div class="grid-tile">
-            <h3>Vermittlungswünsche</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentDemandTotal, 'byDate',keyDataContainerStrings[1].firstTileColor)"></app-line-chart>
-          </div>
-          <div class="grid-tile">
-            <h3>erfolglose Vermittlungswünsche</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[1].secondTileColor)"></app-line-chart>
-          </div>
-          <div class="grid-tile">
-            <h3>erfolgreiche Vermittlungswünsche</h3>
-            <app-line-chart
-              [data]="constructChartData(appointmentDemandArranged, 'byDate',keyDataContainerStrings[1].thirdTileColor)"></app-line-chart>
-          </div>
-        </div>
-        <div *ngIf="this.levelSettings['thema'] === 'Terminangebot' && false">
           <div class="textOverviewContainer">
-            <span class="textSecond">ein Blick in die Zukunft des</span><span class="textFirstOffer"> Angebots
-            </span><span class="textThird">bis {{dataDateUntil}}</span>
+            <span class="textFirstOffer">Terminangebot</span>
+            <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstOffer"> letzten 30 Tagen </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstOffer"> letzte 12 Monaten
+            </span>
+            <span class="textThird"> seit {{dataDateSince}}</span>
           </div>
         </div>
-        <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche' && false">
+        <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
           <div class="textOverviewContainer">
-            <span class="textSecond">ein Blick in die Zukunft der</span><span class="textFirstDemand"> Nachfrage
-            </span><span class="textThird">bis {{dataDateUntil}}</span>
+            <span class="textFirstDemand">Vermittlungswünsche</span>
+            <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textSecond"> in den </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'daily'" class="textFirstDemand"> letzten 30 Tagen </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textSecond"> in den </span>
+            <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="textFirstDemand"> letzten 12 Monaten
+            </span>
+            <span class="textThird"> seit {{dataDateSince}}</span>
           </div>
         </div>
-        <div class="mat-small textThird"><br>Datenstand: {{this.dataLastAggregation | date : 'dd.MM.yyyy HH:mm'}} Uhr
+        <!-- <span *ngIf="this.levelSettings['resolution'] === 'weekly'" class="hint-text">Abweichendes Datum-Seit möglich </span> -->
+        <div class="grid-container">
+          <mat-grid-list *ngIf="this.levelSettings['thema'] !== 'Überblick'" cols="3" rowHeight="150px">
+            <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
+              <mat-grid-tile colspan="1" rowspan="1">
+                <app-key-data-container [value]="this.summaryInfo['Anzahl Angebot']"
+                  [title]="keyDataContainerStrings[0].firstTile" [color]="keyDataContainerStrings[0].firstTileColor">
+                </app-key-data-container>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="1" rowspan="1">
+                <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelt Termine']"
+                  [title]="keyDataContainerStrings[0].thirdTile" [color]="keyDataContainerStrings[0].thirdTileColor">
+                </app-key-data-container>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="1" rowspan="1">
+                <app-key-data-container [value]="this.summaryInfo['Anzahl Termine vermittelt']"
+                  [title]="keyDataContainerStrings[0].secondTile" [color]="keyDataContainerStrings[0].secondTileColor">
+                </app-key-data-container>
+              </mat-grid-tile>
+            </div>
+            <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
+              <mat-grid-tile colspan="1" rowspan="1">
+                <app-key-data-container [value]="this.summaryInfo['Anzahl Terminnachfrage']"
+                  [title]="keyDataContainerStrings[1].firstTile" [color]="keyDataContainerStrings[1].firstTileColor">
+                </app-key-data-container>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="1" rowspan="1">
+                <app-key-data-container [value]="this.summaryInfo['Anzahl nicht vermittelte Terminnachfrage']"
+                  [title]="keyDataContainerStrings[1].secondTile" [color]="keyDataContainerStrings[1].secondTileColor">
+                </app-key-data-container>
+              </mat-grid-tile>
+              <mat-grid-tile colspan="1" rowspan="1">
+                <app-key-data-container [value]="this.summaryInfo['Anzahl vermittelte Terminnachfrage']"
+                  [title]="keyDataContainerStrings[1].thirdTile" [color]="keyDataContainerStrings[1].thirdTileColor">
+                </app-key-data-container>
+              </mat-grid-tile>
+            </div>
+          </mat-grid-list>
+          <mat-grid-list *ngIf="this.levelSettings['thema'] === 'Überblick'" cols="2" rowHeight="150px">
+            <mat-grid-tile colspan="1" rowspan="1">
+              <app-key-data-container [value]="this.summaryInfo['Anteil Terminangebot']" [isPercent]="true"
+                [title]="keyDataContainerStrings[2].firstTile" [color]="keyDataContainerStrings[2].firstTileColor">
+              </app-key-data-container>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="1" rowspan="1">
+              <app-key-data-container [value]="this.summaryInfo['Anteil Vermittelungswünsche']" [isPercent]="true"
+                [title]="keyDataContainerStrings[2].secondTile" [color]="keyDataContainerStrings[2].secondTileColor">
+              </app-key-data-container>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+        <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
+          <div class="textOverviewContainer">
+            <span class="textFirstOffer">Angebots</span><span class="textSecond">entwicklung </span><span
+              class="textThird">seit {{dataDateSince}}</span>
+          </div>
+        </div>
+        <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
+          <div class="textOverviewContainer">
+            <span class="textFirstDemand">Nachfrage</span><span class="textSecond">entwicklung </span><span
+              class="textThird">seit {{dataDateSince}}</span>
+          </div>
+        </div>
+        <div class="grid-container">
+          <div class="textOverviewContainer" *ngIf="this.levelSettings['thema'] === 'Überblick' && false">
+            <span class="textFirst">Facharztgruppen</span><span class="textSecond"> auf einen
+              Blick </span><span class="textThird">seit {{dataDateSince}}</span>
+          </div>
+          <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
+            <div class="tile-container">
+              <div class="grid-tile">
+                <h3>Termine im Angebot</h3>
+                <app-line-chart
+                  [data]="constructChartData(appointmentOfferTotal, 'byDate', keyDataContainerStrings[0].firstTileColor)"></app-line-chart>
+              </div>
+              <div class="grid-tile">
+                <h3>nicht vermittelte Termine</h3>
+                <app-line-chart
+                  [data]="constructChartData(appointmentUnarranged, 'byDate',keyDataContainerStrings[0].thirdTileColor)"></app-line-chart>
+              </div>
+              <div class="grid-tile">
+                <h3>vermittelte Termine</h3>
+                <app-line-chart
+                  [data]="constructChartData(appointmentBooked, 'byDate',keyDataContainerStrings[0].secondTileColor)"></app-line-chart>
+              </div>
+            </div>
+          </div>
+          <div class="tile-container" *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche'">
+            <div class="grid-tile">
+              <h3>Vermittlungswünsche</h3>
+              <app-line-chart
+                [data]="constructChartData(appointmentDemandTotal, 'byDate',keyDataContainerStrings[1].firstTileColor)"></app-line-chart>
+            </div>
+            <div class="grid-tile">
+              <h3>erfolglose Vermittlungswünsche</h3>
+              <app-line-chart
+                [data]="constructChartData(appointmentDemandUnarranged, 'byDate',keyDataContainerStrings[1].secondTileColor)"></app-line-chart>
+            </div>
+            <div class="grid-tile">
+              <h3>erfolgreiche Vermittlungswünsche</h3>
+              <app-line-chart
+                [data]="constructChartData(appointmentDemandArranged, 'byDate',keyDataContainerStrings[1].thirdTileColor)"></app-line-chart>
+            </div>
+          </div>
+          <div *ngIf="this.levelSettings['thema'] === 'Terminangebot' && false">
+            <div class="textOverviewContainer">
+              <span class="textSecond">ein Blick in die Zukunft des</span><span class="textFirstOffer"> Angebots
+              </span><span class="textThird">bis {{dataDateUntil}}</span>
+            </div>
+          </div>
+          <div *ngIf="this.levelSettings['thema'] === 'Vermittlungswünsche' && false">
+            <div class="textOverviewContainer">
+              <span class="textSecond">ein Blick in die Zukunft der</span><span class="textFirstDemand"> Nachfrage
+              </span><span class="textThird">bis {{dataDateUntil}}</span>
+            </div>
+          </div>
+          <div class="mat-small textThird"><br>Datenstand: {{this.dataLastAggregation | date : 'dd.MM.yyyy HH:mm'}} Uhr
+          </div>
+        </div>
+      </div>
+      <div *ngIf="this.levelSettings['view'] === 'Terminsuche'">
+        <div class="large-tile-grid">
+          <div class="grid-tile">
+            <h3>Kartenansicht</h3>
+            <app-map [levelSettings]="levelSettings" [stateFilter]="levelSettings['levelValues']"
+              [layerType]="selectedRegionalLayer"></app-map>
+          </div>
         </div>
       </div>
     </div>

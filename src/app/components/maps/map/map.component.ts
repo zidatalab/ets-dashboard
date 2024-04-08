@@ -20,7 +20,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     private shapeService: ShapeService,
     private markerService: MarkerService,
     private api: ApiService,
-    private changeDetect: ChangeDetectorRef
   ) { }
 
   @Input() stateFilter: string = ''

@@ -63,6 +63,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         weight: 1,
         opacity: 0.5,
         fillOpacity: 0.8,
+        color: '#5f656b',
         fillColor: helper.getColor(this.data, feature.properties, this.colorGrade),
       }),
 

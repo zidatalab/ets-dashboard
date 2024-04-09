@@ -92,6 +92,20 @@ export class ETerminDashboardRender implements OnInit {
       { key: "letzter Monat", value: "lastMonth" }
     ]
   }
+  terminStatus = [
+    {
+      key: "Gebucht",
+      value: "booked"
+    },
+    {
+      key: "Verfügbar",
+      value: "available"
+    },
+    {
+      key: "nicht Verfügbar",
+      value: "unavailable"
+    }
+  ]
   periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr" }, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Überblick", "Terminangebot", "Vermittlungswünsche"]
@@ -206,12 +220,13 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings = {
         'level': 'KV',
         "fg": "Gesamt",
-        'levelValues': 'Gesamt',
+        'levelValues': 'Berlin',
         'resolution': 'upcoming_daily_plz4',
         'thema': 'Terminangebot',
         'urgency': 'Gesamt',
         'view': 'Planung',
-        'resolutionPlaningOption': 'today'
+        'resolutionPlaningOption': 'today',
+        'status': 'available'
       }
 
       return
@@ -390,5 +405,13 @@ export class ETerminDashboardRender implements OnInit {
     })
 
     this.selectedContainerStringObject = res
+  }
+
+  setMapTitle() {
+    const timeStringDay = `für ${this.levelSettings['resolutionPlaningOption'] === 'today' ? 'heute' : 'morgen'}`
+    const timeStringMonth = `${this.levelSettings['resolutionPlaningOption'] === 'thisMonth' ? 'in diesem Monat' : 'für den letzen Monat'}`
+    const result = `Planungsansicht: ${this.levelSettings['thema']} in ${this.levelSettings['levelValues']} ${this.levelSettings['resolution'] === 'upcoming_daily_plz4' ? timeStringDay : timeStringMonth}`
+
+    return result
   }
 }

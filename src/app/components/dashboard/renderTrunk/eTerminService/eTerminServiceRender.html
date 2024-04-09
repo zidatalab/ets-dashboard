@@ -23,12 +23,13 @@
     <div class="dashboard-content-header">
       <h3>Ansicht</h3>
       <mat-chip-listbox>
-        <mat-chip-option (click)="this.setLevelData('view',item)" *ngFor="let item of this.views"
-          color="primary" [selected]="(this.levelSettings['view'] === item)" selectable="false">
+        <mat-chip-option (click)="this.setLevelData('view',item)" *ngFor="let item of this.views" color="primary"
+          [selected]="(this.levelSettings['view'] === item)" selectable="false">
           <div class="chip-wrapper">
             {{ item }}
             <mat-icon *ngIf="item === 'Planung'" class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon>
-            <mat-icon *ngIf="item === 'Zeitreihen'" class="map-icon" aria-hidden="false" fontIcon="bar_chart"></mat-icon>
+            <mat-icon *ngIf="item === 'Zeitreihen'" class="map-icon" aria-hidden="false"
+              fontIcon="bar_chart"></mat-icon>
           </div>
         </mat-chip-option>
       </mat-chip-listbox>
@@ -46,7 +47,7 @@
           {{ item }}
         </mat-chip-option>
       </mat-chip-listbox>
-      <div *ngIf="this.levelSettings['levelValues'] !== 'Gesamt'">
+      <div *ngIf="this.levelSettings['levelValues'] !== 'Gesamt' && regionalLayer.length !== 1">
         <h3>Raumeinheit</h3>
         <mat-chip-listbox>
           <mat-chip-option (click)="setRegionalLayer(item.value)" *ngFor="let item of this.regionalLayer"
@@ -74,6 +75,15 @@
           {{ item.key }}
         </mat-chip-option>
       </mat-chip-listbox>
+      <div *ngIf="this.levelSettings['view'] === 'Planung' && this.levelSettings['levelValues'] !== 'Gesamt'">
+        <h3>Status</h3>
+        <mat-chip-listbox>
+          <mat-chip-option (click)="this.setLevelData('status',item.value);" *ngFor="let item of this.terminStatus"
+            color="primary" [selected]="(this.levelSettings['status']==item.value)" selectable="false">
+            {{ item.key }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
       <h3>Zeitliche Auflösung</h3>
       <div *ngIf="this.levelSettings['view'] === 'Zeitreihen'">
         <mat-chip-listbox>
@@ -281,7 +291,7 @@
       <div *ngIf="this.levelSettings['view'] === 'Planung'">
         <div class="large-tile-grid">
           <div class="grid-tile">
-            <h3>Kartenansicht</h3>
+            <h3>{{setMapTitle()}}</h3>
             <app-map [levelSettings]="levelSettings" [stateFilter]="levelSettings['levelValues']"
               [layerType]="selectedRegionalLayer"></app-map>
           </div>

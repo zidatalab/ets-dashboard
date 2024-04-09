@@ -26,15 +26,14 @@ export function getColor(data: any, value: any, colorGrade: any) {
   let gradeValue
   const dataValue = data.find((item: any) => item.angebot_group_plz4 === value.plz4)
 
+  if(!dataValue) {
+    return 'white'
+  }
+
   if (dataValue) {
     gradeValue = colorGrade.find((item: any) => dataValue.angebot_Anzahl <= item.value || dataValue.angebot_Anzahl > colorGrade[colorGrade.length - 1].value)
 
-    if (!gradeValue) {
-      return 'white'
-    }
-
     if (gradeValue.value > colorGrade[colorGrade.length - 1].value) {
-      console.log('value greater than max grade')
       return colorGrade[colorGrade.length - 1].color
     }
 
@@ -89,21 +88,22 @@ export function generateGrades(data: any) {
 */
 export function processMapData(result: any, levelSettings: any) {
   const innerResult = result[0]['stats_angebot']
-  const filteredResult = innerResult.filter((item: any) => {
-    return item['angebot_group_dringlichkeit'] === levelSettings['urgency']
-  })
 
-  return groupFilter(filteredResult, levelSettings)
+  const filteredResult = getFilteredData(innerResult, levelSettings)
+
+  const dateFilteredResult = groupDateFilter(filteredResult, levelSettings)
+
+  return groupSum(dateFilteredResult)
 }
 
 /**
- * group by status - avaiable, booked, unavaiable (?)
- * group by actual and upcoming (angebot_reference_date)
+ * Filters the provided data based on the given filters
  * 
- * monthly and daily seperation
- */
-
-export function groupFilter(data: any, filters: any) {
+ * @param data - The data to filter and group
+ * @param filters - The filters to apply when filtering the data
+ * @returns The filtered and grouped data
+*/
+export function groupDateFilter(data: any, filters: any) {
   switch (filters.resolutionPlaningOption) {
     case 'yesterday':
       return data.filter((item: any) => item.angebot_reference_date === getYesterdaysDate())
@@ -122,50 +122,7 @@ export function groupFilter(data: any, filters: any) {
   }
 }
 
-function getYesterdaysDate() {
-  const now = new Date();
-  const result = new Date(now.setDate(now.getDate() - 1));
-
-  return result.toISOString().slice(0, 10);
-}
-
-function getTodaysDate() {
-  const now = new Date();
-
-  return now.toISOString().slice(0, 10);
-}
-
-function getTomorrrowsDate() {
-  const now = new Date();
-  const result = new Date(now.setDate(now.getDate() + 1));
-
-  return result.toISOString().slice(0, 10);
-}
-
-
-function getLastMonthDate() {
-  const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth(), 1);
-
-  return result.toISOString().slice(0, 10);
-}
-
-function getThisMonthDate() {
-  const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-
-  return result.toISOString().slice(0, 10);
-}
-
-function getNextMonthDate() {
-  const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth() + 2, 1);
-
-  return result.toISOString().slice(0, 10);
-}
-
 /**
- * @deprecated
  * Groups and sums data by a given property. 
  * 
  * Loops through the data and reduces it into an array of grouped objects. 
@@ -190,9 +147,61 @@ export function groupSum(data: any) {
 
       result.push(res[value.angebot_group_plz4])
     }
+
     res[value.angebot_group_plz4].angebot_Anzahl += value.angebot_Anzahl;
+    
     return res;
   }, {});
 
   return result
+}
+
+
+function getFilteredData(data: any, filters: any) {
+  const result = data.filter((item: any) => {
+    return item['angebot_group_dringlichkeit'] === filters['urgency'] && item['angebot_group_status'] === filters['status']
+  })
+
+  return result
+}
+
+function getYesterdaysDate() {
+  const now = new Date();
+  const result = new Date(now.setDate(now.getDate() - 1));
+
+  return result.toISOString().slice(0, 10);
+}
+
+function getTodaysDate() {
+  const now = new Date();
+
+  return now.toISOString().slice(0, 10);
+}
+
+function getTomorrrowsDate() {
+  const now = new Date();
+  const result = new Date(now.setDate(now.getDate() + 1));
+
+  return result.toISOString().slice(0, 10);
+}
+
+function getLastMonthDate() {
+  const now = new Date();
+  const result = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  return result.toISOString().slice(0, 10);
+}
+
+function getThisMonthDate() {
+  const now = new Date();
+  const result = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+  return result.toISOString().slice(0, 10);
+}
+
+function getNextMonthDate() {
+  const now = new Date();
+  const result = new Date(now.getFullYear(), now.getMonth() + 2, 1);
+
+  return result.toISOString().slice(0, 10);
 }

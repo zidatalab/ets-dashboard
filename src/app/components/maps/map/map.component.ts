@@ -63,12 +63,10 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         weight: 1,
         opacity: 0.5,
         fillOpacity: 0.8,
-        color: 'white',
         fillColor: helper.getColor(this.data, feature.properties, this.colorGrade),
       }),
 
       onEachFeature: (feature, layer) => (
-        layer.bindPopup(''),
         layer.on({
           mouseover: (e) => (this.highlightFeature(e)),
           mouseout: (e) => (this.resetFeature(e)),

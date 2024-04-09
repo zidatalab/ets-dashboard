@@ -73,8 +73,25 @@ export class ETerminDashboardRender implements OnInit {
     'Thüringen'
   ];
 
-  views = ['Planungsansicht', 'Terminsuche']
-  resolutionOptions = [{ key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }];
+  views = ['Zeitreihen', 'Planung']
+  resolutionOptions = {
+    timeSeries: [
+      { key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }
+    ],
+    planing: [
+      { key: "Monate", value: 'upcoming_monthly_plz4' }, { key: "Tage", value: "upcoming_daily_plz4" }
+    ]
+  }
+  resolutionPlaningOptions = {
+    daily: [
+      { key: "Heute", value: "today" },
+      { key: "Morgen", value: "tomorrow" }
+    ],
+    monthly: [
+      { key: "aktueller Monat", value: "thisMonth" },
+      { key: "letzter Monat", value: "lastMonth" }
+    ]
+  }
   periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr" }, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
   themes = ["Überblick", "Terminangebot", "Vermittlungswünsche"]
@@ -135,13 +152,26 @@ export class ETerminDashboardRender implements OnInit {
   // regionalLayer: any = [{ key: 'Kreise', value: 'districtLayer' }, { key: 'Stadtbezirke 4', value: 'postalLayer4' }, { key: 'Stadtbezirke 3', value: 'postalLayer3' }, { key: 'Stadtbezirke 2', value: 'postalLayer2' }];
   selectedRegionalLayer: any = 'postalLayer4';
   isLoadingMapData: boolean = false;
+  standardLevelSettings = {
+    'level': 'KV',
+    "fg": "Gesamt",
+    'levelValues': 'Gesamt',
+    'zeitraum': 'letzten 12 Monate',
+    'resolution': 'monthly',
+    'thema': 'Überblick',
+    'urgency': 'Gesamt',
+    'view': 'Zeitreihen',
+  };
 
   ngOnInit(): void {
-    this.levelSettings = { 'level': 'KV', "fg": "Gesamt", 'levelValues': 'Gesamt', 'zeitraum': 'letzten 12 Monate', 'resolution': 'monthly', 'thema': 'Überblick', 'urgency': 'Gesamt', 'view': 'Planungsansicht' };
+    this.levelSettings = this.standardLevelSettings
+
     this.currentUser = this.auth.getUserDetails()
+
     if (!this.currentUser) {
       this.router.navigate(['/'])
     }
+
     this.fillPeriodOfTime()
     this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     this.setKeyDataString()
@@ -162,6 +192,29 @@ export class ETerminDashboardRender implements OnInit {
           this.setLevelData()
         }
       }, 100);
+    }
+  }
+
+  onChangeView(value: any) {
+    if (value === 'Zeitreihen') {
+      this.levelSettings = this.standardLevelSettings
+
+      return
+    }
+
+    if (value === 'Planung') {
+      this.levelSettings = {
+        'level': 'KV',
+        "fg": "Gesamt",
+        'levelValues': 'Gesamt',
+        'resolution': 'upcoming_daily_plz4',
+        'thema': 'Terminangebot',
+        'urgency': 'Gesamt',
+        'view': 'Planung',
+        'resolutionPlaningOption': 'today'
+      }
+
+      return
     }
   }
 
@@ -205,6 +258,10 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   async setLevelData(level: any = '', value: any = '') {
+    if (level === 'view') {
+      this.onChangeView(value)
+    }
+
     if (level === 'thema') {
       this.levelSettings['fg'] = 'Gesamt'
     }
@@ -228,27 +285,6 @@ export class ETerminDashboardRender implements OnInit {
     this.levelId = this.api.filterArray(this.metaData, 'type', 'levelid')[0]['varname']
     this.professionGroup = this.api.filterArray(this.metaData, 'type', 'fg')[0]['varname']
     // this.subGroups = ['Keine'].concat(this.api.getValues(this.api.filterArray(this.metaData, 'type', 'group'), 'varname'))
-  }
-
-  async setMapData(input: any = '') {
-    this.isLoadingMapData = true;
-    const levelSettings = this.levelSettings
-
-    console.log(this.levelSettings)
-
-    levelSettings.resolution = 'upcoming_monthly_plz4'
-
-    const _result = await this.queryETerminData.getQueryDataMap(levelSettings)
-
-    if (_result instanceof Error) {
-      this.isLoadingMapData = false
-      this.hasNoData = true
-      return
-    }
-
-    if (_result) {
-      console.log(_result)
-    }
   }
 
   /**

@@ -25,11 +25,11 @@ function setColor() {
 export function getColor(data: any, value: any, colorGrade: any) {
   let gradeValue
   const dataValue = data.find((item: any) => item.angebot_group_plz4 === value.plz4)
-  
+
   if (dataValue) {
     gradeValue = colorGrade.find((item: any) => dataValue.angebot_Anzahl <= item.value || dataValue.angebot_Anzahl > colorGrade[colorGrade.length - 1].value)
 
-    if(!gradeValue) {
+    if (!gradeValue) {
       return 'white'
     }
 
@@ -93,7 +93,7 @@ export function processMapData(result: any, levelSettings: any) {
     return item['angebot_group_dringlichkeit'] === levelSettings['urgency']
   })
 
-  return groupSum(filteredResult)
+  return groupFilter(filteredResult, levelSettings)
 }
 
 /**
@@ -103,8 +103,65 @@ export function processMapData(result: any, levelSettings: any) {
  * monthly and daily seperation
  */
 
-export function groupFilter(data: any, filterBy: string, filterValue: string) {
-  
+export function groupFilter(data: any, filters: any) {
+  switch (filters.resolutionPlaningOption) {
+    case 'yesterday':
+      return data.filter((item: any) => item.angebot_reference_date === getYesterdaysDate())
+    case 'today':
+      return data.filter((item: any) => item.angebot_reference_date === getTodaysDate())
+    case 'tomorrow':
+      return data.filter((item: any) => item.angebot_reference_date === getTomorrrowsDate())
+    case 'lastMonth':
+      return data.filter((item: any) => item.angebot_reference_date === getLastMonthDate())
+    case 'thisMonth':
+      return data.filter((item: any) => item.angebot_reference_date === getThisMonthDate())
+    case 'nextMonth':
+      return data.filter((item: any) => item.angebot_reference_date === getNextMonthDate())
+    default:
+      break;
+  }
+}
+
+function getYesterdaysDate() {
+  const now = new Date();
+  const result = new Date(now.setDate(now.getDate() - 1));
+
+  return result.toISOString().slice(0, 10);
+}
+
+function getTodaysDate() {
+  const now = new Date();
+
+  return now.toISOString().slice(0, 10);
+}
+
+function getTomorrrowsDate() {
+  const now = new Date();
+  const result = new Date(now.setDate(now.getDate() + 1));
+
+  return result.toISOString().slice(0, 10);
+}
+
+
+function getLastMonthDate() {
+  const now = new Date();
+  const result = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  return result.toISOString().slice(0, 10);
+}
+
+function getThisMonthDate() {
+  const now = new Date();
+  const result = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+  return result.toISOString().slice(0, 10);
+}
+
+function getNextMonthDate() {
+  const now = new Date();
+  const result = new Date(now.getFullYear(), now.getMonth() + 2, 1);
+
+  return result.toISOString().slice(0, 10);
 }
 
 /**

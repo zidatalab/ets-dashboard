@@ -23,11 +23,11 @@
     <div class="dashboard-content-header">
       <h3>Ansicht</h3>
       <mat-chip-listbox>
-        <mat-chip-option (click)="this.setLevelData('view',item);" *ngFor="let item of this.views" color="primary"
-          [selected]="(this.levelSettings['view']==item)" selectable="false">
+        <mat-chip-option (click)="this.setLevelData('view',item)" *ngFor="let item of this.views"
+          color="primary" [selected]="(this.levelSettings['view'] === item)" selectable="false">
           <div class="chip-wrapper">
             {{ item }}
-            <mat-icon *ngIf="item === 'Terminsuche'" class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon>
+            <mat-icon *ngIf="item === 'Planung'" class="map-icon" aria-hidden="false" fontIcon="map"></mat-icon>
           </div>
         </mat-chip-option>
       </mat-chip-listbox>
@@ -74,13 +74,43 @@
         </mat-chip-option>
       </mat-chip-listbox>
       <h3>Zeitliche Auflösung</h3>
-      <mat-chip-listbox>
-        <mat-chip-option (click)="this.setLevelData('resolution',item.value);"
-          *ngFor="let item of this.resolutionOptions" color="primary"
-          [selected]="(this.levelSettings['resolution']==item.value)" selectable="false">
-          {{ item.key }}
-        </mat-chip-option>
-      </mat-chip-listbox>
+      <div *ngIf="this.levelSettings['view'] === 'Zeitreihen'">
+        <mat-chip-listbox>
+          <mat-chip-option (click)="this.setLevelData('resolution',item.value);"
+            *ngFor="let item of this.resolutionOptions.timeSeries" color="primary"
+            [selected]="(this.levelSettings['resolution'] == item.value)" selectable="false">
+            {{ item.key }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      <div *ngIf="this.levelSettings['view'] === 'Planung'">
+        <mat-chip-listbox>
+          <mat-chip-option (click)="this.setLevelData('resolution',item.value);"
+            *ngFor="let item of this.resolutionOptions.planing" color="primary"
+            [selected]="(this.levelSettings['resolution'] == item.value)" selectable="false">
+            {{ item.key }}
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <h3>Zeit</h3>
+        <div *ngIf="this.levelSettings['resolution'] === 'upcoming_monthly_plz4'">
+          <mat-chip-listbox>
+            <mat-chip-option (click)="this.setLevelData('resolutionPlaningOption',item.value);"
+              *ngFor="let item of this.resolutionPlaningOptions.monthly" color="primary"
+              [selected]="(this.levelSettings['resolutionPlaningOption'] == item.value)" selectable="false">
+              {{ item.key }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </div>
+        <div *ngIf="this.levelSettings['resolution'] === 'upcoming_daily_plz4'">
+          <mat-chip-listbox>
+            <mat-chip-option (click)="this.setLevelData('resolutionPlaningOption',item.value);"
+              *ngFor="let item of this.resolutionPlaningOptions.daily" color="primary"
+              [selected]="(this.levelSettings['resolutionPlaningOption'] == item.value)" selectable="false">
+              {{ item.key }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </div>
+      </div>
       <div *ngIf="this.levelSettings['resolution'] === 'monthly'">
         <h3>Zeitraum</h3>
         <mat-chip-listbox>
@@ -94,7 +124,7 @@
     <app-skeleton-loader *ngIf="this.isInProgress"></app-skeleton-loader>
     <app-no-data *ngIf="this.hasNoData"></app-no-data>
     <div *ngIf="!this.hasNoData && !this.isInProgress" class="plot-container">
-      <div *ngIf="this.levelSettings['view'] === 'Planungsansicht'">
+      <div *ngIf="this.levelSettings['view'] === 'Zeitreihen'">
         <div *ngIf="this.levelSettings['thema'] === 'Überblick'">
           <div class="textOverviewContainer">
             <span class="textFirst">Terminservice</span>
@@ -247,7 +277,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="this.levelSettings['view'] === 'Terminsuche'">
+      <div *ngIf="this.levelSettings['view'] === 'Planung'">
         <div class="large-tile-grid">
           <div class="grid-tile">
             <h3>Kartenansicht</h3>

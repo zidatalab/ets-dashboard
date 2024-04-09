@@ -173,7 +173,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         'level': 'KV',
         "fg": levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
-        'timeframe': 'upcoming_monthly_plz4',
+        'timeframe': levelSettings['resolution'],
       },
       "showfields": ["stats_angebot", "stats_nachfrage"]
     }

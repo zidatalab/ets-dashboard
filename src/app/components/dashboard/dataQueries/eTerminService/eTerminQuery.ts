@@ -89,7 +89,7 @@ export class ETerminQuery {
     let stopYear = new Date(levelSettings['stop']).getFullYear();
     let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
 
-    let query: any = {
+    let query : any = {
       'client_id': 'ets_reporting',
       'groupinfo': {
         'level': 'KV',
@@ -102,37 +102,41 @@ export class ETerminQuery {
       "showfields": ["stats_angebot", "stats_nachfrage"]
     }
 
-    if (startYear == stopYear) {
-      query.groupinfo['$or'] = [
-        {
-          '$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
-          { 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }
-          ]
-        }
-      ]
-    }
+      if (startYear == stopYear) {
+        query.groupinfo['$or'] = [
+          {
+            '$and': [{ 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+            { 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }
+            ]
+          }
+        ]
+      }
 
-    if ((startYear + 1) == stopYear) {
-      query.groupinfo['$or'] = [
-        {
-          '$and': [
-            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
-          ]
-        },
-        { '$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }] }
-      ]
-    }
+      if ((startYear + 1) == stopYear) {
+        query.groupinfo['$or'] = [
+          {
+            '$and': [
+              { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+            ]
+          },
+          { '$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }] }
+        ]
+      }
 
-    if ((startYear + 1) < stopYear) {
-      query.groupinfo['$or'] = [
-        {
-          '$and': [
-            { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
-          ]
-        },
-        { '$and': [{ 'Jahr': { '$gt': startYear, '$lt': stopYear } }] },
-        { '$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }] }
-      ]
+      if ((startYear + 1) < stopYear) {
+        query.groupinfo['$or'] = [
+          {
+            '$and': [
+              { 'Jahr': { '$eq': startYear }, 'Monat': { '$gte': startMonth } },
+            ]
+          },
+          { '$and': [{ 'Jahr': { '$gt': startYear, '$lt': stopYear } }] },
+          { '$and': [{ 'Jahr': { '$eq': stopYear }, 'Monat': { '$lte': stopMonth } }] }
+        ]
+      }
+
+    if (levelSettings.view === 'Planung') {
+      delete query['groupinfo']['$or']  
     }
 
     let _result: any = []

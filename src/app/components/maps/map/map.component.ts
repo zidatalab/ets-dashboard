@@ -134,7 +134,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     });
 
     // this.shapeService.getPostalCodeShapes3(GermanStates[this.stateFilter].name).subscribe(result => {
-    //   console.log('plz3')
     //   this.postalLayer3 = this.initLayer(result)
     // });
 

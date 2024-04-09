@@ -77,7 +77,6 @@ export class ETerminQuery {
     }
 
     delete query.groupinfo['$or']
-    console.log('Getting map data', query)
     const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
     return result

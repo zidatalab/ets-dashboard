@@ -45,11 +45,6 @@ export class MakeETerminData {
     return null
   }
 
-  async createStatsForMap(data: any, levelSettings: any, input: any) {
-
-    console.log(data)
-  }
-
   async createStats(levelSettings: any, input: any) {
     let dbData: any = await this.db.listData(
       input,

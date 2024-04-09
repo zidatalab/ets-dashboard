@@ -266,6 +266,14 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings['fg'] = 'Gesamt'
     }
 
+    if(level === 'resolution' && value === 'upcoming_monthly_plz4') {
+      this.levelSettings['resolutionPlaningOption'] = 'thisMonth'
+    }
+
+    if(level === 'resolution' && value === 'upcoming_daily_plz4') {
+      this.levelSettings['resolutionPlaningOption'] = 'today'
+    }
+
     this.levelSettings[level] = value
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 

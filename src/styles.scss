@@ -39,8 +39,7 @@ $apptheme: mat.define-dark-theme($primary, $accent);
 @font-face {
   font-family: 'Lato';
   font-style: bold;
-  font-weight: 700;
-  src: url('assets/fonts/Lato/Lato-Bold.ttf') format('truetype');
+  font-weight: 700;src: url('assets/fonts/Lato/Lato-Bold.ttf') format('truetype');
 }
 
 /* Material Icons*/

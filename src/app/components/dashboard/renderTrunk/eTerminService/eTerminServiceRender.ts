@@ -313,6 +313,8 @@ export class ETerminDashboardRender implements OnInit {
   /**
    * 
    * fixing reactivity on change filter values
+   * 
+   * !TODO needs to seperated from map data loading
    */
   async setData(input: any = '') {
     this.isInProgress = true
@@ -354,13 +356,12 @@ export class ETerminDashboardRender implements OnInit {
         this.dataDateUntil = result.stats_nachfrage.dataDateUntil
       }
 
-
       this.isInProgress = false;
       this.hasNoData = false
       this.cdr.detectChanges()
       this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     }
-    
+
     if (this.levelSettings['view'] === 'Planung') {
       this.isInProgress = false;
       this.hasNoData = false

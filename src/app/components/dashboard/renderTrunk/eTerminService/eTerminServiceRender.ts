@@ -211,6 +211,7 @@ export class ETerminDashboardRender implements OnInit {
 
   onChangeView(value: any) {
     if (value === 'Zeitreihen') {
+      this.levelValues.unshift('Gesamt')
       this.levelSettings = this.standardLevelSettings
 
       return
@@ -228,6 +229,8 @@ export class ETerminDashboardRender implements OnInit {
         'resolutionPlaningOption': 'today',
         'status': 'available'
       }
+
+      this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
 
       return
     }

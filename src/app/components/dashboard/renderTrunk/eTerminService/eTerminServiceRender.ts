@@ -281,11 +281,11 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings['fg'] = 'Gesamt'
     }
 
-    if(level === 'resolution' && value === 'upcoming_monthly_plz4') {
+    if (level === 'resolution' && value === 'upcoming_monthly_plz4') {
       this.levelSettings['resolutionPlaningOption'] = 'thisMonth'
     }
 
-    if(level === 'resolution' && value === 'upcoming_daily_plz4') {
+    if (level === 'resolution' && value === 'upcoming_daily_plz4') {
       this.levelSettings['resolutionPlaningOption'] = 'today'
     }
 
@@ -319,13 +319,13 @@ export class ETerminDashboardRender implements OnInit {
 
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
 
-    if (result instanceof Error) {
+    if (result instanceof Error && this.levelSettings['view'] !== 'Planung') {
       this.isInProgress = false
       this.hasNoData = true
       return
     }
 
-    if (result) {
+    if (result && this.levelSettings['view'] !== 'Planung') {
       this.summaryInfo = {
         ...result.stats_angebot.summaryInfo,
         ...result.stats_nachfrage.summaryInfo
@@ -354,6 +354,14 @@ export class ETerminDashboardRender implements OnInit {
         this.dataDateUntil = result.stats_nachfrage.dataDateUntil
       }
 
+
+      this.isInProgress = false;
+      this.hasNoData = false
+      this.cdr.detectChanges()
+      this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
+    }
+    
+    if (this.levelSettings['view'] === 'Planung') {
       this.isInProgress = false;
       this.hasNoData = false
       this.cdr.detectChanges()
@@ -407,11 +415,45 @@ export class ETerminDashboardRender implements OnInit {
     this.selectedContainerStringObject = res
   }
 
+  // facharzt gruppe, Status, Dringlichkeit
   setMapTitle() {
+    const urgencyString = this.levelSettings['urgency'] !== 'Gesamt' ? `${this.translateUrgency(this.levelSettings['urgency'])} ` : '';
+    const statusString = `${this.levelSettings['status'] !== 'Gesamt' ? `${this.translateStatus(this.levelSettings['status'])} - ` : ''}`
+    const fgString = `${this.levelSettings['fg'] !== 'Gesamt' ? `der ${this.levelSettings['fg']}` : ''}`
     const timeStringDay = `für ${this.levelSettings['resolutionPlaningOption'] === 'today' ? 'heute' : 'morgen'}`
     const timeStringMonth = `${this.levelSettings['resolutionPlaningOption'] === 'thisMonth' ? 'in diesem Monat' : 'für den letzen Monat'}`
-    const result = `Planungsansicht: ${this.levelSettings['thema']} in ${this.levelSettings['levelValues']} ${this.levelSettings['resolution'] === 'upcoming_daily_plz4' ? timeStringDay : timeStringMonth}`
+    const result = `${urgencyString}${statusString}${this.levelSettings['thema'] === "Terminangebot" ? 'Terminangebote' : this.levelSettings['thema']} ${fgString} in ${this.levelSettings['levelValues']} ${this.levelSettings['resolution'] === 'upcoming_daily_plz4' ? timeStringDay : timeStringMonth}`
 
     return result
+  }
+
+  translateUrgency(urgency: string) {
+    switch (urgency) {
+      case 'AKUT':
+        return 'Akute'
+      case 'PT_AKUTBEHANDLUNG':
+        return 'PT Akutbehandlungen'
+      case 'DRINGEND':
+        return 'dringende'
+      case 'NICHT_DRINGEND':
+        return 'nicht dringende'
+      default:
+        return ''
+    }
+  }
+
+  translateStatus(status: string) {
+    switch (status) {
+      case 'booked':
+        return 'gebuchte'
+      case 'available':
+        return 'verfügbare'
+      case 'DRINGEND':
+        return 'dringende'
+      case 'unavailable':
+        return 'nicht verfügbare'
+      default:
+        return ''
+    }
   }
 }

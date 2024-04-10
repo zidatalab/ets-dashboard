@@ -62,12 +62,22 @@ export function generateGrades(data: any) {
   const min = Math.min(...values);
   const step = ((max - min) / 10);
   const colors = setColor();
+  let stepsWithColors = null
+
+  if(values.length === 1) {
+    stepsWithColors = {
+      value : values[0],
+      color: colors[0]
+    }
+
+    return stepsWithColors
+  }
 
   for (let i = min; i <= max; i += step) {
     steps.push(Number(i.toFixed(0)))
   }
 
-  const stepsWithColors = steps.map((step, index) => {
+  stepsWithColors = steps.map((step, index) => {
     return {
       value: step,
       color: colors[index]
@@ -155,7 +165,6 @@ export function groupSum(data: any) {
 
   return result
 }
-
 
 function getFilteredData(data: any, filters: any) {
   const result = data.filter((item: any) => {

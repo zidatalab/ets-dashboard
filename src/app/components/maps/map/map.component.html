@@ -1,5 +1,6 @@
-<div class="map-container">
+<div *ngIf="!this.isNoData" class="map-container">
   <div class="map-frame">
     <div id="map"></div>
   </div>
 </div>
+<app-no-data *ngIf="this.isNoData"></app-no-data>

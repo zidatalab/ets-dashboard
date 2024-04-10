@@ -108,7 +108,7 @@ export class ETerminDashboardRender implements OnInit {
   ]
   periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr" }, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
-  themes = ["Überblick", "Terminangebot", "Vermittlungswünsche"]
+  themes = ["Terminangebot", "Vermittlungswünsche"]
   urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
   data: any;
@@ -172,7 +172,7 @@ export class ETerminDashboardRender implements OnInit {
     'levelValues': 'Gesamt',
     'zeitraum': 'letzten 12 Monate',
     'resolution': 'monthly',
-    'thema': 'Überblick',
+    'thema': 'Terminangebot',
     'urgency': 'Gesamt',
     'view': 'Zeitreihen',
   };

@@ -37,6 +37,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   private data: any = null
   private colorGrade: any = null
 
+  isNoData: boolean = false
+
   private initMap(): void {
     this.map = L.map('map', {
       center: [GermanStates[this.stateFilter].center[0], GermanStates[this.stateFilter].center[1]],
@@ -163,8 +165,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   }
 
   private async setMapDate(levelSettings: any) {
-    this.isDataLoading = true
-
     let query: any = {
       'client_id': 'ets_reporting',
       'groupinfo': {
@@ -177,6 +177,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     }
 
     const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
+
+
+    if (!result.length) {
+      this.isNoData = true
+
+      return
+    }
 
     this.data = helper.processMapData(result, levelSettings)
   }
@@ -239,6 +246,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     if (!this[this.layerType]) {
       this.interval = setInterval(() => {
         if (this[this.layerType]) {
+          if (!this.data.length) {
+            this.isNoData = true
+
+            return
+          }
           if (this.data) {
             this.initMap()
             clearInterval(this.interval);

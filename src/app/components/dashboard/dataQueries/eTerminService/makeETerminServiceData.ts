@@ -125,6 +125,7 @@ export class MakeETerminData {
             || (item.nachfrage_group_status === "gebucht_arzt_abgesagt")
             || (item.nachfrage_group_status === "erfolgreich_gebucht")
             || (item.nachfrage_group_status === "gebucht_pat_abgesagt")
+            || (item.nachfrage_group_status === "gebucht_pat_noshow")
 
           ) {
             resAppointmentDemand.push({ total: item['nachfrage_Anzahl'], date: this.localDateParser(item['nachfrage_reference_date']) })
@@ -140,6 +141,7 @@ export class MakeETerminData {
 
           if ((item.nachfrage_group_status === "erfolgreich_gebucht")
             || (item.nachfrage_group_status === "gebucht_pat_abgesagt")
+            || (item.nachfrage_group_status === "gebucht_pat_noshow")
           ) {
             resAppointmentDemandArranged.push({ total: item['nachfrage_Anzahl'], date: this.localDateParser(item['nachfrage_reference_date']) })
             dataAppointmentDemandArranged += item.nachfrage_Anzahl

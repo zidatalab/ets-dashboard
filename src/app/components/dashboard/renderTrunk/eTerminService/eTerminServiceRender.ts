@@ -218,10 +218,11 @@ export class ETerminDashboardRender implements OnInit {
     }
 
     if (value === 'Planung') {
+      this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
       this.levelSettings = {
         'level': 'KV',
         "fg": "Gesamt",
-        'levelValues': 'Berlin',
+        'levelValues': !this.currentUser.is_admin ? this.levelValues[0] : 'Berlin',
         'resolution': 'upcoming_daily_plz4',
         'thema': 'Terminangebot',
         'urgency': 'Gesamt',
@@ -229,8 +230,6 @@ export class ETerminDashboardRender implements OnInit {
         'resolutionPlaningOption': 'today',
         'status': 'available'
       }
-
-      this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
 
       return
     }

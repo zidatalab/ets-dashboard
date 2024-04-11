@@ -25,7 +25,7 @@ export const GermanStates: any = {
     center: [51.45, 7.9]
   },
   'Westfalen-Lippe': {
-    name: "Westfalen-Lippe",
+    name: "WestfalenLippe",
     SN_L: "05",
     center: [51.45, 7.9]
   },

@@ -1,12 +1,12 @@
 import { Component, OnInit, OnChanges, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AggregationService } from 'src/app/services/aggregation.service';
 // import { CsvexportService } from 'src/app/services/csvexport.service';
 import { DBService } from 'src/app/services/db.service';
-import { Router } from '@angular/router';
-import { MakeETerminData } from '../../dataQueries/eTerminService/makeETerminServiceData';
 import { ETerminQuery } from '../../dataQueries/eTerminService/eTerminQuery';
+import { Buffer } from 'buffer'
 
 /**
  * 
@@ -38,9 +38,9 @@ export class ETerminDashboardRender implements OnInit {
     private auth: AuthService,
     private aggregation: AggregationService,
     private router: Router,
-    private makeData: MakeETerminData,
     private queryETerminData: ETerminQuery,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
   ) { }
 
   metaData: any;
@@ -178,7 +178,7 @@ export class ETerminDashboardRender implements OnInit {
   };
 
   ngOnInit(): void {
-    this.levelSettings = this.standardLevelSettings
+    this.levelSettings = this.getUrlParams()
 
     this.currentUser = this.auth.getUserDetails()
 
@@ -218,10 +218,11 @@ export class ETerminDashboardRender implements OnInit {
     }
 
     if (value === 'Planung') {
+      this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
       this.levelSettings = {
         'level': 'KV',
         "fg": "Gesamt",
-        'levelValues': 'Berlin',
+        'levelValues': !this.currentUser.is_admin ? this.levelValues[0] : 'Berlin',
         'resolution': 'upcoming_daily_plz4',
         'thema': 'Terminangebot',
         'urgency': 'Gesamt',
@@ -230,10 +231,40 @@ export class ETerminDashboardRender implements OnInit {
         'status': 'available'
       }
 
-      this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
-
       return
     }
+  }
+
+  setUrlParams() {
+    const stringifiedParams = JSON.stringify(this.levelSettings);
+    const encodeParams = encodeURIComponent(stringifiedParams);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        params: encodeParams,
+      }
+    });
+  }
+
+  getUrlParams() {
+    if (!Object.keys(this.route.snapshot.queryParams).length) {
+      return this.standardLevelSettings;
+    }
+
+    const params = this.route.snapshot.queryParams['params'];
+    const decodeParams = decodeURIComponent(params);
+    let parsedParams = JSON.parse(decodeParams);
+
+    if (parsedParams.view === 'Planung') {
+      this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
+    }
+
+    if (parsedParams.view === 'Zeitreihen') {
+      this.levelValues.unshift('Gesamt')
+    }
+
+    return parsedParams
   }
 
   setRegionalLayer(selection: any) {
@@ -296,7 +327,9 @@ export class ETerminDashboardRender implements OnInit {
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 
     if (this.levelSettings['start'] && this.levelSettings['stop']) {
-      await this.setData()
+      await this.setData().then(() => {
+        this.setUrlParams()
+      })
     }
   }
 

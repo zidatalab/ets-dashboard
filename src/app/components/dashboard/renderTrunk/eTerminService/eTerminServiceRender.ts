@@ -6,7 +6,6 @@ import { AggregationService } from 'src/app/services/aggregation.service';
 // import { CsvexportService } from 'src/app/services/csvexport.service';
 import { DBService } from 'src/app/services/db.service';
 import { ETerminQuery } from '../../dataQueries/eTerminService/eTerminQuery';
-import { Buffer } from 'buffer'
 
 /**
  * 
@@ -166,7 +165,7 @@ export class ETerminDashboardRender implements OnInit {
   // regionalLayer: any = [{ key: 'Kreise', value: 'districtLayer' }, { key: 'Stadtbezirke 4', value: 'postalLayer4' }, { key: 'Stadtbezirke 3', value: 'postalLayer3' }, { key: 'Stadtbezirke 2', value: 'postalLayer2' }];
   selectedRegionalLayer: any = 'postalLayer4';
   isLoadingMapData: boolean = false;
-  standardLevelSettings = {
+  timelineLevelSettings: any = {
     'level': 'KV',
     "fg": "Gesamt",
     'levelValues': 'Gesamt',
@@ -177,8 +176,22 @@ export class ETerminDashboardRender implements OnInit {
     'view': 'Zeitreihen',
   };
 
+  planingLevelSettings: any = {
+    'level': 'KV',
+    "fg": "Gesamt",
+    'levelValues': 'Berlin',
+    'resolution': 'upcoming_daily_plz4',
+    'thema': 'Terminangebot',
+    'urgency': 'Gesamt',
+    'view': 'Planung',
+    'resolutionPlaningOption': 'today',
+    'status': 'available'
+  }
+
+  changedSettings: any = {}
+
   ngOnInit(): void {
-    this.levelSettings = this.getUrlParams()
+    this.getUrlParams()
 
     this.currentUser = this.auth.getUserDetails()
 
@@ -199,12 +212,11 @@ export class ETerminDashboardRender implements OnInit {
             if (!this.currentUser.is_superadmin) {
               this.levelValues = this.setDataLevelForAccess()
             }
-          }
-          else {
+          } else {
             this.levelValues = ['Gesamt']
           }
 
-          this.setLevelData('','', true)
+          this.setLevelData()
         }
       }, 100);
     }
@@ -213,7 +225,7 @@ export class ETerminDashboardRender implements OnInit {
   onChangeView(value: any) {
     if (value === 'Zeitreihen') {
       this.levelValues.unshift('Gesamt')
-      this.levelSettings = this.standardLevelSettings
+      this.levelSettings = this.timelineLevelSettings
 
       return
     }
@@ -237,7 +249,7 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   setUrlParams() {
-    const stringifiedParams = JSON.stringify(this.levelSettings);
+    const stringifiedParams = JSON.stringify(this.changedSettings);
     const encodeParams = encodeURIComponent(stringifiedParams);
 
     this.router.navigate([], {
@@ -250,22 +262,32 @@ export class ETerminDashboardRender implements OnInit {
 
   getUrlParams() {
     if (!Object.keys(this.route.snapshot.queryParams).length) {
-      return this.standardLevelSettings;
+      console.log("No query params")
+      this.levelSettings = this.timelineLevelSettings
+
+      return
     }
 
     const params = this.route.snapshot.queryParams['params'];
     const decodeParams = decodeURIComponent(params);
     let parsedParams = JSON.parse(decodeParams);
+    this.changedSettings = parsedParams;
 
     if (parsedParams.view === 'Planung') {
+      this.levelSettings = this.planingLevelSettings
+      console.log("parsedParams.view is Planung", this.levelSettings)
       this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
     }
 
-    if (parsedParams.view === 'Zeitreihen') {
+    if (parsedParams.view === 'Zeitreihen' || !parsedParams.view) {
+      this.levelSettings = this.timelineLevelSettings
+      console.log("parsedParams.view is Zeitreihen", this.levelSettings)
       this.levelValues.unshift('Gesamt')
     }
 
-    return parsedParams
+    for (let [key, value] of Object.entries(parsedParams)) {
+      this.levelSettings[key] = value
+    }
   }
 
   setRegionalLayer(selection: any) {
@@ -307,8 +329,18 @@ export class ETerminDashboardRender implements OnInit {
     return levelsAllowed
   }
 
-  async setLevelData(level: any = '', value: any = '', isFromInit : boolean = false) {
+  async setLevelData(level: any = '', value: any = '', isFromInit: boolean = false) {
+    if (level && value) {
+      Object.assign(this.changedSettings, {
+        [level]: value
+      });
+    }
+
     if (level === 'view') {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {}
+      });
       this.onChangeView(value)
     }
 
@@ -329,8 +361,7 @@ export class ETerminDashboardRender implements OnInit {
 
     if (this.levelSettings['start'] && this.levelSettings['stop']) {
       await this.setData().then(() => {
-        if(level.length !== 0 && value.length !== 0) {
-          console.log('Level and value passed, loading data');
+        if (Object.keys(this.changedSettings).length > 0) {
           this.setUrlParams()
         }
       })

@@ -203,7 +203,8 @@ export class ETerminDashboardRender implements OnInit {
           else {
             this.levelValues = ['Gesamt']
           }
-          this.setLevelData()
+
+          this.setLevelData('','', true)
         }
       }, 100);
     }
@@ -306,7 +307,7 @@ export class ETerminDashboardRender implements OnInit {
     return levelsAllowed
   }
 
-  async setLevelData(level: any = '', value: any = '') {
+  async setLevelData(level: any = '', value: any = '', isFromInit : boolean = false) {
     if (level === 'view') {
       this.onChangeView(value)
     }
@@ -328,7 +329,10 @@ export class ETerminDashboardRender implements OnInit {
 
     if (this.levelSettings['start'] && this.levelSettings['stop']) {
       await this.setData().then(() => {
-        this.setUrlParams()
+        if(level.length !== 0 && value.length !== 0) {
+          console.log('Level and value passed, loading data');
+          this.setUrlParams()
+        }
       })
     }
   }

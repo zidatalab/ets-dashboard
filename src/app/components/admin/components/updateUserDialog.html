@@ -62,6 +62,7 @@
     </form>
   </mat-card>
   <div class="dialog-menu">
+    <button class="menu-button" mat-raised-button (click)="updateUserDashboardAffiliation(data.email)" color="primary">{{ hasDashboardAfiliation() }}</button>
     <button class="menu-button" mat-raised-button (click)="onNoClick()" color="primary">Schließen</button>
   </div>
 </div>

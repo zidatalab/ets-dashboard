@@ -29,6 +29,7 @@ export class UpdateUserDialog implements OnInit {
     // this.currentuser = this.auth.getUserDetails();
     this.buildForm();
     this.getUserGroups()
+    this.hasDashboardAfiliation()
   }
 
   async getUserGroups(): Promise<void> {
@@ -111,6 +112,17 @@ export class UpdateUserDialog implements OnInit {
     this.userGroupOptions.filter(i => { if (i.value === value) i.selected = !i.selected })
 
     this.api.updateUser(user, key, add, value).subscribe()
+  }
+
+  hasDashboardAfiliation() {
+    return this.data.dashboards.includes(this.api.clientApiId) ? 'vom Dashboard entfernen' : 'zum Dashboard hinzufügen'
+  }
+
+  updateUserDashboardAffiliation(user : any){
+    const isChangeAffiliation : boolean = this.data.dashboards.includes(this.api.clientApiId)
+
+    console.log(isChangeAffiliation)
+    this.api.changeDashboardAffiliation(user, !isChangeAffiliation).subscribe()
   }
 
   buildForm() {

@@ -64,6 +64,18 @@ export class ApiService {
     return this.postTypeRequest('userstatus/', payload)
   }
 
+  changeDashboardAffiliation(user: any, change: any) {
+    const payload = {
+      email: user,
+      key: 'user',
+      value: change
+    }
+
+    console.log('User dashboard affiliation changed to: ', change)
+
+    return this.postTypeRequest('userstatus/', payload)
+  }
+
   public deleteUser(user: any, password = "") {
     const payload = { 'email': user.email, password: password }
 

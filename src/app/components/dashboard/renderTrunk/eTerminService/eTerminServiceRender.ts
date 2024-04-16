@@ -262,7 +262,6 @@ export class ETerminDashboardRender implements OnInit {
 
   getUrlParams() {
     if (!Object.keys(this.route.snapshot.queryParams).length) {
-      console.log("No query params")
       this.levelSettings = this.timelineLevelSettings
 
       return
@@ -271,23 +270,41 @@ export class ETerminDashboardRender implements OnInit {
     const params = this.route.snapshot.queryParams['params'];
     const decodeParams = decodeURIComponent(params);
     let parsedParams = JSON.parse(decodeParams);
+
+    if (parsedParams.reslution === 'upcoming_daily_plz4' && !parsedParams.resolutionPlaningOption) {
+      parsedParams.resolutionPlaningOption = 'today'
+    }
+
+    if (parsedParams.resolution === 'upcoming_monthly_plz4' && !parsedParams.resolutionPlaningOption) {
+      parsedParams.resolutionPlaningOption = 'thisMonth'
+    }
+
     this.changedSettings = parsedParams;
 
     if (parsedParams.view === 'Planung') {
       this.levelSettings = this.planingLevelSettings
-      console.log("parsedParams.view is Planung", this.levelSettings)
       this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
     }
 
-    if (parsedParams.view === 'Zeitreihen' || !parsedParams.view) {
+    if ((parsedParams.view === 'Zeitreihen') || !parsedParams.view) {
       this.levelSettings = this.timelineLevelSettings
-      console.log("parsedParams.view is Zeitreihen", this.levelSettings)
       this.levelValues.unshift('Gesamt')
     }
 
     for (let [key, value] of Object.entries(parsedParams)) {
       this.levelSettings[key] = value
     }
+  }
+
+  resetUrlParams(view: any) {
+    this.changedSettings = {
+      view: view
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {}
+    });
   }
 
   setRegionalLayer(selection: any) {
@@ -329,19 +346,28 @@ export class ETerminDashboardRender implements OnInit {
     return levelsAllowed
   }
 
-  async setLevelData(level: any = '', value: any = '', isFromInit: boolean = false) {
+  async setLevelData(level: any = '', value: any = '') {
     if (level && value) {
       Object.assign(this.changedSettings, {
         [level]: value
       });
     }
 
+    if (level === 'resolution') {
+      if (value === 'upcoming_daily_plz4') {
+        this.levelSettings['resolutionPlaningOption'] = 'today'
+        this.changedSettings['resolutionPlaningOption'] = 'today'
+      }
+
+      if (value === 'upcoming_monthly_plz4') {
+        this.levelSettings['resolutionPlaningOption'] = 'thisMonth'
+        this.changedSettings['resolutionPlaningOption'] = 'thisMonth'
+      }
+    }
+
     if (level === 'view') {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: {}
-      });
       this.onChangeView(value)
+      this.resetUrlParams(value)
     }
 
     if (level === 'thema') {

@@ -26,7 +26,7 @@ export function getColor(data: any, value: any, colorGrade: any) {
   let gradeValue
   const dataValue = data.find((item: any) => item.angebot_group_plz4 === value.plz4)
 
-  if(!dataValue) {
+  if (!dataValue) {
     return 'white'
   }
 
@@ -64,9 +64,9 @@ export function generateGrades(data: any) {
   const colors = setColor();
   let stepsWithColors = null
 
-  if(values.length === 1) {
+  if (values.length === 1) {
     stepsWithColors = {
-      value : values[0],
+      value: values[0],
       color: colors[0]
     }
 
@@ -121,12 +121,20 @@ export function groupDateFilter(data: any, filters: any) {
       return data.filter((item: any) => item.angebot_reference_date === getTodaysDate())
     case 'tomorrow':
       return data.filter((item: any) => item.angebot_reference_date === getTomorrrowsDate())
-    case 'lastMonth':
-      return data.filter((item: any) => item.angebot_reference_date === getLastMonthDate())
-    case 'thisMonth':
-      return data.filter((item: any) => item.angebot_reference_date === getThisMonthDate())
-    case 'nextMonth':
-      return data.filter((item: any) => item.angebot_reference_date === getNextMonthDate())
+    case 'last4Weeks':
+      return data.filter((item: any) => {
+        const dateObject = getLast4Weeks()
+
+        return new Date(item.angebot_reference_date) >= dateObject.toDate &&
+          new Date(item.angebot_reference_date) <= dateObject.today;
+      })
+    case 'upcoming4Weeks':
+      return data.filter((item: any) => {
+        const dateObject = getUpcoming4Weeks()
+
+        return new Date(item.angebot_reference_date) >= dateObject.today &&
+          new Date(item.angebot_reference_date) <= dateObject.toDate
+      })
     default:
       break;
   }
@@ -159,7 +167,7 @@ export function groupSum(data: any) {
     }
 
     res[value.angebot_group_plz4].angebot_Anzahl += value.angebot_Anzahl;
-    
+
     return res;
   }, {});
 
@@ -194,23 +202,20 @@ function getTomorrrowsDate() {
   return result.toISOString().slice(0, 10);
 }
 
-function getLastMonthDate() {
+function getLast4Weeks() {
   const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  return result.toISOString().slice(0, 10);
+  const today = now
+  const toDate = new Date(new Date().setHours(-24 * 7 * 4));
+
+  return { today: today, toDate: toDate }
 }
 
-function getThisMonthDate() {
+function getUpcoming4Weeks() {
   const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
-  return result.toISOString().slice(0, 10);
-}
+  const today = now
+  const toDate = new Date(new Date().setHours(24 * 7 * 4))
 
-function getNextMonthDate() {
-  const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth() + 2, 1);
-
-  return result.toISOString().slice(0, 10);
+  return { today: today, toDate: toDate }
 }

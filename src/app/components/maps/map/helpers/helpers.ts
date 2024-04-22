@@ -1,3 +1,11 @@
+/**
+* Generates an array of colors in the HSL color space, ranging from a start hue to an end hue.
+* 
+* @param startHue - The starting hue value (0-360).
+* @param endHue - The ending hue value (0-360).
+* @param numColors - The number of colors to generate.
+* @returns An array of color strings in the format 'hsl(hue, 100%, 50%)'.
+*/
 function setColor() {
   const colors = [];
   const startHue = 200;
@@ -43,17 +51,12 @@ export function getColor(data: any, value: any, colorGrade: any) {
   }
 }
 
+
 /**
- * Generates color grades for mapping data values 
- * 
- * This function takes in data with value properties and generates 
- * discrete color grades to map those values. It calculates min and max
- * values, number of grades, and assigns a color from the predefined 
- * palette to each grade.
- *
- * @param data - The data to generate grades for 
- * @returns An array of objects with value and color properties 
- * for each grade
+* Generates a set of graded values and associated colors based on the provided data.
+*
+* @param data - The input data to generate the grades from.
+* @returns An array of objects, where each object has a `value` property (the grade value) and a `color` property (the associated color).
 */
 export function generateGrades(data: any) {
   const steps = []
@@ -91,11 +94,18 @@ export function generateGrades(data: any) {
   return stepsWithColors
 }
 
+/**
+* Calculates the number of steps to use for a range of values.
+* 
+* @param min - The minimum value of the range.
+* @param max - The maximum value of the range.
+* @returns The number of steps to use, capped at 10 if the range is too large.
+*/
 function rangeFinder(min: number, max: number) {
   const range = max - min
   const numSteps = Math.ceil(range / 10)
 
-  if(numSteps > 10) return 10
+  if (numSteps > 10) return 10
 
   return numSteps
 }

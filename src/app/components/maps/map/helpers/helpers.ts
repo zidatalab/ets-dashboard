@@ -60,19 +60,20 @@ export function generateGrades(data: any) {
   const values = data.map((item: any) => item.angebot_Anzahl);
   const max = Math.max(...values);
   const min = Math.min(...values);
-  const step = ((max - min) / 10);
+  const stepRange = rangeFinder(min, max)
+  const step = ((max - min) / stepRange);
   const colors = setColor();
   let stepsWithColors = null
 
-  if(min === Infinity || max === -Infinity) {
+  if (min === Infinity || max === -Infinity) {
     return [{ value: 0, color: 'white' }]
   }
 
-  if(values.length === 0) {
+  if (values.length === 0) {
     return [{ value: 0, color: 'white' }]
   }
 
-  if((min === max)) {
+  if ((min === max)) {
     return [{ value: min, color: colors[min] }]
   }
 
@@ -90,6 +91,14 @@ export function generateGrades(data: any) {
   return stepsWithColors
 }
 
+function rangeFinder(min: number, max: number) {
+  const range = max - min
+  const numSteps = Math.ceil(range / 10)
+
+  if(numSteps > 10) return 10
+
+  return numSteps
+}
 
 /**
  * Processes map data by filtering for a given urgency level 

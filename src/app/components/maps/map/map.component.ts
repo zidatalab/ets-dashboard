@@ -66,7 +66,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         opacity: 0.5,
         fillOpacity: 0.8,
         color: '#5f656b',
-        fillColor: helper.getColor(this.data, feature.properties, this.colorGrade),
+        fillColor: this.data ? helper.getColor(this.data, feature.properties, this.colorGrade) : 'white',
       }),
 
       onEachFeature: (feature, layer) => (
@@ -179,13 +179,13 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
 
-    if (!result.length) {
-      this.isNoData = true
+    // if (!result.length) {
+    //   this.isNoData = true
 
-      return
-    }
+    //   return
+    // }
 
-    this.data = helper.processMapData(result, levelSettings)
+    this.data = result.length ? helper.processMapData(result, levelSettings) : []
   }
 
   private generateLegend() {
@@ -246,11 +246,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     if (!this[this.layerType]) {
       this.interval = setInterval(() => {
         if (this[this.layerType]) {
-          if (!this.data.length) {
-            this.isNoData = true
+          // if (!this.data.length) {
+          //   // this.isNoData = true
 
-            return
-          }
+          //   return
+          // }
           if (this.data) {
             this.initMap()
             clearInterval(this.interval);

@@ -64,13 +64,16 @@ export function generateGrades(data: any) {
   const colors = setColor();
   let stepsWithColors = null
 
-  if (values.length === 1) {
-    stepsWithColors = {
-      value: values[0],
-      color: colors[0]
-    }
+  if(min === Infinity || max === -Infinity) {
+    return [{ value: 0, color: 'white' }]
+  }
 
-    return stepsWithColors
+  if(values.length === 0) {
+    return [{ value: 0, color: 'white' }]
+  }
+
+  if((min === max)) {
+    return [{ value: min, color: colors[min] }]
   }
 
   for (let i = min; i <= max; i += step) {

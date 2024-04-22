@@ -1,5 +1,5 @@
 export const GermanStates: any = {
-  SchleswigHolstein: {
+  'Schleswig-Holstein': {
     name: "Schleswig-Holstein",
     SN_L: "01",
     center: [54.45, 9.4]

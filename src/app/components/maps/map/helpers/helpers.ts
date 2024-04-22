@@ -1,3 +1,11 @@
+/**
+* Generates an array of colors in the HSL color space, ranging from a start hue to an end hue.
+* 
+* @param startHue - The starting hue value (0-360).
+* @param endHue - The ending hue value (0-360).
+* @param numColors - The number of colors to generate.
+* @returns An array of color strings in the format 'hsl(hue, 100%, 50%)'.
+*/
 function setColor() {
   const colors = [];
   const startHue = 200;
@@ -26,7 +34,7 @@ export function getColor(data: any, value: any, colorGrade: any) {
   let gradeValue
   const dataValue = data.find((item: any) => item.angebot_group_plz4 === value.plz4)
 
-  if(!dataValue) {
+  if (!dataValue) {
     return 'white'
   }
 
@@ -43,34 +51,33 @@ export function getColor(data: any, value: any, colorGrade: any) {
   }
 }
 
+
 /**
- * Generates color grades for mapping data values 
- * 
- * This function takes in data with value properties and generates 
- * discrete color grades to map those values. It calculates min and max
- * values, number of grades, and assigns a color from the predefined 
- * palette to each grade.
- *
- * @param data - The data to generate grades for 
- * @returns An array of objects with value and color properties 
- * for each grade
+* Generates a set of graded values and associated colors based on the provided data.
+*
+* @param data - The input data to generate the grades from.
+* @returns An array of objects, where each object has a `value` property (the grade value) and a `color` property (the associated color).
 */
 export function generateGrades(data: any) {
   const steps = []
   const values = data.map((item: any) => item.angebot_Anzahl);
   const max = Math.max(...values);
   const min = Math.min(...values);
-  const step = ((max - min) / 10);
+  const stepRange = rangeFinder(min, max)
+  const step = ((max - min) / stepRange);
   const colors = setColor();
   let stepsWithColors = null
 
-  if(values.length === 1) {
-    stepsWithColors = {
-      value : values[0],
-      color: colors[0]
-    }
+  if (min === Infinity || max === -Infinity) {
+    return [{ value: 0, color: 'white' }]
+  }
 
-    return stepsWithColors
+  if (values.length === 0) {
+    return [{ value: 0, color: 'white' }]
+  }
+
+  if ((min === max)) {
+    return [{ value: min, color: colors[min] }]
   }
 
   for (let i = min; i <= max; i += step) {
@@ -87,6 +94,21 @@ export function generateGrades(data: any) {
   return stepsWithColors
 }
 
+/**
+* Calculates the number of steps to use for a range of values.
+* 
+* @param min - The minimum value of the range.
+* @param max - The maximum value of the range.
+* @returns The number of steps to use, capped at 10 if the range is too large.
+*/
+function rangeFinder(min: number, max: number) {
+  const range = max - min
+  const numSteps = Math.ceil(range / 10)
+
+  if (numSteps > 10) return 10
+
+  return numSteps
+}
 
 /**
  * Processes map data by filtering for a given urgency level 
@@ -121,12 +143,20 @@ export function groupDateFilter(data: any, filters: any) {
       return data.filter((item: any) => item.angebot_reference_date === getTodaysDate())
     case 'tomorrow':
       return data.filter((item: any) => item.angebot_reference_date === getTomorrrowsDate())
-    case 'lastMonth':
-      return data.filter((item: any) => item.angebot_reference_date === getLastMonthDate())
-    case 'thisMonth':
-      return data.filter((item: any) => item.angebot_reference_date === getThisMonthDate())
-    case 'nextMonth':
-      return data.filter((item: any) => item.angebot_reference_date === getNextMonthDate())
+    case 'last4Weeks':
+      return data.filter((item: any) => {
+        const dateObject = getLast4Weeks()
+
+        return new Date(item.angebot_reference_date) >= dateObject.toDate &&
+          new Date(item.angebot_reference_date) <= dateObject.today;
+      })
+    case 'upcoming4Weeks':
+      return data.filter((item: any) => {
+        const dateObject = getUpcoming4Weeks()
+
+        return new Date(item.angebot_reference_date) >= dateObject.today &&
+          new Date(item.angebot_reference_date) <= dateObject.toDate
+      })
     default:
       break;
   }
@@ -159,7 +189,7 @@ export function groupSum(data: any) {
     }
 
     res[value.angebot_group_plz4].angebot_Anzahl += value.angebot_Anzahl;
-    
+
     return res;
   }, {});
 
@@ -194,23 +224,20 @@ function getTomorrrowsDate() {
   return result.toISOString().slice(0, 10);
 }
 
-function getLastMonthDate() {
+function getLast4Weeks() {
   const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  return result.toISOString().slice(0, 10);
+  const today = now
+  const toDate = new Date(new Date().setHours(-24 * 7 * 4));
+
+  return { today: today, toDate: toDate }
 }
 
-function getThisMonthDate() {
+function getUpcoming4Weeks() {
   const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
-  return result.toISOString().slice(0, 10);
-}
+  const today = now
+  const toDate = new Date(new Date().setHours(24 * 7 * 4))
 
-function getNextMonthDate() {
-  const now = new Date();
-  const result = new Date(now.getFullYear(), now.getMonth() + 2, 1);
-
-  return result.toISOString().slice(0, 10);
+  return { today: today, toDate: toDate }
 }

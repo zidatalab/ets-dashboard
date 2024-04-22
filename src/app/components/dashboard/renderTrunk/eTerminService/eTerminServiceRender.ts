@@ -78,7 +78,7 @@ export class ETerminDashboardRender implements OnInit {
       { key: "Monate", value: 'monthly' }, { key: "Kalenderwochen", value: 'weekly' }, { key: "Tage", value: "daily" }
     ],
     planing: [
-      { key: "Monate", value: 'upcoming_monthly_plz4' }, { key: "Tage", value: "upcoming_daily_plz4" }
+      { key: "Wochen", value: 'upcoming_4weeks_plz4' }, { key: "Tage", value: "upcoming_daily_plz4" }
     ]
   }
   resolutionPlaningOptions = {
@@ -86,9 +86,9 @@ export class ETerminDashboardRender implements OnInit {
       { key: "Heute", value: "today" },
       { key: "Morgen", value: "tomorrow" }
     ],
-    monthly: [
-      { key: "aktueller Monat", value: "thisMonth" },
-      { key: "letzter Monat", value: "lastMonth" }
+    weekly: [
+      { key: "vergangene 4 Wochen", value: "last4Weeks" },
+      { key: "zukünftige 4 Wochen", value: "upcoming4Weeks" }
     ]
   }
   terminStatus = [
@@ -374,8 +374,8 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings['fg'] = 'Gesamt'
     }
 
-    if (level === 'resolution' && value === 'upcoming_monthly_plz4') {
-      this.levelSettings['resolutionPlaningOption'] = 'thisMonth'
+    if (level === 'resolution' && value === 'upcoming_4weeks_plz4') {
+      this.levelSettings['resolutionPlaningOption'] = 'last4Weeks'
     }
 
     if (level === 'resolution' && value === 'upcoming_daily_plz4') {
@@ -519,8 +519,8 @@ export class ETerminDashboardRender implements OnInit {
     const statusString = `${this.levelSettings['status'] !== 'Gesamt' ? `${this.translateStatus(this.levelSettings['status'])} - ` : ''}`
     const fgString = `${this.levelSettings['fg'] !== 'Gesamt' ? `der ${this.levelSettings['fg']}` : ''}`
     const timeStringDay = `für ${this.levelSettings['resolutionPlaningOption'] === 'today' ? 'heute' : 'morgen'}`
-    const timeStringMonth = `${this.levelSettings['resolutionPlaningOption'] === 'thisMonth' ? 'in diesem Monat' : 'für den letzen Monat'}`
-    const result = `${urgencyString}${statusString}${this.levelSettings['thema'] === "Terminangebot" ? 'Terminangebote' : this.levelSettings['thema']} ${fgString} in ${this.levelSettings['levelValues']} ${this.levelSettings['resolution'] === 'upcoming_daily_plz4' ? timeStringDay : timeStringMonth}`
+    const timeStringWeeks = `${this.levelSettings['resolutionPlaningOption'] === 'last4Weeks' ? 'für die letzten 4 Wochen' : 'für die nächsten 4 Wochen'}`
+    const result = `${urgencyString}${statusString}${this.levelSettings['thema'] === "Terminangebot" ? 'Terminangebote' : this.levelSettings['thema']} ${fgString} in ${this.levelSettings['levelValues']} ${this.levelSettings['resolution'] === 'upcoming_daily_plz4' ? timeStringDay : timeStringWeeks}`
 
     return result
   }

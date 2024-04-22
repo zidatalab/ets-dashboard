@@ -106,10 +106,10 @@
           </mat-chip-option>
         </mat-chip-listbox>
         <h3>Zeit</h3>
-        <div *ngIf="this.levelSettings['resolution'] === 'upcoming_monthly_plz4'">
+        <div *ngIf="this.levelSettings['resolution'] === 'upcoming_4weeks_plz4'">
           <mat-chip-listbox>
             <mat-chip-option (click)="this.setLevelData('resolutionPlaningOption',item.value);"
-              *ngFor="let item of this.resolutionPlaningOptions.monthly" color="primary"
+              *ngFor="let item of this.resolutionPlaningOptions.weekly" color="primary"
               [selected]="(this.levelSettings['resolutionPlaningOption'] == item.value)" selectable="false">
               {{ item.key }}
             </mat-chip-option>

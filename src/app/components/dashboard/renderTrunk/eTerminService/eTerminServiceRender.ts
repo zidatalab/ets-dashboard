@@ -237,7 +237,7 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings = {
         'level': 'KV',
         "fg": "Gesamt",
-        'levelValues': !this.currentUser.is_admin ? this.levelValues[0] : 'Berlin',
+        'levelValues': this.levelValues[0],
         'resolution': 'upcoming_daily_plz4',
         'thema': 'Terminangebot',
         'urgency': 'Gesamt',
@@ -286,16 +286,18 @@ export class ETerminDashboardRender implements OnInit {
     if (parsedParams.view === 'Planung') {
       this.levelSettings = this.planingLevelSettings
       this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
+
+      if(!parsedParams.levelValues) {
+        parsedParams.levelValues = this.levelValues[0];
+      }
     }
 
     if (parsedParams.view === 'Zeitreihen') {
       this.levelSettings = this.timelineLevelSettings
 
-      if (this.levelValues.includes('Gesamt')) {
-        return
+      if (!this.levelValues.includes('Gesamt')) {
+        this.levelValues.unshift('Gesamt')
       }
-
-      this.levelValues.unshift('Gesamt')
     }
 
     for (let [key, value] of Object.entries(parsedParams)) {

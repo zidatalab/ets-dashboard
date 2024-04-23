@@ -188,7 +188,9 @@ export class ETerminDashboardRender implements OnInit {
     'status': 'available'
   }
 
-  changedSettings: any = {}
+  changedSettings: any = {
+    view: 'Zeitreihen'
+  }
 
   ngOnInit(): void {
     this.getUrlParams()
@@ -286,8 +288,13 @@ export class ETerminDashboardRender implements OnInit {
       this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
     }
 
-    if ((parsedParams.view === 'Zeitreihen') || !parsedParams.view) {
+    if (parsedParams.view === 'Zeitreihen') {
       this.levelSettings = this.timelineLevelSettings
+
+      if (this.levelValues.includes('Gesamt')) {
+        return
+      }
+
       this.levelValues.unshift('Gesamt')
     }
 

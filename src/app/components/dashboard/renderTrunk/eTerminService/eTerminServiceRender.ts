@@ -227,7 +227,16 @@ export class ETerminDashboardRender implements OnInit {
   onChangeView(value: any) {
     if (value === 'Zeitreihen') {
       this.levelValues.unshift('Gesamt')
-      this.levelSettings = this.timelineLevelSettings
+      this.levelSettings = {
+        'level': 'KV',
+        "fg": "Gesamt",
+        'levelValues': 'Gesamt',
+        'zeitraum': 'letzten 12 Monate',
+        'resolution': 'monthly',
+        'thema': 'Terminangebot',
+        'urgency': 'Gesamt',
+        'view': 'Zeitreihen',
+      };
 
       return
     }
@@ -287,7 +296,7 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings = this.planingLevelSettings
       this.levelValues = this.levelValues.filter(level => level !== 'Gesamt')
 
-      if(!parsedParams.levelValues) {
+      if (!parsedParams.levelValues) {
         parsedParams.levelValues = this.levelValues[0];
       }
     }
@@ -314,6 +323,7 @@ export class ETerminDashboardRender implements OnInit {
       relativeTo: this.route,
       queryParams: {}
     });
+
   }
 
   setRegionalLayer(selection: any) {

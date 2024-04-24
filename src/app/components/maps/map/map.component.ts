@@ -1,10 +1,8 @@
 // @ts-nocheck
-import { Component, AfterViewInit, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet'
 
 import { ShapeService } from 'src/app/services/shape.service';
-import { MarkerService } from 'src/app/services/marker.service';
-
 import { GermanStates } from './helpers/dataHelper'
 import { ApiService } from 'src/app/services/api.service';
 import * as helper from './helpers/helpers';
@@ -18,13 +16,13 @@ import * as helper from './helpers/helpers';
 export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   constructor(
     private shapeService: ShapeService,
-    private markerService: MarkerService,
     private api: ApiService,
   ) { }
 
   @Input() stateFilter: string = ''
   @Input() layerType: any = null
   @Input() levelSettings: any = null
+  @Output() emitDataToParent: any = new EventEmitter()
 
   private map: any = null
   private postalLayer4: any = null
@@ -224,6 +222,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
   ngOnChanges(changes: SimpleChanges) {
     if (changes['levelSettings'].currentValue.levelValues !== 'Gesamt') {
       this.setMapDate(changes['levelSettings'].currentValue).then(() => {
+        this.emitDataToParent.emit(this.data);
         this.colorGrade = helper.generateGrades(this.data)
       }).then(() => {
         this.setShapes()

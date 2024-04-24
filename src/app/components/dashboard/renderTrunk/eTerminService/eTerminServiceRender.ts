@@ -175,7 +175,6 @@ export class ETerminDashboardRender implements OnInit {
     'urgency': 'Gesamt',
     'view': 'Zeitreihen',
   };
-
   planingLevelSettings: any = {
     'level': 'KV',
     "fg": "Gesamt",
@@ -187,10 +186,11 @@ export class ETerminDashboardRender implements OnInit {
     'resolutionPlaningOption': 'today',
     'status': 'available'
   }
-
   changedSettings: any = {
     view: 'Zeitreihen'
   }
+  childData: any = []
+  childSummaryInfo: any = []
 
   ngOnInit(): void {
     this.getUrlParams()
@@ -486,6 +486,15 @@ export class ETerminDashboardRender implements OnInit {
     }
   }
 
+  getChildData(data: any) {
+    this.childSummaryInfo = this.processChildData(data)
+  }
+
+  processChildData(data: any) {
+    const totalAngebotAnzahl = data.reduce((result : any, item : any) => result += item.angebot_Anzahl, 0);
+
+    return totalAngebotAnzahl
+  }
   /**
    * 
    * @param data array of objects

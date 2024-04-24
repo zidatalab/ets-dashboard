@@ -294,21 +294,19 @@
       </div>
       <div *ngIf="this.levelSettings['view'] === 'Planung'">
         <div class="grid-container">
-          <mat-grid-list *ngIf="this.levelSettings['thema'] !== 'Überblick'" cols="3" rowHeight="150px">
-            <div *ngIf="this.levelSettings['thema'] === 'Terminangebot'">
-              <mat-grid-tile colspan="1" rowspan="1">
-                <app-key-data-container [value]="this.childSummaryInfo"
-                  [title]="keyDataContainerStrings[0].firstTile" [color]="keyDataContainerStrings[0].firstTileColor">
-                </app-key-data-container>
-              </mat-grid-tile>
-            </div>
+          <mat-grid-list *ngIf="childSummaryInfo" cols="3" rowHeight="150px">
+            <mat-grid-tile colspan="1" rowspan="1">
+              <app-key-data-container [value]="this.childSummaryInfo" [title]="keyDataContainerStrings[0].firstTile"
+                [color]="keyDataContainerStrings[0].firstTileColor">
+              </app-key-data-container>
+            </mat-grid-tile>
           </mat-grid-list>
         </div>
         <div class="large-tile-grid">
           <div class="grid-tile">
             <h3>{{setMapTitle()}}</h3>
-            <app-map (emitDataToParent)="getChildData($event)" [levelSettings]="levelSettings" [stateFilter]="levelSettings['levelValues']"
-              [layerType]="selectedRegionalLayer"></app-map>
+            <app-map (emitDataToParent)="getChildData($event)" [levelSettings]="levelSettings"
+              [stateFilter]="levelSettings['levelValues']" [layerType]="selectedRegionalLayer"></app-map>
           </div>
         </div>
         <div class="mat-small textThird"><br>Datenstand: {{this.dataLastAggregation | date : 'dd.MM.yyyy HH:mm'}} Uhr

@@ -68,6 +68,15 @@
             {{ item }}
           </mat-chip-option>
         </mat-chip-listbox>
+        <div *ngIf="levelSettings['fg'] !== 'Gesamt'">
+          <h3>Facharztuntergruppen</h3>
+          <mat-chip-listbox>
+            <mat-chip-option (click)="this.setLevelData('fgSubGroup', item)" *ngFor="let item of this.filteredSubGroup(levelSettings['fg'])"
+            color="primary" [selected]="(this.levelSettings['fgSubGroup']===item)" selectable="false">
+              {{ item }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+        </div>
       </ng-template>
       <ng-template #elseBlock>
       </ng-template>

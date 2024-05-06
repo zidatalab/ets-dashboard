@@ -106,7 +106,17 @@ export class ETerminDashboardRender implements OnInit {
     }
   ]
   periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr" }, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
-  professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
+  professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Sonderleistungen"]
+  professionsSubGrups = [
+    {
+      professionGroup: 'Psychotherapeuten',
+      subGroups: ['forensische Psychatrie']
+    },
+    {
+      professionGroup: 'Chirurgie',
+      subGroups: ['Allgemeine Chirurgie', 'Gefäßchirugie', 'Herzchirugie']
+    }
+  ]
   themes = ["Terminangebot", "Vermittlungswünsche"]
   urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
@@ -222,6 +232,16 @@ export class ETerminDashboardRender implements OnInit {
         }
       }, 100);
     }
+  }
+
+  filteredSubGroup(professionGroup: any) {
+    const result : any = this.professionsSubGrups.filter(item => item.professionGroup === professionGroup)
+
+    if (result.length > 0) {
+      return result[0].subGroups
+    }
+
+    return []
   }
 
   onChangeView(value: any) {

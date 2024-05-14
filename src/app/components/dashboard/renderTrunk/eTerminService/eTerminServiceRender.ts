@@ -109,12 +109,68 @@ export class ETerminDashboardRender implements OnInit {
   professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Sonderleistungen"]
   professionsSubGrups = [
     {
-      professionGroup: 'Psychotherapeuten',
-      subGroups: ['forensische Psychatrie']
+      professionGroup: 'Allgemeinmedizin',
+      subGroups: ['Allgemeinmedizin']
     },
     {
-      professionGroup: 'Chirurgie',
-      subGroups: ['Allgemeine Chirurgie', 'Gefäßchirugie', 'Herzchirugie']
+      professionGroup: 'Kindermedizin',
+      subGroups: ['Kindermedizin', 'U-Untersuchungen']
+    },
+    {
+      professionGroup: 'Anästhesiologie',
+      subGroups: ['Anästhesiologie', '']
+    },
+    {
+      professionGroup: 'Augenheilkunde',
+      subGroups: ['Augenheilkunde', '']
+    },
+    {
+      professionGroup: 'Chirurgie und Orthopädie',
+      subGroups: ['Chirurgie und Orthopädie', '']
+    },
+    {
+      professionGroup: 'Frauenheilkunde',
+      subGroups: ['Frauenheilkunde', '']
+    },
+    {
+      professionGroup: 'HNO-Heilkunde',
+      subGroups: ['HNO-Heilkunde', '']
+    },
+    {
+      professionGroup: 'Haut- und Geschlechtskrankheiten',
+      subGroups: ['Haut- und Geschlechtskrankheiten', '']
+    },
+    {
+      professionGroup: 'Innere Medizin',
+      subGroups: ['Innere Medizin ohne Schwerpunkt', 'Gastroenterologie', 'Kardiologie', 'Endokrinologie und Diabetologie', 'Hämatologie und Onkologie', 'Nephrologie', 'Rheumatologie', 'Neurologie']
+    },
+    {
+      professionGroup: 'Neurologie',
+      subGroups: ['Neurologie', '']
+    },
+    {
+      professionGroup: 'Psychotherapie',
+      subGroups: ['PT nicht differenzierbar', 'PT-Sprechstunde', 'PT-Akutbehandlung', 'Probatorik', 'PT-Sprechstunde (Kinder und Jugend)', 'PT-Akutbehandlung (Kinder und Jugend)', 'Probatorik (Kinder und Jugend)']
+    },
+    {
+      professionGroup: 'Radiologie',
+      subGroups: ['Radiologie', '']
+    },
+    {
+      professionGroup: 'Urologie',
+      subGroups: ['Urologie', '']
+    },
+    {
+      professionGroup: 'weitere ärztliche Gruppen',
+      subGroups: ['Kinder- und Jugendpsychiatrie', 'weitere ärztliche Gruppen', 'Neurochirurgie', 'Nuklearmedizin', 'Strahlentherapie', 'Transfusionsmedizin', 'Humangenetik', 'Physikalische und rehabilitative Medizin']
+    },
+    {
+      professionGroup: 'Sonstige',
+      subGroups: ['Sonstige', '']
+    },
+    {
+      professionGroup: 'fg',
+      subGroups: ['fg_long']
     }
   ]
   themes = ["Terminangebot", "Vermittlungswünsche"]

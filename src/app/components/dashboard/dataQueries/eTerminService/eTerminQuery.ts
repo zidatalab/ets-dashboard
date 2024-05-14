@@ -31,10 +31,11 @@ export class ETerminQuery {
     let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
 
     let query: any = {
-      'client_id': 'ets_reporting',
+      'client_id': 'ets_reporting_2',
       'groupinfo': {
         'level': 'KV',
-        "fg": levelSettings['fg'],
+        'fg': 'Gesamt',
+        "fg_long": levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
         'timeframe': levelSettings['resolution'],
         '$or': [
@@ -77,6 +78,7 @@ export class ETerminQuery {
     }
 
     delete query.groupinfo['$or']
+    console.log(query)
     const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
     return result
@@ -89,10 +91,11 @@ export class ETerminQuery {
     let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
 
     let query : any = {
-      'client_id': 'ets_reporting',
+      'client_id': 'ets_reporting_2',
       'groupinfo': {
         'level': 'KV',
-        "fg": levelSettings['fg'],
+        'fg': 'Gesamt',
+        "fg_long": levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
         'timeframe': levelSettings['resolution'],
         '$or': [
@@ -165,6 +168,7 @@ export class ETerminQuery {
       }
     } else {
       this.auth.refreshToken()
+      console.log(query)
       let { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
       if (!result.length) {

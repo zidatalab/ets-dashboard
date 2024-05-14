@@ -166,7 +166,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
   private async setMapDate(levelSettings: any) {
     let query: any = {
-      'client_id': 'ets_reporting',
+      'client_id': 'ets_reporting_2',
       'groupinfo': {
         'level': 'KV',
         "fg": levelSettings['fg'],

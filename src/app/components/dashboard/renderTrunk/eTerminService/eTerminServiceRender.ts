@@ -106,8 +106,11 @@ export class ETerminDashboardRender implements OnInit {
     }
   ]
   periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr" }, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
-  professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Sonderleistungen"]
-  professionsSubGrups = [
+  professionGroups = [
+    {
+      professionGroup: 'Gesamt',
+      subGroups: ['fg_long']
+    },
     {
       professionGroup: 'Allgemeinmedizin',
       subGroups: ['Allgemeinmedizin']
@@ -167,11 +170,7 @@ export class ETerminDashboardRender implements OnInit {
     {
       professionGroup: 'Sonstige',
       subGroups: ['Sonstige', '']
-    },
-    {
-      professionGroup: 'fg',
-      subGroups: ['fg_long']
-    }
+    }    
   ]
   themes = ["Terminangebot", "Vermittlungswünsche"]
   urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
@@ -233,6 +232,7 @@ export class ETerminDashboardRender implements OnInit {
   isLoadingMapData: boolean = false;
   timelineLevelSettings: any = {
     'level': 'KV',
+    'fg_long': 'Gesamt',
     "fg": "Gesamt",
     'levelValues': 'Gesamt',
     'zeitraum': 'letzten 12 Monate',
@@ -244,6 +244,7 @@ export class ETerminDashboardRender implements OnInit {
 
   planingLevelSettings: any = {
     'level': 'KV',
+    'fg_long': 'Gesamt',
     "fg": "Gesamt",
     'levelValues': 'Berlin',
     'resolution': 'upcoming_daily_plz4',
@@ -291,11 +292,11 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   filteredSubGroup(professionGroup: any) {
-    const result : any = this.professionsSubGrups.filter(item => item.professionGroup === professionGroup)
+    // const result: any = this.professionsSubGrups.filter(item => item.professionGroup === professionGroup)
 
-    if (result.length > 0) {
-      return result[0].subGroups
-    }
+    // if (result.length > 0) {
+    //   return result[0].subGroups
+    // }
 
     return []
   }

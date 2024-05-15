@@ -10,7 +10,7 @@ import { firstValueFrom } from 'rxjs';
 export class ApiService {
 
   public apiServer = 'https://api.zidatasciencelab.de/'
-  public clientApiId = 'ets_reporting'//'smed_reporting'////////////// 
+  public clientApiId = 'ets_reporting_2'//'smed_reporting'////////////// 
 
   public primarycolor = "#2196f3"; // "#e91e63";
   public accentcolor = "#e3714e1";

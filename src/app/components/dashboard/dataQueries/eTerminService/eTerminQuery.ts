@@ -34,8 +34,7 @@ export class ETerminQuery {
       'client_id': 'ets_reporting_2',
       'groupinfo': {
         'level': 'KV',
-        'fg': 'Gesamt',
-        "fg_long": levelSettings['fg'],
+        'fg': levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
         'timeframe': levelSettings['resolution'],
         '$or': [
@@ -78,7 +77,6 @@ export class ETerminQuery {
     }
 
     delete query.groupinfo['$or']
-    console.log(query)
     const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
     return result
@@ -94,8 +92,7 @@ export class ETerminQuery {
       'client_id': 'ets_reporting_2',
       'groupinfo': {
         'level': 'KV',
-        'fg': 'Gesamt',
-        "fg_long": levelSettings['fg'],
+        'fg': levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
         'timeframe': levelSettings['resolution'],
         '$or': [
@@ -168,7 +165,6 @@ export class ETerminQuery {
       }
     } else {
       this.auth.refreshToken()
-      console.log(query)
       let { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
       if (!result.length) {

@@ -113,63 +113,63 @@ export class ETerminDashboardRender implements OnInit {
     },
     {
       professionGroup: 'Allgemeinmedizin',
-      subGroups: ['Allgemeinmedizin']
+      subGroups: ['Gesamt', 'Allgemeinmedizin',]
     },
     {
       professionGroup: 'Kindermedizin',
-      subGroups: ['Kindermedizin', 'U-Untersuchungen']
+      subGroups: ['Gesamt', 'Kindermedizin', 'U-Untersuchungen']
     },
     {
       professionGroup: 'Anästhesiologie',
-      subGroups: ['Anästhesiologie', '']
+      subGroups: ['Gesamt', 'Anästhesiologie']
     },
     {
       professionGroup: 'Augenheilkunde',
-      subGroups: ['Augenheilkunde', '']
+      subGroups: ['Gesamt', 'Augenheilkunde']
     },
     {
       professionGroup: 'Chirurgie und Orthopädie',
-      subGroups: ['Chirurgie und Orthopädie', '']
+      subGroups: ['Gesamt', 'Chirurgie und Orthopädie']
     },
     {
       professionGroup: 'Frauenheilkunde',
-      subGroups: ['Frauenheilkunde', '']
+      subGroups: ['Gesamt', 'Frauenheilkunde']
     },
     {
       professionGroup: 'HNO-Heilkunde',
-      subGroups: ['HNO-Heilkunde', '']
+      subGroups: ['Gesamt', 'HNO-Heilkunde']
     },
     {
       professionGroup: 'Haut- und Geschlechtskrankheiten',
-      subGroups: ['Haut- und Geschlechtskrankheiten', '']
+      subGroups: ['Gesamt', 'Haut- und Geschlechtskrankheiten']
     },
     {
       professionGroup: 'Innere Medizin',
-      subGroups: ['Innere Medizin ohne Schwerpunkt', 'Gastroenterologie', 'Kardiologie', 'Endokrinologie und Diabetologie', 'Hämatologie und Onkologie', 'Nephrologie', 'Rheumatologie', 'Neurologie']
+      subGroups: ['Gesamt', 'Innere Medizin ohne Schwerpunkt', 'Gastroenterologie', 'Kardiologie', 'Endokrinologie und Diabetologie', 'Hämatologie und Onkologie', 'Nephrologie', 'Rheumatologie', 'Neurologie']
     },
     {
       professionGroup: 'Neurologie',
-      subGroups: ['Neurologie', '']
+      subGroups: ['Gesamt', 'Neurologie']
     },
     {
       professionGroup: 'Psychotherapie',
-      subGroups: ['PT nicht differenzierbar', 'PT-Sprechstunde', 'PT-Akutbehandlung', 'Probatorik', 'PT-Sprechstunde (Kinder und Jugend)', 'PT-Akutbehandlung (Kinder und Jugend)', 'Probatorik (Kinder und Jugend)']
+      subGroups: ['Gesamt', 'PT nicht differenzierbar', 'PT-Sprechstunde', 'PT-Akutbehandlung', 'Probatorik', 'PT-Sprechstunde (Kinder und Jugend)', 'PT-Akutbehandlung (Kinder und Jugend)', 'Probatorik (Kinder und Jugend)']
     },
     {
       professionGroup: 'Radiologie',
-      subGroups: ['Radiologie', '']
+      subGroups: ['Gesamt', 'Radiologie']
     },
     {
       professionGroup: 'Urologie',
-      subGroups: ['Urologie', '']
+      subGroups: ['Gesamt', 'Urologie']
     },
     {
       professionGroup: 'weitere ärztliche Gruppen',
-      subGroups: ['Kinder- und Jugendpsychiatrie', 'weitere ärztliche Gruppen', 'Neurochirurgie', 'Nuklearmedizin', 'Strahlentherapie', 'Transfusionsmedizin', 'Humangenetik', 'Physikalische und rehabilitative Medizin']
+      subGroups: ['Gesamt', 'Kinder- und Jugendpsychiatrie', 'weitere ärztliche Gruppen', 'Neurochirurgie', 'Nuklearmedizin', 'Strahlentherapie', 'Transfusionsmedizin', 'Humangenetik', 'Physikalische und rehabilitative Medizin']
     },
     {
       professionGroup: 'Sonstige',
-      subGroups: ['Sonstige', '']
+      subGroups: ['Gesamt', 'Sonstige']
     }    
   ]
   themes = ["Terminangebot", "Vermittlungswünsche"]
@@ -292,11 +292,11 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   filteredSubGroup(professionGroup: any) {
-    // const result: any = this.professionsSubGrups.filter(item => item.professionGroup === professionGroup)
+    const result: any = this.professionGroups.filter(item => item.professionGroup === professionGroup)
 
-    // if (result.length > 0) {
-    //   return result[0].subGroups
-    // }
+    if (result.length > 0) {
+      return result[0].subGroups
+    }
 
     return []
   }
@@ -480,7 +480,6 @@ export class ETerminDashboardRender implements OnInit {
 
     this.levelSettings[level] = value
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
-
     if (this.levelSettings['start'] && this.levelSettings['stop']) {
       await this.setData().then(() => {
         if (Object.keys(this.changedSettings).length > 0) {

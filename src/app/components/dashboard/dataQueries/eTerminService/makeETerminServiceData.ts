@@ -115,6 +115,7 @@ export class MakeETerminData {
         let dataAppointmentDemandUnarranged = 0
         let dataAppointmentDemandArranged = 0
 
+        console.log(this.levelSettings)
         const filtered = dbData.filter((item : any) => {
           return item.nachfrage_group_dringlichkeit === this.levelSettings.urgency
         })

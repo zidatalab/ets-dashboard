@@ -232,8 +232,8 @@ export class ETerminDashboardRender implements OnInit {
   isLoadingMapData: boolean = false;
   timelineLevelSettings: any = {
     'level': 'KV',
-    'fg_long': 'Gesamt',
     "fg": "Gesamt",
+    'fgSubGroup': 'Gesamt',
     'levelValues': 'Gesamt',
     'zeitraum': 'letzten 12 Monate',
     'resolution': 'monthly',
@@ -244,8 +244,8 @@ export class ETerminDashboardRender implements OnInit {
 
   planingLevelSettings: any = {
     'level': 'KV',
-    'fg_long': 'Gesamt',
     "fg": "Gesamt",
+    'fgSubGroup': 'Gesamt',
     'levelValues': 'Berlin',
     'resolution': 'upcoming_daily_plz4',
     'thema': 'Terminangebot',
@@ -307,6 +307,7 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings = {
         'level': 'KV',
         "fg": "Gesamt",
+        'fgSubGroup': 'Gesamt',
         'levelValues': 'Gesamt',
         'zeitraum': 'letzten 12 Monate',
         'resolution': 'monthly',
@@ -323,6 +324,7 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings = {
         'level': 'KV',
         "fg": "Gesamt",
+        'fgSubGroup': 'Gesamt',
         'levelValues': this.levelValues[0],
         'resolution': 'upcoming_daily_plz4',
         'thema': 'Terminangebot',
@@ -476,6 +478,10 @@ export class ETerminDashboardRender implements OnInit {
 
     if (level === 'resolution' && value === 'upcoming_daily_plz4') {
       this.levelSettings['resolutionPlaningOption'] = 'today'
+    }
+    
+    if(level === 'fg') {
+      this.levelSettings['fgSubGroup'] = 'Gesamt'
     }
 
     this.levelSettings[level] = value

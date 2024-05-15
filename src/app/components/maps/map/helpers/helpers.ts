@@ -196,9 +196,18 @@ export function groupSum(data: any) {
   return result
 }
 
+/**
+ * Filters the provided data based on the specified filters.
+ *
+ * @param data - The data to be filtered.
+ * @param filters - The filters to apply to the data.
+ * @returns The filtered data.
+ */
 function getFilteredData(data: any, filters: any) {
   const result = data.filter((item: any) => {
-    return item['angebot_group_dringlichkeit'] === filters['urgency'] && item['angebot_group_status'] === filters['status']
+    return item['angebot_group_dringlichkeit'] === filters['urgency'] &&
+      item['angebot_group_status'] === filters['status'] &&
+      item['angebot_group_fg_long'] === filters['fgSubGroup']
   })
 
   return result

@@ -178,13 +178,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     const { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
-
-    // if (!result.length) {
-    //   this.isNoData = true
-
-    //   return
-    // }
-
     this.data = result.length ? helper.processMapData(result, levelSettings) : []
   }
 
@@ -246,11 +239,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
     if (!this[this.layerType]) {
       this.interval = setInterval(() => {
         if (this[this.layerType]) {
-          // if (!this.data.length) {
-          //   // this.isNoData = true
-
-          //   return
-          // }
           if (this.data) {
             this.initMap()
             clearInterval(this.interval);

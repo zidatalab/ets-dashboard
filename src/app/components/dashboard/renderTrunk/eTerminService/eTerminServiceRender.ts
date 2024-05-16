@@ -145,7 +145,7 @@ export class ETerminDashboardRender implements OnInit {
     },
     {
       professionGroup: 'Innere Medizin',
-      subGroups: ['Gesamt', 'Innere Medizin ohne Schwerpunkt', 'Gastroenterologie', 'Kardiologie', 'Endokrinologie und Diabetologie', 'Hämatologie und Onkologie', 'Nephrologie', 'Rheumatologie', 'Neurologie']
+      subGroups: ['Gesamt', 'Innere Medizin ohne Schwerpunkt', 'Gastroenterologie', 'Kardiologie', 'Endokrinologie und Diabetologie', 'Hämatologie und Onkologie', 'Nephrologie', 'Rheumatologie']
     },
     {
       professionGroup: 'Neurologie',

@@ -106,7 +106,72 @@ export class ETerminDashboardRender implements OnInit {
     }
   ]
   periodOfTime = [{ key: "Gesamt", value: "Gesamt" }, { key: "Aktuelles Jahr", value: "Aktuelles Jahr" }, { key: "letzte 12 Monate", value: "letzten 12 Monate" }]
-  professionGroups = ["Gesamt", "Psychotherapeuten", "Fachinternisten", "Nervenärzte", "Hautärzte", "Augenärzte", "Orthopäden", "Kinderärzte", "Frauenärzte", "Hausarzt", "Chirurgen", "Urologen", "HNO-Ärzte", "Weitere Arztgruppen", "Transfusionsmediziner", "Sonderleistungen"]
+  professionGroups = [
+    {
+      professionGroup: 'Gesamt',
+      subGroups: ['fg_long']
+    },
+    {
+      professionGroup: 'Allgemeinmedizin',
+      subGroups: ['Gesamt', 'Allgemeinmedizin',]
+    },
+    {
+      professionGroup: 'Kindermedizin',
+      subGroups: ['Gesamt', 'Kindermedizin', 'U-Untersuchungen']
+    },
+    {
+      professionGroup: 'Anästhesiologie',
+      subGroups: ['Gesamt', 'Anästhesiologie']
+    },
+    {
+      professionGroup: 'Augenheilkunde',
+      subGroups: ['Gesamt', 'Augenheilkunde']
+    },
+    {
+      professionGroup: 'Chirurgie und Orthopädie',
+      subGroups: ['Gesamt', 'Chirurgie und Orthopädie']
+    },
+    {
+      professionGroup: 'Frauenheilkunde',
+      subGroups: ['Gesamt', 'Frauenheilkunde']
+    },
+    {
+      professionGroup: 'HNO-Heilkunde',
+      subGroups: ['Gesamt', 'HNO-Heilkunde']
+    },
+    {
+      professionGroup: 'Haut- und Geschlechtskrankheiten',
+      subGroups: ['Gesamt', 'Haut- und Geschlechtskrankheiten']
+    },
+    {
+      professionGroup: 'Innere Medizin',
+      subGroups: ['Gesamt', 'Innere Medizin ohne Schwerpunkt', 'Gastroenterologie', 'Kardiologie', 'Endokrinologie und Diabetologie', 'Hämatologie und Onkologie', 'Nephrologie', 'Rheumatologie']
+    },
+    {
+      professionGroup: 'Neurologie',
+      subGroups: ['Gesamt', 'Neurologie']
+    },
+    {
+      professionGroup: 'Psychotherapie',
+      subGroups: ['Gesamt', 'PT nicht differenzierbar', 'PT-Sprechstunde', 'PT-Akutbehandlung', 'Probatorik', 'PT-Sprechstunde (Kinder und Jugend)', 'PT-Akutbehandlung (Kinder und Jugend)', 'Probatorik (Kinder und Jugend)']
+    },
+    {
+      professionGroup: 'Radiologie',
+      subGroups: ['Gesamt', 'Radiologie']
+    },
+    {
+      professionGroup: 'Urologie',
+      subGroups: ['Gesamt', 'Urologie']
+    },
+    {
+      professionGroup: 'weitere ärztliche Gruppen',
+      subGroups: ['Gesamt', 'Kinder- und Jugendpsychiatrie', 'weitere ärztliche Gruppen', 'Neurochirurgie', 'Nuklearmedizin', 'Strahlentherapie', 'Transfusionsmedizin', 'Humangenetik', 'Physikalische und rehabilitative Medizin']
+    },
+    {
+      professionGroup: 'Sonstige',
+      subGroups: ['Gesamt', 'Sonstige']
+    }    
+  ]
   themes = ["Terminangebot", "Vermittlungswünsche"]
   urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
   levelSettings: any = {};
@@ -168,6 +233,7 @@ export class ETerminDashboardRender implements OnInit {
   timelineLevelSettings: any = {
     'level': 'KV',
     "fg": "Gesamt",
+    'fgSubGroup': 'Gesamt',
     'levelValues': 'Gesamt',
     'zeitraum': 'letzten 12 Monate',
     'resolution': 'monthly',
@@ -178,6 +244,7 @@ export class ETerminDashboardRender implements OnInit {
   planingLevelSettings: any = {
     'level': 'KV',
     "fg": "Gesamt",
+    'fgSubGroup': 'Gesamt',
     'levelValues': 'Berlin',
     'resolution': 'upcoming_daily_plz4',
     'thema': 'Terminangebot',
@@ -224,12 +291,23 @@ export class ETerminDashboardRender implements OnInit {
     }
   }
 
+  filteredSubGroup(professionGroup: any) {
+    const result: any = this.professionGroups.filter(item => item.professionGroup === professionGroup)
+
+    if (result.length > 0) {
+      return result[0].subGroups
+    }
+
+    return []
+  }
+
   onChangeView(value: any) {
     if (value === 'Zeitreihen') {
       this.levelValues.unshift('Gesamt')
       this.levelSettings = {
         'level': 'KV',
         "fg": "Gesamt",
+        'fgSubGroup': 'Gesamt',
         'levelValues': 'Gesamt',
         'zeitraum': 'letzten 12 Monate',
         'resolution': 'monthly',
@@ -246,6 +324,7 @@ export class ETerminDashboardRender implements OnInit {
       this.levelSettings = {
         'level': 'KV',
         "fg": "Gesamt",
+        'fgSubGroup': 'Gesamt',
         'levelValues': this.levelValues[0],
         'resolution': 'upcoming_daily_plz4',
         'thema': 'Terminangebot',
@@ -400,10 +479,13 @@ export class ETerminDashboardRender implements OnInit {
     if (level === 'resolution' && value === 'upcoming_daily_plz4') {
       this.levelSettings['resolutionPlaningOption'] = 'today'
     }
+    
+    if(level === 'fg') {
+      this.levelSettings['fgSubGroup'] = 'Gesamt'
+    }
 
     this.levelSettings[level] = value
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
-
     if (this.levelSettings['start'] && this.levelSettings['stop']) {
       await this.setData().then(() => {
         if (Object.keys(this.changedSettings).length > 0) {

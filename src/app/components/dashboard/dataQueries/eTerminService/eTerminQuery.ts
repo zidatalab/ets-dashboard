@@ -31,10 +31,10 @@ export class ETerminQuery {
     let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
 
     let query: any = {
-      'client_id': 'ets_reporting',
+      'client_id': 'ets_reporting_2',
       'groupinfo': {
         'level': 'KV',
-        "fg": levelSettings['fg'],
+        'fg': levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
         'timeframe': levelSettings['resolution'],
         '$or': [
@@ -89,10 +89,10 @@ export class ETerminQuery {
     let stopMonth = new Date(levelSettings['stop']).getMonth() + 1;
 
     let query : any = {
-      'client_id': 'ets_reporting',
+      'client_id': 'ets_reporting_2',
       'groupinfo': {
         'level': 'KV',
-        "fg": levelSettings['fg'],
+        'fg': levelSettings['fg'],
         'levelid': levelSettings['levelValues'],
         'timeframe': levelSettings['resolution'],
         '$or': [

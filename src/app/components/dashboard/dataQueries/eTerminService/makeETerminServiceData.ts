@@ -29,7 +29,7 @@ export class MakeETerminData {
     return new Date(input).toLocaleDateString()
   }
 
-  async getETerminData(input: any, isMapData : boolean = false, data : any = []) {
+  async getETerminData(input: any, isMapData: boolean = false, data: any = []) {
     /**
      * for data structurization and aggregation see Teams Convo 
      */
@@ -72,10 +72,10 @@ export class MakeETerminData {
         let dataBookedAppointments = 0
         let dataUnarrangedAppointments = 0
 
-        const filtered = dbData.filter((item : any) => {
-          return item.angebot_group_dringlichkeit === this.levelSettings.urgency
-        })
-        
+        const fgSubGroupFilter = dbData.filter((item: any) => item.angebot_group_fg_long === this.levelSettings.fgSubGroup)
+
+        const filtered = fgSubGroupFilter.filter((item: any) => item.angebot_group_dringlichkeit === this.levelSettings.urgency)
+
         for (const item of filtered) {
           if (item.angebot_group_status === "available" || item.angebot_group_status === 'booked') {
             resAppointmentOffer.push({ total: item['angebot_Anzahl'], date: this.localDateParser(item['angebot_reference_date']) })
@@ -115,9 +115,8 @@ export class MakeETerminData {
         let dataAppointmentDemandUnarranged = 0
         let dataAppointmentDemandArranged = 0
 
-        const filtered = dbData.filter((item : any) => {
-          return item.nachfrage_group_dringlichkeit === this.levelSettings.urgency
-        })
+        const fgSubGroupFilter = dbData.filter((item: any) => item.nachfrage_group_fg_long === this.levelSettings.fgSubGroup)
+        const filtered = fgSubGroupFilter.filter((item: any) => item.nachfrage_group_dringlichkeit === this.levelSettings.urgency)
 
         for (const item of filtered) {
           if (

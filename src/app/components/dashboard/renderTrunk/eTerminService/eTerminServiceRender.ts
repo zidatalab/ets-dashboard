@@ -416,6 +416,23 @@ export class ETerminDashboardRender implements OnInit {
     }
   }
 
+  planningBadgeText() {
+    if (this.levelSettings.status !== 'Gesamt' || this.levelSettings.urgency !== 'Gesamt') {
+      const transStatus = this.levelSettings.status === 'available' ? 
+        'Verfügbare ' : this.levelSettings.status === 'booked' ? 
+        'Gebuchte ' : 'Gesamt '
+      const transUrgency = this.levelSettings.urgency === 'AKUT' ? 
+        'Akut ' : this.levelSettings.urgency === 'PT_AKUTBEHANDLUNG' ? 
+        'PT Akut ' : this.levelSettings.urgency === 'DRINGEND' ? 
+        'Dringende ' : this.levelSettings.urgency === 'NICHT_DRINGEND' ? 'nicht dringende ' : 'Gesamt '
+
+      const result = transStatus + transUrgency + 'Termin(e) Angebot'
+      return result
+    }
+
+    return 'Gesamt Termin Angebot'
+  }
+
   setDataLevelForAccess() {
     let userGroups = Array()
     let levelsAllowed = Array()

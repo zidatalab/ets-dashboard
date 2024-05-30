@@ -424,7 +424,7 @@ export class ETerminDashboardRender implements OnInit {
       const transUrgency = this.levelSettings.urgency === 'AKUT' ? 
         'Akut ' : this.levelSettings.urgency === 'PT_AKUTBEHANDLUNG' ? 
         'PT Akut ' : this.levelSettings.urgency === 'DRINGEND' ? 
-        'Dringende ' : this.levelSettings.urgency === 'NICHT_DRINGEND' ? 'nicht dringende ' : 'Gesamt '
+        'Dringende ' : this.levelSettings.urgency === 'NICHT_DRINGEND' ? 'nicht dringende ' : ''
 
       const result = transStatus + transUrgency + 'Termin(e) Angebot'
       return result

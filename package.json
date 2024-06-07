@@ -27,6 +27,8 @@
     "chart.js": "^3.6.0",
     "chartjs-adapter-moment": "^1.0.1",
     "dexie": "^3.2.3",
+    "keycloak-angular": "^15.2.1",
+    "keycloak-js": "^24.0.5",
     "leaflet": "^1.9.4",
     "moment": "^2.29.4",
     "ng2-charts": "^4.1.1",

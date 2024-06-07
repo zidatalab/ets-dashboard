@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
@@ -46,6 +46,8 @@ import { NgChartsModule } from 'ng2-charts';
 import { MapComponent } from './components/maps/map/map.component';
 import { ShapeService } from './services/shape.service';
 import { MarkerService } from './services/marker.service';
+import { initializeKeycloak } from './init/keycloak-init';
+import { KeycloakService } from 'keycloak-angular';
 
 registerLocaleData(locales, 'de');
 
@@ -138,6 +140,12 @@ const routes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
       multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
     },
     ShapeService,
     MarkerService

@@ -6,7 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor.service';
 import locales from '@angular/common/locales/de';
 import { AuthGuardService } from './services/auth-guard.service';
-
+import { AuthGuard } from './guard/auth.guard';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -47,7 +47,7 @@ import { MapComponent } from './components/maps/map/map.component';
 import { ShapeService } from './services/shape.service';
 import { MarkerService } from './services/marker.service';
 import { initializeKeycloak } from './init/keycloak-init';
-import { KeycloakService } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 
 registerLocaleData(locales, 'de');
 
@@ -79,6 +79,11 @@ const routes: Routes = [
         component: ProfileComponent
       },
     ]
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '404',
@@ -134,6 +139,7 @@ const routes: Routes = [
     MatButtonModule,
     LayoutModule,
     NgChartsModule,
+    KeycloakAngularModule
   ],
   providers: [
     {

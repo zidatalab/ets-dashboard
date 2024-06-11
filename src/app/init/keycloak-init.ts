@@ -9,9 +9,15 @@ export function initializeKeycloak(
   return () =>
     keycloak.init({
       config: {
-        url: `https://auth.zi.de/realms/${realm}/protocol/openid-connect/auth?client_id=${clientId}`,
+        url: `https://auth.zi.de`,
         realm: 'dashboardsso',
         clientId: 'ets_reporting_test',
+      },
+      initOptions: {
+        onLoad: "check-sso",
+        checkLoginIframe: false,
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/assets/silent-check-sso.html'
       }
     });
 }

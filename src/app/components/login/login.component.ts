@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
+import { OAuth2Service } from 'src/app/services/oauth2.service';
 import { ApiService } from '../../services/api.service'
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -14,11 +15,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class LoginComponent implements OnInit {
 
   constructor(
-    private api: ApiService,
     private auth: AuthService,
+    private oauth2Service: OAuth2Service,
     private router: Router,
     public fb: FormBuilder,
-    public dialogRef: MatDialogRef<LoginComponent>
+    public dialogRef: MatDialogRef<LoginComponent>,
   ) { }
 
   form!: FormGroup
@@ -52,6 +53,10 @@ export class LoginComponent implements OnInit {
     })
 
     this.isLoginPending = false
+  }
+
+  oAuthLogin() {
+    this.oauth2Service.initLoginFlow()
   }
 
   showPassword(id : string, iconId : string) {

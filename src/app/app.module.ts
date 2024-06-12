@@ -4,8 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor.service';
+import { OAuthModule } from 'angular-oauth2-oidc';
 import locales from '@angular/common/locales/de';
-import { AuthGuardService } from './services/auth-guard.service';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -34,6 +34,7 @@ import { AddUserDialog } from './components/admin/components/addUserDialog';
 import { UpdateUserDialog } from './components/admin/components/updateUserDialog';
 import { DeleteUserDialog } from './components/admin/components/deleteUserDialog';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { AuthGuardService } from './services/auth-guard.service';
 
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
@@ -131,6 +132,7 @@ const routes: Routes = [
     MatButtonModule,
     LayoutModule,
     NgChartsModule,
+    OAuthModule.forRoot(),
   ],
   providers: [
     {

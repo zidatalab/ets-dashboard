@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^15.2.8",
     "@angular/router": "^15.2.8",
     "@types/geojson": "^7946.0.14",
+    "angular-oauth2-oidc": "^17.0.2",
     "angular-plotly.js": "^5.1.0",
     "chart.js": "^3.6.0",
     "chartjs-adapter-moment": "^1.0.1",

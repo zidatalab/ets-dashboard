@@ -41,6 +41,10 @@ export class HeaderComponent {
     })
   }
 
+  onOpenOAuth() {
+    this.auth.oAuthlogin()
+  }
+
   logout(): void {
     this.auth.logout()
     window.location.reload()

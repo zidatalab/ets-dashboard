@@ -6,7 +6,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './services/interceptor.service';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import locales from '@angular/common/locales/de';
-
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -114,7 +113,7 @@ const routes: Routes = [
     UpdateUserDialog,
     DeleteUserDialog,
     PageNotFoundComponent,
-    MapComponent
+    MapComponent,
   ],
   imports: [
     CommonModule,
@@ -132,7 +131,12 @@ const routes: Routes = [
     MatButtonModule,
     LayoutModule,
     NgChartsModule,
-    OAuthModule.forRoot(),
+    OAuthModule.forRoot({
+      resourceServer: {
+        sendAccessToken: true,
+        allowedUrls: ['https://api.zidatasciencelab.de/']
+      }
+    })
   ],
   providers: [
     {

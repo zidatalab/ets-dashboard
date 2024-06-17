@@ -4,6 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +17,36 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private api: ApiService,
-    private router: Router
+    private router: Router,
+    private oAuthService: OAuthService
   ) {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userInfo') || '{}'))
     this.currentUser = this.currentUserSubject.asObservable()
+    this.configureAuth();
+  }
+
+  private configureAuth() {
+    this.oAuthService.configure({
+      redirectUri: window.location.origin,
+      clientId: 'ets_reporting_test',
+      responseType: 'code',
+      scope: 'openid profile email',
+      showDebugInformation: true,
+      loginUrl: 'https://auth.zi.de/realms/dashboardsso/protocol/openid-connect/auth',
+    });
+    // this.oAuthService.setStorage(localStorage);
+  }
+
+  oAuthlogin() {
+    this.oAuthService.initImplicitFlow()
+  }
+
+  oAuthlogout() {
+    this.oAuthService.logOut();
+  }
+
+  oAuthgetAccessToken() {
+    return this.oAuthService.getAccessToken();
   }
 
   public get currenUserValue(): any {

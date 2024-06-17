@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, Route } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,13 @@ import { AuthService } from './auth.service';
 export class AuthGuardService {
   constructor(
     private auth: AuthService,
+    private oAuthService: OAuthService,
     private router: Router
   ) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const userData = this.auth.getUserDetails()
+    // console.log(this.oAuthService.getAccessToken())
 
     if(userData) {
       return true

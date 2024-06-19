@@ -32,14 +32,14 @@ export class HeaderComponent {
   public isLoggedIn : any = false;
 
   ngOnInit(): void {
+    console.log(this.oauth.isAuthenticated())
     this.currentUser = this.auth.getUserDetails()
     this.showLoggedInName()
+    this.initKeycloak()
+  }
 
-    this.isLoggedIn = this.oauth.checkCredentials();
-    let i = window.location.href.indexOf('code');
-    if (!this.isLoggedIn && i != -1) {
-      this.oauth.retrieveToken(window.location.href.substring(i + 5));
-    }
+  private async initKeycloak() : Promise<void> {
+    await this.oauth.init()
   }
 
   onOpenLoginDialog() {
@@ -51,8 +51,7 @@ export class HeaderComponent {
   }
 
   oAuthLogin() : void {
-    window.location.href =
-      'https://auth.zi.de/realms/dashboardsso/protocol/openid-connect/auth?client_id=ets_reporting_test&response_type=code&redirect_uri=http://localhost:4200/home'
+    this.oauth.login()
   }
 
   logout(): void {

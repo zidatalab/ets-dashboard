@@ -4,7 +4,6 @@ import { ApiService } from './services/api.service';
 import { AuthService } from './services/auth.service';
 import { DBService } from './services/db.service';
 import { filter } from 'rxjs';
-import { OAuthService } from './services/o-auth.service';
 
 
 @Component({
@@ -17,7 +16,6 @@ export class AppComponent {
 
   constructor(
     private auth: AuthService,
-    private oauth: OAuthService,
     private api: ApiService,
     private db: DBService,
     private router: Router,
@@ -53,13 +51,6 @@ export class AppComponent {
     this.checkApiConnection();
 
     this.currentDate = new Date()
-
-    this.isLoggedIn = this.oauth.checkCredentials();
-    let i = window.location.href.indexOf('code');
-    if (!this.isLoggedIn) {
-      console.log('here')
-      this.oauth.retrieveToken(window.location.href.substring(i + 5));
-    }
 
     this.auth.currentUser.subscribe(data => {
       if (data) {

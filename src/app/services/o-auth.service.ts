@@ -1,50 +1,56 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import Keycloak from "keycloak-js";
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface UserProfile {
+  sub: string;
+  email: string;
+  given_name: string;
+  family_name: string;
+  token: string;
+}
+
+@Injectable({ providedIn: "root" })
 export class OAuthService {
-  public clientId = 'ets_reporting_test';
-  public redirectUri = 'http://localhost:4200/home' //'https://auth.zi.de/';
+  _keycloak: Keycloak | undefined;
+  profile: UserProfile | undefined;
 
-  constructor(private _http: HttpClient) { }
-
-  retrieveToken(code: any) {
-    let params = new URLSearchParams()
-    params.append('code', code)
-    params.append('client_id', this.clientId)
-    params.append('redirect_uri', this.redirectUri)
-    params.append('grant_type', 'authorization_code')
-
-    let headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
-
-    this._http.post('https://auth.zi.de/auth/realms/baeldung/protocol/openid-connect/token',
-      params.toString(), { headers: headers })
-      .subscribe(
-        data => this.saveToken(data),
-        err => console.log(err)
-      )
+  get keycloak() {
+    if (!this._keycloak) {
+      this._keycloak = new Keycloak({
+        url: "https://auth.zi.de",
+        realm: "dashboardsso",
+        clientId: "ets_reporting_test",
+      });
+    }
+    return this._keycloak;
   }
 
-  saveToken(token: any) {
-    // let expiresIn = new Date(new Date().getTime() + token.expires_in * 1000)
-    localStorage.setItem('access_token', token.access_token)
-    console.log('token saved')
-    window.location.href = '/home'
+  async init() {
+    const authenticated = await this.keycloak.init({
+      onLoad: "check-sso",
+      silentCheckSsoRedirectUri:
+        window.location.origin + "/assets/silent-check-sso.html",
+    });
+
+    if (!authenticated) {
+      return authenticated;
+    }
+    this.profile =
+      (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
+    this.profile.token = this.keycloak.token || "";
+
+    return true;
   }
 
-  getResources(resourceUrl: any): Observable<any> {
-    let headers = new HttpHeaders({
-      'Content-type': 'application/x-www-form-urlencoded; charset=utf-8',
-      'Authorization': 'Bearer' + localStorage.getItem('access_token')
-    })
-
-    return this._http.get(resourceUrl, { headers: headers })
+  login() {
+    return this.keycloak.login();
   }
 
-  checkCredentials() {
-    return localStorage.getItem('access_token');
+  isAuthenticated() {
+    return this.keycloak.token
+  }
+
+  logout() {
+    return this.keycloak.logout({ redirectUri: "http://localhost:4200" });
   }
 }

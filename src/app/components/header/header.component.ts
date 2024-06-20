@@ -51,6 +51,7 @@ export class HeaderComponent {
 
   oAuthLogin() : void {
     this.oauth.login()
+    window.location.reload()
   }
 
   logout(): void {
@@ -58,12 +59,16 @@ export class HeaderComponent {
     window.location.reload()
   }
 
+  oAuthLogout() : void {
+    this.oauth.logout()
+  }
+
   toProfile(): void {
     console.log('change route to profile');
   }
 
   showLoggedInName() {
-    console.log(this.oauth)
+    console.log(this.oauth.getProfile())
     if(this.currentUser){
      this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
      

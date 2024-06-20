@@ -43,7 +43,17 @@ export class OAuthService {
       (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
     this.profile.token = this.keycloak.token || "";
 
+    this.setProfile(this.profile)
+
     return true;
+  }
+
+  setProfile(profile:any) {
+    localStorage.setItem("oAuthProfile", JSON.stringify(profile))
+  }
+
+  getProfile(){
+    return localStorage.getItem("oAuthProfile")
   }
 
   login() {
@@ -51,11 +61,11 @@ export class OAuthService {
   }
 
   isAuthenticated() {
-    console.log(this.keycloak)
     return this.keycloak.token
   }
 
   logout() {
+    localStorage.removeItem("oAuthProfile")
     return this.keycloak.logout({ redirectUri: "http://localhost:4200" });
   }
 }

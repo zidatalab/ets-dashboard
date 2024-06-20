@@ -32,7 +32,6 @@ export class HeaderComponent {
   public isLoggedIn : any = false;
 
   ngOnInit(): void {
-    console.log(this.oauth.isAuthenticated())
     this.currentUser = this.auth.getUserDetails()
     this.showLoggedInName()
     this.initKeycloak()
@@ -64,6 +63,7 @@ export class HeaderComponent {
   }
 
   showLoggedInName() {
+    console.log(this.oauth)
     if(this.currentUser){
      this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
      

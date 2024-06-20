@@ -30,11 +30,15 @@ export class OAuthService {
       onLoad: "check-sso",
       silentCheckSsoRedirectUri:
         window.location.origin + "/assets/silent-check-sso.html",
+      enableLogging: true,
+      checkLoginIframe: false,
+      flow: "standard",
     });
 
     if (!authenticated) {
       return authenticated;
     }
+
     this.profile =
       (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
     this.profile.token = this.keycloak.token || "";
@@ -47,6 +51,7 @@ export class OAuthService {
   }
 
   isAuthenticated() {
+    console.log(this.keycloak)
     return this.keycloak.token
   }
 

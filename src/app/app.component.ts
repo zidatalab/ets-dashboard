@@ -41,7 +41,7 @@ export class AppComponent {
 
   public currentUser: any
   public currentRoute: string = ""
-  public isLoggedIn: boolean = false
+  public isLoggedIn: any = false
   public isAdmin: boolean = false
   public apiConnection: number = 0
 

@@ -8,6 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
+import { OAuthService } from 'src/app/services/o-auth.service';
 import { LoginComponent } from '../login/login.component';
 
 @Component({
@@ -21,16 +22,24 @@ export class HeaderComponent {
 
   constructor(
     private auth: AuthService,
+    private oauth: OAuthService,
     private router: Router,
     public dialog: MatDialog,
   ) { }
 
   currentUser: any
   loggedInUserName: string = ''
+  public isLoggedIn : any = false;
 
   ngOnInit(): void {
+    console.log(this.oauth.isAuthenticated())
     this.currentUser = this.auth.getUserDetails()
     this.showLoggedInName()
+    this.initKeycloak()
+  }
+
+  private async initKeycloak() : Promise<void> {
+    await this.oauth.init()
   }
 
   onOpenLoginDialog() {
@@ -41,8 +50,8 @@ export class HeaderComponent {
     })
   }
 
-  onOpenOAuth() {
-    this.auth.oAuthlogin()
+  oAuthLogin() : void {
+    this.oauth.login()
   }
 
   logout(): void {

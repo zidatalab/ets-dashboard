@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
+import { OAuthService } from 'src/app/services/o-auth.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -14,6 +15,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
+    private oAuthService: OAuthService,
     private router: Router,
     public fb: FormBuilder,
     public dialogRef: MatDialogRef<LoginComponent>,
@@ -34,6 +36,28 @@ export class LoginComponent implements OnInit {
     if (this.auth.getToken()) {
       this.isLoggedIn = true
     }
+
+    if(this.oAuthService.isAuthenticated()) {
+      this.oAuthService.handleAuthCallback()
+      this.isLoggedIn = true
+    }
+  }
+
+  oAuthLogin() {
+    this.oAuthService.init().then((authenticated) => {
+      if (authenticated) {
+        // User is authenticated, handle the successful login
+        const profile = this.oAuthService.getProfile();
+        // Process the user profile or perform any other necessary actions
+        console.log('User is authenticated:', profile);
+      } else {
+        // User is not authenticated, initiate the login process
+        this.oAuthService.login();
+      }
+    }).catch((error) => {
+      console.error('Error during authentication:', error);
+      // Handle the error appropriately
+    });
   }
 
   login() {

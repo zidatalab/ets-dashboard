@@ -25,6 +25,19 @@
         <strong>E-Mail oder Passwort falsch, bitte probieren Sie es noch einmal.</strong>
       </mat-error>
     </mat-dialog-content>
+    <mat-dialog-content>
+      <div class="oauth-login">
+        <p class="secondary-login-text">Oder melden Sie sich mit einer sekundären OAuth-Methode an</p>
+        <button mat-button (click)="oAuthLogin()">
+          <mat-icon>
+            <span class="material-symbols-outlined">
+              account_circle
+            </span>
+          </mat-icon>
+          Mit ZI Account einloggen
+        </button>
+      </div>
+    </mat-dialog-content>
     <mat-dialog-actions class="actions">
       <button mat-raised-button mat-dialog-close>Schließen</button>
       <button mat-raised-button color="primary" (click)="login()">Login</button>

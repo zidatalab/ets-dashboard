@@ -25,7 +25,7 @@ export class OAuthService {
     return this._keycloak;
   }
 
-  async init() {
+  async init(): Promise<boolean> {
     const authenticated = await this.keycloak.init({
       onLoad: "check-sso",
       silentCheckSsoRedirectUri:
@@ -35,24 +35,49 @@ export class OAuthService {
       flow: "standard",
     });
 
-    if (!authenticated) {
-      return authenticated;
+    console.log("authenticated", authenticated);
+
+    if (authenticated) {
+      this.profile =
+        (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
+      this.profile.token = this.keycloak.token || "";
+
+      this.setProfile(this.profile)
+
+      return true;
     }
 
-    this.profile =
-      (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
-    this.profile.token = this.keycloak.token || "";
-
-    this.setProfile(this.profile)
-
-    return true;
+    return new Promise((resolve, reject) => {
+      this.keycloak.login().then(() => {
+        console.log("login try");
+        resolve(true);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
   }
 
-  setProfile(profile:any) {
+  handleAuthCallback() : void {
+    this.keycloak.loadUserInfo().then((profile) => {
+      this.profile = profile as unknown as UserProfile;
+      this.profile.token = this.keycloak.token || '';
+      this.setProfile(this.profile);
+
+      console.log('User is authenticated:', this.profile);
+    }).catch((error) => {
+      console.error('Error during authentication:', error);
+    });
+  }
+
+  exposeHandleAuthCallback() {
+    (<any>window)['handleAuthCallback'] = this.handleAuthCallback.bind(this);
+  }
+
+  setProfile(profile: any) {
     localStorage.setItem("oAuthProfile", JSON.stringify(profile))
   }
 
-  getProfile(){
+  getProfile() {
     return localStorage.getItem("oAuthProfile")
   }
 

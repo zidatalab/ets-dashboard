@@ -34,12 +34,12 @@ export class HeaderComponent {
   ngOnInit(): void {
     this.currentUser = this.auth.getUserDetails()
     this.showLoggedInName()
-    this.initKeycloak()
+    // this.initKeycloak()
   }
 
-  private async initKeycloak() : Promise<void> {
-    await this.oauth.init()
-  }
+  // private async initKeycloak() : Promise<void> {
+  //   await this.oauth.init()
+  // }
 
   onOpenLoginDialog() {
     const dialogRef = this.dialog.open(LoginComponent, {
@@ -68,7 +68,6 @@ export class HeaderComponent {
   }
 
   showLoggedInName() {
-    console.log(this.oauth.getProfile())
     if(this.currentUser){
      this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
      

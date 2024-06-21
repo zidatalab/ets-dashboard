@@ -4,6 +4,7 @@ import { ApiService } from './services/api.service';
 import { AuthService } from './services/auth.service';
 import { DBService } from './services/db.service';
 import { filter } from 'rxjs';
+import { OAuthService } from './services/o-auth.service';
 
 
 @Component({
@@ -16,6 +17,7 @@ export class AppComponent {
 
   constructor(
     private auth: AuthService,
+    private oAuthService: OAuthService,
     private api: ApiService,
     private db: DBService,
     private router: Router,
@@ -69,7 +71,12 @@ export class AppComponent {
       }
     })
 
+    this.handleAuthCallback()
     this.cdr.detectChanges()
+  }
+
+  handleAuthCallback() {
+    this.oAuthService.handleAuthCallback()
   }
 
   public checkApiConnection() {

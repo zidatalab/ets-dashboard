@@ -57,6 +57,14 @@ export class OAuthService {
     });
   }
 
+  async loadUserProfile() {
+    this.profile =
+      (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
+    this.profile.token = this.keycloak.token || ""
+
+    return this.profile;
+  }
+
   handleAuthCallback() : void {
     this.keycloak.loadUserInfo().then((profile) => {
       this.profile = profile as unknown as UserProfile;
@@ -67,10 +75,6 @@ export class OAuthService {
     }).catch((error) => {
       console.error('Error during authentication:', error);
     });
-  }
-
-  exposeHandleAuthCallback() {
-    (<any>window)['handleAuthCallback'] = this.handleAuthCallback.bind(this);
   }
 
   setProfile(profile: any) {

@@ -4,7 +4,7 @@ import {
   EventEmitter,
   Output
 } from '@angular/core';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
@@ -34,12 +34,7 @@ export class HeaderComponent {
   ngOnInit(): void {
     this.currentUser = this.auth.getUserDetails()
     this.showLoggedInName()
-    // this.initKeycloak()
   }
-
-  // private async initKeycloak() : Promise<void> {
-  //   await this.oauth.init()
-  // }
 
   onOpenLoginDialog() {
     const dialogRef = this.dialog.open(LoginComponent, {
@@ -47,11 +42,6 @@ export class HeaderComponent {
     }).afterClosed().subscribe(result => {
       window.location.reload()
     })
-  }
-
-  oAuthLogin() : void {
-    this.oauth.login()
-    window.location.reload()
   }
 
   logout(): void {

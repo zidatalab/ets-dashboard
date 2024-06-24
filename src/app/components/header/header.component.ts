@@ -28,11 +28,13 @@ export class HeaderComponent {
   ) { }
 
   currentUser: any
+  oAuthUser : any
   loggedInUserName: string = ''
   public isLoggedIn : any = false;
 
   ngOnInit(): void {
-    this.currentUser = this.auth.getUserDetails()
+    this.oAuthUser = this.oauth.getProfile()
+    this.currentUser = this.auth.getUserDetails() ? this.auth.getUserDetails() : this.oauth.getProfile()
     this.showLoggedInName()
   }
 
@@ -58,6 +60,11 @@ export class HeaderComponent {
   }
 
   showLoggedInName() {
+    if(this.oAuthUser){
+      this.loggedInUserName = `${this.oAuthUser.given_name} ${this.oAuthUser.family_name}`
+      return
+    }
+
     if(this.currentUser){
      this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
      
@@ -65,5 +72,10 @@ export class HeaderComponent {
     }
 
     this.loggedInUserName = 'nicht angemeldet'
+  }
+
+  public setIsLoggedIn(value: boolean): void {
+    console.log('set is logged in to', value)
+    this.isLoggedIn = value
   }
 }

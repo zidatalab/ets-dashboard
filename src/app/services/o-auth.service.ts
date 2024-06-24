@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import Keycloak from "keycloak-js";
 
 export interface UserProfile {
@@ -11,6 +12,8 @@ export interface UserProfile {
 
 @Injectable({ providedIn: "root" })
 export class OAuthService {
+  constructor(private router: Router) { }
+
   _keycloak: Keycloak | undefined;
   profile: UserProfile | undefined;
 
@@ -25,17 +28,15 @@ export class OAuthService {
     return this._keycloak;
   }
 
-  async init(): Promise<boolean> {
+  async init() {
     const authenticated = await this.keycloak.init({
       onLoad: "check-sso",
       silentCheckSsoRedirectUri:
         window.location.origin + "/assets/silent-check-sso.html",
       enableLogging: true,
-      checkLoginIframe: false,
+      checkLoginIframe: true,
       flow: "standard",
     });
-
-    console.log("authenticated", authenticated);
 
     if (authenticated) {
       this.profile =
@@ -47,14 +48,7 @@ export class OAuthService {
       return true;
     }
 
-    return new Promise((resolve, reject) => {
-      this.keycloak.login().then(() => {
-        console.log("login try");
-        resolve(true);
-      }).catch((error) => {
-        reject(error);
-      });
-    });
+    return authenticated
   }
 
   async loadUserProfile() {
@@ -65,16 +59,8 @@ export class OAuthService {
     return this.profile;
   }
 
-  handleAuthCallback() : void {
-    this.keycloak.loadUserInfo().then((profile) => {
-      this.profile = profile as unknown as UserProfile;
-      this.profile.token = this.keycloak.token || '';
-      this.setProfile(this.profile);
-
-      console.log('User is authenticated:', this.profile);
-    }).catch((error) => {
-      console.error('Error during authentication:', error);
-    });
+  handleAuthCallback(): void {
+    this.init()
   }
 
   setProfile(profile: any) {
@@ -82,15 +68,24 @@ export class OAuthService {
   }
 
   getProfile() {
-    return localStorage.getItem("oAuthProfile")
+    return JSON.parse(localStorage.getItem("oAuthProfile") || '')
   }
 
   login() {
-    return this.keycloak.login();
+    this.keycloak.login();
+  }
+
+  checkLoginState() {
+    this.init().then((authenticated) => {
+      const profile = this.getProfile()
+      this.router.navigate(['/'])
+      return
+    }).catch((error) => {
+      console.error('Error during authentication:', error);
+    });
   }
 
   isAuthenticated() {
-    return this.keycloak.token
   }
 
   logout() {

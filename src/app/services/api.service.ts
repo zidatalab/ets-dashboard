@@ -10,7 +10,9 @@ import { firstValueFrom } from 'rxjs';
 export class ApiService {
 
   public apiServer = 'https://api.zidatasciencelab.de/'
-  public clientApiId = 'ets_reporting_2'//'smed_reporting'////////////// 
+  public dataApiServer = 'https://data.zi.de/'
+  public clientApiId = 'ets_reporting_2'
+  public oAuthClientApiId = 'ets_reporting_test'
 
   public primarycolor = "#2196f3"; // "#e91e63";
   public accentcolor = "#e3714e1";
@@ -20,6 +22,8 @@ export class ApiService {
 
   // requester
   public getTypeRequest(url: any) {
+    const serverToCall = localStorage.getItem('oAuthProfile') ? this.dataApiServer : this.apiServer
+    const clientId = localStorage.getItem('oAuthProfile') ? this.oAuthClientApiId : this.clientApiId
     return this.httpClient.get(`${this.apiServer}${url}`).pipe(map(result => {
       return result
     })).pipe(retry(3))

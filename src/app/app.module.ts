@@ -145,7 +145,8 @@ const routes: Routes = [
       multi: true
     },
     ShapeService,
-    MarkerService
+    MarkerService,
+    HeaderComponent
   ],
   bootstrap: [AppComponent]
 })

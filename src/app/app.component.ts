@@ -5,7 +5,7 @@ import { AuthService } from './services/auth.service';
 import { DBService } from './services/db.service';
 import { filter } from 'rxjs';
 import { OAuthService } from './services/o-auth.service';
-
+import { HeaderComponent } from './components/header/header.component';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +21,8 @@ export class AppComponent {
     private api: ApiService,
     private db: DBService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public header: HeaderComponent
   ) {
     this.router.events.pipe(
       filter((e: any): e is RouterEvent => e instanceof RouterEvent)
@@ -71,12 +72,15 @@ export class AppComponent {
       }
     })
 
-    this.handleAuthCallback()
-    this.cdr.detectChanges()
-  }
+    try {
+      this.oAuthService.checkLoginState()
+      this.header.setIsLoggedIn(true)
+    } catch (error) {
+      console.log(error)
+    }
 
-  handleAuthCallback() {
-    this.oAuthService.handleAuthCallback()
+    this.cdr.detectChanges()
+
   }
 
   public checkApiConnection() {

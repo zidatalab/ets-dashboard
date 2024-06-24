@@ -39,18 +39,11 @@ export class LoginComponent implements OnInit {
   }
 
   oAuthLogin() {
-    this.oAuthService.init().then((authenticated) => {
-      if (authenticated) {
-        const profile = this.oAuthService.getProfile();
-
-        console.log('User is authenticated:', profile);
-      } else {
-
-        this.oAuthService.login();
-      }
-    }).catch((error) => {
-      console.error('Error during authentication:', error);
-    });
+    try {
+      this.oAuthService.login();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   login() {

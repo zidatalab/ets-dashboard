@@ -277,10 +277,11 @@ export class ETerminDashboardRender implements OnInit {
       setTimeout(() => {
         this.metaData = localStorage.getItem('metadata')
         if (this.metaData) {
+          console.log(this.currentUser)
           if (this.currentUser) {
-            if (!this.currentUser.is_superadmin) {
+            // if (!this.currentUser.is_superadmin) {
               this.levelValues = this.setDataLevelForAccess()
-            }
+            // }
           } else {
             this.levelValues = ['Gesamt']
           }
@@ -440,11 +441,15 @@ export class ETerminDashboardRender implements OnInit {
     const metaObject = JSON.parse(this.metaData)
 
     userGroups = this.currentUser.usergroups[this.api.clientApiId]
+    console.log(metaObject)
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")
+    console.log(levelIdMeta)
 
     let levelrights = levelIdMeta?.levelrights
+    console.log(userGroups)
 
     for (let group of userGroups) {
+      console.log(group)
       let idArray = Array()
 
       if (levelrights[group]) {

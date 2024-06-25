@@ -65,20 +65,26 @@ export class AppComponent {
         this.checkApiConnection()
 
         setInterval(() => {
-          this.auth.refreshToken()
+          if (!localStorage.getItem('oAuthProfile')) {
+            this.auth.refreshToken()
+          }
           this.autoRefreshData()
           this.checkApiConnection()
         }, 20000);
       }
     })
 
-    try {
-      this.oAuthService.checkLoginState()
-      this.header.setIsLoggedIn(true)
-    } catch (error) {
-      console.log(error)
-    }
+    if (localStorage.getItem('oAuthProfile')) {
 
+      try {
+        this.oAuthService.checkLoginState()
+        if (localStorage.getItem('oAuthProfile')) {
+          this.header.setIsLoggedIn(true)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
     this.cdr.detectChanges()
 
   }

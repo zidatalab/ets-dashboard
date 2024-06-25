@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import Keycloak from "keycloak-js";
+import { skip } from "rxjs";
 
 export interface UserProfile {
   sub: string;
@@ -39,9 +40,7 @@ export class OAuthService {
     });
 
     if (authenticated) {
-      this.profile =
-        (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
-      this.profile.token = this.keycloak.token || "";
+      this.profile = await this.loadUserProfile()
 
       this.setProfile(this.profile)
 
@@ -51,13 +50,19 @@ export class OAuthService {
     return authenticated
   }
 
+  login() {
+    this.keycloak.login();
+  }
+
   async loadUserProfile() {
     this.profile =
       (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
-    this.profile.token = this.keycloak.token || ""
+    this.profile.token = this.keycloak.token || "";
+    localStorage.setItem('access_token', this.keycloak.token || "");
 
     return this.profile;
   }
+
 
   handleAuthCallback(): void {
     this.init()
@@ -65,18 +70,74 @@ export class OAuthService {
 
   setProfile(profile: any) {
     localStorage.setItem("oAuthProfile", JSON.stringify(profile))
+    localStorage.setItem("userInfo", JSON.stringify(this.writeOldUserInfo(profile)))
+  }
+
+  writeOldUserInfo(profile: any) {
+    const userInfo = {
+      anrede: '',
+      dashboard_admin: [],
+      dashboards: [] as string[],
+      disabled: false,
+      email: '',
+      firstname: '',
+      is_admin: false,
+      is_superadmin: false,
+      lastname: '',
+      refresh_counter: 0,
+      refresh_counter_blocked: 0,
+      roles: [] as string[],
+      usergroups: {} as { [key: string]: any }
+    }
+
+    for (const item in profile) {
+      switch (item) {
+        case 'given_name':
+          userInfo.firstname = profile[item]
+          break;
+        case 'family_name':
+          userInfo.lastname = profile[item]
+          break;
+        case 'email':
+          userInfo.email = profile[item]
+          break;
+        case 'email_verified':
+          userInfo.disabled = !profile[item]
+          break;
+        case 'groups':
+          const userGroupsObject: any = {};
+
+          for (const str of profile[item]) {
+            const parts = str.split('/');
+            const key = parts[1];
+            const value = parts.slice(2).join('/') || '';
+
+            if(value === '') continue
+
+            if (userGroupsObject[key]) {
+              userGroupsObject[key].push(value);
+            } else {
+              userGroupsObject[key] = [value];
+            }
+          }
+
+          userInfo.dashboards = Object.keys(userGroupsObject)
+          userInfo.usergroups = userGroupsObject
+          break;
+        default:
+          break;
+      }
+    }
+
+    return userInfo
   }
 
   getProfile() {
     return JSON.parse(localStorage.getItem("oAuthProfile") || '')
   }
 
-  login() {
-    this.keycloak.login();
-  }
-
-  checkLoginState() {
-    this.init().then((authenticated) => {
+  async checkLoginState() {
+    await this.init().then((authenticated) => {
       const profile = this.getProfile()
       this.router.navigate(['/'])
       return
@@ -85,7 +146,17 @@ export class OAuthService {
     });
   }
 
-  isAuthenticated() {
+  refreshKeycloakToken() {
+    return this.keycloak.updateToken(5).then(async (refreshed) => {
+      if (refreshed) {
+        this.profile =
+          (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
+        this.profile.token = this.keycloak.token || "";
+        this.setProfile(this.profile)
+        return true;
+      }
+      return false;
+    });
   }
 
   logout() {

@@ -164,7 +164,7 @@ export class ETerminQuery {
         _result.push(await this.makeData.getETerminData(item))
       }
     } else {
-      this.auth.refreshToken()
+      // this.auth.refreshToken()
       let { data: result }: any = await this.api.postTypeRequestWithoutObs('get_data/', query);
 
       if (!result.length) {

@@ -66,6 +66,7 @@ export class AuthService {
   }
 
   public logout() {
+    if(localStorage.getItem('oAuthProfile')) return
     const token = this.getToken()
     localStorage.clear();
     this.api.logout(token).subscribe(res => {
@@ -126,6 +127,7 @@ export class AuthService {
   }
 
   refreshToken() {
+    if(localStorage.getItem('oAuthProfile')) return
     return this.http.post(`${this.api.apiServer}login/refresh/`, { refresh: true }).subscribe(
       data => {
         const result: any = data

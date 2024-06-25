@@ -33,8 +33,8 @@ export class HeaderComponent {
   public isLoggedIn : any = false;
 
   ngOnInit(): void {
-    this.oAuthUser = this.oauth.getProfile()
-    this.currentUser = this.auth.getUserDetails() ? this.auth.getUserDetails() : this.oauth.getProfile()
+    // this.oAuthUser = Object.keys(this.oauth.getProfile()).length === 0 ? undefined : this.oauth.getProfile()
+    this.currentUser = this.auth.getUserDetails()
     this.showLoggedInName()
   }
 
@@ -48,6 +48,7 @@ export class HeaderComponent {
 
   logout(): void {
     this.auth.logout()
+    this.oauth.logout()
     window.location.reload()
   }
 
@@ -60,11 +61,6 @@ export class HeaderComponent {
   }
 
   showLoggedInName() {
-    if(this.oAuthUser){
-      this.loggedInUserName = `${this.oAuthUser.given_name} ${this.oAuthUser.family_name}`
-      return
-    }
-
     if(this.currentUser){
      this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
      

@@ -23,7 +23,7 @@ export class InterceptorService {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh') && this.auth.getUserDetails()) {
+    if (request.url.includes(this.api.apiServer) && (!request.url.includes('login/refresh') && !request.url.includes('get_metadata')) && this.auth.getUserDetails()) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.auth.getToken()}`
@@ -31,7 +31,7 @@ export class InterceptorService {
       })
     }
 
-    if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh') && this.auth.getUserDetails()) {
+    if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh') && this.auth.getUserDetails() && !localStorage.getItem('oAuthProfile')) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.auth.getRefreshToken()}`

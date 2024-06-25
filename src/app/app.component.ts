@@ -48,7 +48,7 @@ export class AppComponent {
   public isAdmin: boolean = false
   public apiConnection: number = 0
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.db.clean()
     this.api.setMetaData()
     this.checkApiConnection();
@@ -72,9 +72,8 @@ export class AppComponent {
       }
     })
 
-
     try {
-      this.oAuthService.checkLoginState()
+      await this.oAuthService.init()
       if (localStorage.getItem('oAuthProfile')) {
         this.header.setIsLoggedIn(true)
       }

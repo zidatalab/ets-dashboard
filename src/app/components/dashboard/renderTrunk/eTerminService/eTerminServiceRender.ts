@@ -278,7 +278,9 @@ export class ETerminDashboardRender implements OnInit {
         this.metaData = localStorage.getItem('metadata')
         if (this.metaData) {
           if (this.currentUser) {
-            this.levelValues = this.setDataLevelForAccess()
+            this.setDataLevelForAccess().then((data: any) => {
+              this.levelValues = data;
+            })
           } else {
             this.levelValues = ['Gesamt']
           }
@@ -431,11 +433,11 @@ export class ETerminDashboardRender implements OnInit {
     return 'Gesamt Termin Angebot'
   }
 
-  setDataLevelForAccess() {
+  async setDataLevelForAccess() {
     let userGroups = Array()
     let levelsAllowed = Array()
     let levelIdMeta: any
-    const metaObject = JSON.parse(this.metaData)
+    const metaObject = await this.api.getMetaData('metadata')['data']
 
     userGroups = this.currentUser.usergroups[this.api.clientApiId]
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")

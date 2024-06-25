@@ -140,7 +140,7 @@ export class OAuthService {
 
   async checkLoginState() {
     await this.init().then((authenticated) => {
-      const profile = this.getProfile()
+      // const profile = this.getProfile()
       this.router.navigate(['/'])
       return
     }).catch((error) => {

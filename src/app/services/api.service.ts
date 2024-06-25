@@ -27,6 +27,10 @@ export class ApiService {
     })).pipe(retry(3))
   }
 
+  public getTypeRequestWithoutObs(url: any) {
+    return firstValueFrom(this.httpClient.get(`${this.apiServer}${url}`).pipe(retry(3)))
+  }
+
   public getTypeRequestWithPayload(url: any, payload : any) {
     return this.httpClient.get(`${this.apiServer}${url}`, { headers: {'Authorization': `Bearer ${payload.token}` }}).pipe(map(result => {
       return result
@@ -181,10 +185,15 @@ export class ApiService {
     return result
   }
 
-  public setMetaData() {
-    this.getTypeRequest(`get_metadata/${this.clientApiId}`).subscribe((data : any) => {
-      localStorage.setItem('metadata', JSON.stringify(data['data']))
-    })
+  // public setMetaData() {
+  //   this.getTypeRequest(`get_metadata/${this.clientApiId}`).subscribe((data : any) => {
+  //     localStorage.setItem('metadata', JSON.stringify(data['data']))
+  //   })
+  // }
+
+  public async setMetaData() {
+    const resp = await this.getTypeRequestWithoutObs(`get_metadata/${this.clientApiId}`)
+    localStorage.setItem('metadata', JSON.stringify(resp))
   }
 
   public getMetaData(name: string) {

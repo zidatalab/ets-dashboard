@@ -170,7 +170,7 @@ export class ETerminDashboardRender implements OnInit {
     {
       professionGroup: 'Sonstige',
       subGroups: ['Gesamt', 'Sonstige']
-    }    
+    }
   ]
   themes = ["Terminangebot", "Vermittlungswünsche"]
   urgencies = [{ key: "Gesamt", value: 'Gesamt' }, { key: "Akut", value: "AKUT" }, { key: "PT-Akut", value: "PT_AKUTBEHANDLUNG" }, { key: "Dringend", value: "DRINGEND" }, { key: "Nicht Dringend", value: "NICHT_DRINGEND" },]
@@ -277,11 +277,8 @@ export class ETerminDashboardRender implements OnInit {
       setTimeout(() => {
         this.metaData = localStorage.getItem('metadata')
         if (this.metaData) {
-          console.log(this.currentUser)
           if (this.currentUser) {
-            // if (!this.currentUser.is_superadmin) {
-              this.levelValues = this.setDataLevelForAccess()
-            // }
+            this.levelValues = this.setDataLevelForAccess()
           } else {
             this.levelValues = ['Gesamt']
           }
@@ -419,13 +416,13 @@ export class ETerminDashboardRender implements OnInit {
 
   planningBadgeText() {
     if (this.levelSettings.status !== 'Gesamt' || this.levelSettings.urgency !== 'Gesamt') {
-      const transStatus = this.levelSettings.status === 'available' ? 
-        'Verfügbare ' : this.levelSettings.status === 'booked' ? 
-        'Gebuchte ' : 'Gesamt '
-      const transUrgency = this.levelSettings.urgency === 'AKUT' ? 
-        'Akut ' : this.levelSettings.urgency === 'PT_AKUTBEHANDLUNG' ? 
-        'PT Akut ' : this.levelSettings.urgency === 'DRINGEND' ? 
-        'Dringende ' : this.levelSettings.urgency === 'NICHT_DRINGEND' ? 'nicht dringende ' : ''
+      const transStatus = this.levelSettings.status === 'available' ?
+        'Verfügbare ' : this.levelSettings.status === 'booked' ?
+          'Gebuchte ' : 'Gesamt '
+      const transUrgency = this.levelSettings.urgency === 'AKUT' ?
+        'Akut ' : this.levelSettings.urgency === 'PT_AKUTBEHANDLUNG' ?
+          'PT Akut ' : this.levelSettings.urgency === 'DRINGEND' ?
+            'Dringende ' : this.levelSettings.urgency === 'NICHT_DRINGEND' ? 'nicht dringende ' : ''
 
       const result = transStatus + transUrgency + 'Termin(e) Angebot'
       return result
@@ -441,15 +438,11 @@ export class ETerminDashboardRender implements OnInit {
     const metaObject = JSON.parse(this.metaData)
 
     userGroups = this.currentUser.usergroups[this.api.clientApiId]
-    console.log(metaObject)
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")
-    console.log(levelIdMeta)
 
     let levelrights = levelIdMeta?.levelrights
-    console.log(userGroups)
 
     for (let group of userGroups) {
-      console.log(group)
       let idArray = Array()
 
       if (levelrights[group]) {
@@ -501,8 +494,8 @@ export class ETerminDashboardRender implements OnInit {
     if (level === 'resolution' && value === 'upcoming_daily_plz4') {
       this.levelSettings['resolutionPlaningOption'] = 'today'
     }
-    
-    if(level === 'fg') {
+
+    if (level === 'fg') {
       this.levelSettings['fgSubGroup'] = 'Gesamt'
     }
 
@@ -595,7 +588,7 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   processChildData(data: any) {
-    const totalAngebotAnzahl = data.reduce((result : any, item : any) => result += item.angebot_Anzahl, 0);
+    const totalAngebotAnzahl = data.reduce((result: any, item: any) => result += item.angebot_Anzahl, 0);
 
     return totalAngebotAnzahl
   }

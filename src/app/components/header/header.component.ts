@@ -28,12 +28,11 @@ export class HeaderComponent {
   ) { }
 
   currentUser: any
-  oAuthUser : any
+  oAuthUser: any
   loggedInUserName: string = ''
-  public isLoggedIn : any = false;
+  public isLoggedIn: any = false;
 
   ngOnInit(): void {
-    // this.oAuthUser = Object.keys(this.oauth.getProfile()).length === 0 ? undefined : this.oauth.getProfile()
     this.currentUser = this.auth.getUserDetails()
     this.showLoggedInName()
   }
@@ -47,13 +46,15 @@ export class HeaderComponent {
   }
 
   logout(): void {
-    this.auth.logout()
-    this.oauth.logout()
-    window.location.reload()
-  }
+    if (localStorage.getItem('oAuthProfile')) {
+      this.oauth.logout()
+      window.location.reload()
 
-  oAuthLogout() : void {
-    this.oauth.logout()
+      return
+    }
+
+    this.auth.logout()
+    window.location.reload()
   }
 
   toProfile(): void {
@@ -61,17 +62,15 @@ export class HeaderComponent {
   }
 
   showLoggedInName() {
-    if(this.currentUser){
-     this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
-     
-     return
+    if (this.currentUser) {
+      this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
+      return
     }
 
     this.loggedInUserName = 'nicht angemeldet'
   }
 
   public setIsLoggedIn(value: boolean): void {
-    console.log('set is logged in to', value)
     this.isLoggedIn = value
   }
 }

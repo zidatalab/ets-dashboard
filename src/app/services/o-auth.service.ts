@@ -43,6 +43,7 @@ export class OAuthService {
       this.profile = await this.loadUserProfile()
 
       this.setProfile(this.profile)
+      this.router.navigate(['/'])
 
       return true;
     }
@@ -59,6 +60,7 @@ export class OAuthService {
       (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
     this.profile.token = this.keycloak.token || "";
     localStorage.setItem('access_token', this.keycloak.token || "");
+    localStorage.setItem('refresh_token', this.keycloak.refreshToken || "");
 
     return this.profile;
   }
@@ -142,11 +144,12 @@ export class OAuthService {
       this.router.navigate(['/'])
       return
     }).catch((error) => {
-      console.error('Error during authentication:', error);
+      // console.error('Error during authentication:', error);
+      this.router.navigate(['/'])
     });
   }
 
-  refreshKeycloakToken() {
+  public refreshKeycloakToken() {
     return this.keycloak.updateToken(5).then(async (refreshed) => {
       if (refreshed) {
         this.profile =
@@ -160,7 +163,7 @@ export class OAuthService {
   }
 
   logout() {
-    localStorage.removeItem("oAuthProfile")
-    return this.keycloak.logout({ redirectUri: "http://localhost:4200" });
+    localStorage.clear()
+    return this.keycloak.logout({ redirectUri: window.location.origin });
   }
 }

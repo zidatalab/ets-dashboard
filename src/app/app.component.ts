@@ -65,26 +65,23 @@ export class AppComponent {
         this.checkApiConnection()
 
         setInterval(() => {
-          if (!localStorage.getItem('oAuthProfile')) {
-            this.auth.refreshToken()
-          }
+          this.auth.refreshToken()
           this.autoRefreshData()
           this.checkApiConnection()
         }, 20000);
       }
     })
 
-    if (localStorage.getItem('oAuthProfile')) {
 
-      try {
-        this.oAuthService.checkLoginState()
-        if (localStorage.getItem('oAuthProfile')) {
-          this.header.setIsLoggedIn(true)
-        }
-      } catch (error) {
-        console.log(error)
+    try {
+      this.oAuthService.checkLoginState()
+      if (localStorage.getItem('oAuthProfile')) {
+        this.header.setIsLoggedIn(true)
       }
+    } catch (error) {
+      console.log(error)
     }
+
     this.cdr.detectChanges()
 
   }
@@ -108,19 +105,6 @@ export class AppComponent {
 
   public autoRefreshData() {
     this.api.setMetaData()
-  }
-
-  logout() {
-    this.auth.logout()
-    this.db.clean()
-    localStorage.clear()
-    this.autoRefreshData()
-    this.isLoggedIn = !this.isLoggedIn
-    this.isAdmin = false
-
-    setTimeout(() => {
-      this.router.navigate(['/'])
-    }, 1500);
   }
 
   getSortData() {

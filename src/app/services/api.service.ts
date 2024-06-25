@@ -183,7 +183,6 @@ export class ApiService {
 
   public setMetaData() {
     this.getTypeRequest(`get_metadata/${this.clientApiId}`).subscribe((data : any) => {
-      console.log('data', data)
       localStorage.setItem('metadata', JSON.stringify(data['data']))
     })
   }

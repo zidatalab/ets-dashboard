@@ -4,8 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { OAuthService } from 'angular-oauth2-oidc';
-
+import { OAuthService } from './o-auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -22,31 +21,6 @@ export class AuthService {
   ) {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('userInfo') || '{}'))
     this.currentUser = this.currentUserSubject.asObservable()
-    this.configureAuth();
-  }
-
-  private configureAuth() {
-    this.oAuthService.configure({
-      redirectUri: window.location.origin,
-      clientId: 'ets_reporting_test',
-      responseType: 'code',
-      scope: 'openid profile email',
-      showDebugInformation: true,
-      loginUrl: 'https://auth.zi.de/realms/dashboardsso/protocol/openid-connect/auth',
-    });
-    // this.oAuthService.setStorage(localStorage);
-  }
-
-  oAuthlogin() {
-    this.oAuthService.initImplicitFlow()
-  }
-
-  oAuthlogout() {
-    this.oAuthService.logOut();
-  }
-
-  oAuthgetAccessToken() {
-    return this.oAuthService.getAccessToken();
   }
 
   public get currenUserValue(): any {
@@ -62,6 +36,10 @@ export class AuthService {
   }
 
   public getRefreshToken() {
+    if (localStorage.getItem('oAuthProfile')) {
+      return this.oAuthService.refreshKeycloakToken()
+    }
+
     return localStorage.getItem('refresh_token');
   }
 
@@ -127,7 +105,10 @@ export class AuthService {
   }
 
   refreshToken() {
-    if(localStorage.getItem('oAuthProfile')) return
+    if(localStorage.getItem('oAuthProfile')) {
+      return this.oAuthService.refreshKeycloakToken()
+    }
+
     return this.http.post(`${this.api.apiServer}login/refresh/`, { refresh: true }).subscribe(
       data => {
         const result: any = data

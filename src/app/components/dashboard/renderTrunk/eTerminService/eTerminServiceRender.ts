@@ -278,9 +278,10 @@ export class ETerminDashboardRender implements OnInit {
         this.metaData = localStorage.getItem('metadata')
         if (this.metaData) {
           if (this.currentUser) {
-            this.setDataLevelForAccess().then((data: any) => {
-              this.levelValues = data;
-            })
+            // this.setDataLevelForAccess().then((data: any) => {
+            //   this.levelValues = data;
+            // })
+            this.levelValues = this.setDataLevelForAccess()
           } else {
             this.levelValues = ['Gesamt']
           }
@@ -289,8 +290,6 @@ export class ETerminDashboardRender implements OnInit {
         }
       }, 100);
     }
-
-    console.log(this.levelValues)
   }
 
   filteredSubGroup(professionGroup: any) {
@@ -435,15 +434,15 @@ export class ETerminDashboardRender implements OnInit {
     return 'Gesamt Termin Angebot'
   }
 
-  async setDataLevelForAccess() {
+  setDataLevelForAccess() {
     let userGroups = Array()
     let levelsAllowed = Array()
     let levelIdMeta: any
-    const metaObject = await this.api.getMetaData('metadata')['data']
-
+    const metaObject = this.api.getMetaData('metadata')['data']
+    
     userGroups = this.currentUser.usergroups[this.api.clientApiId]
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")
-
+    
     let levelrights = levelIdMeta?.levelrights
 
     for (let group of userGroups) {

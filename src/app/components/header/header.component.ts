@@ -71,7 +71,6 @@ export class HeaderComponent {
   }
 
   public setIsLoggedIn(value: boolean): void {
-    console.log('set is logged in to', value)
     this.isLoggedIn = value
   }
 }

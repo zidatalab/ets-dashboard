@@ -17,9 +17,8 @@ export class AuthGuardService {
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const userData = this.auth.getUserDetails()
-    // console.log(this.oAuthService.getAccessToken())
 
-    if(userData) {
+    if (userData) {
       return true
     }
 
@@ -31,8 +30,8 @@ export class AuthGuardService {
   canActivateAdmin(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const userData = this.auth.getUserDetails()
 
-    if(userData) {
-      if(userData['is_admin'] || userData['is_superadmin']) {
+    if (userData) {
+      if (userData['is_admin'] || userData['is_superadmin']) {
         return true
       }
     }

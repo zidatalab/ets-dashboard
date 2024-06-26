@@ -73,8 +73,8 @@ export class AppComponent {
     })
 
     try {
-      await this.oAuthService.init()
-      if (localStorage.getItem('oAuthProfile')) {
+      if(localStorage.getItem('oAuthProfile')) {
+        await this.oAuthService.init()
         this.header.setIsLoggedIn(true)
       }
     } catch (error) {

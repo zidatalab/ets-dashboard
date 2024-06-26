@@ -289,6 +289,8 @@ export class ETerminDashboardRender implements OnInit {
         }
       }, 100);
     }
+
+    console.log(this.levelValues)
   }
 
   filteredSubGroup(professionGroup: any) {
@@ -446,7 +448,6 @@ export class ETerminDashboardRender implements OnInit {
 
     for (let group of userGroups) {
       let idArray = Array()
-
       if (levelrights[group]) {
         idArray = levelrights[group]
 

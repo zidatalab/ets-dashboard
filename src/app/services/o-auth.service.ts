@@ -52,7 +52,12 @@ export class OAuthService {
   }
 
   login() {
-    this.keycloak.login();
+    this.init().then((authenticated) => {
+      if (authenticated) {
+        this.keycloak.login();
+        this.router.navigate(['/'])
+      }
+    })
   }
 
   async loadUserProfile() {

@@ -4,7 +4,7 @@ import { ApiService } from './services/api.service';
 import { AuthService } from './services/auth.service';
 import { DBService } from './services/db.service';
 import { filter } from 'rxjs';
-import { OAuthService } from './services/o-auth.service';
+// import { OAuthService } from './services/o-auth.service';
 import { HeaderComponent } from './components/header/header.component';
 import Keycloak from "keycloak-js";
 
@@ -24,7 +24,7 @@ export class AppComponent {
 
   constructor(
     private auth: AuthService,
-    private oAuthService: OAuthService,
+    // private oAuthService: OAuthService,
     private api: ApiService,
     private db: DBService,
     private router: Router,
@@ -68,30 +68,16 @@ export class AppComponent {
         this.isLoggedIn = !this.isLoggedIn
         this.isAdmin = this.currentUser["is_admin"] || this.currentUser['is_superadmin']
 
-        this.autoRefreshData()
-        this.checkApiConnection()
+        // this.autoRefreshData()
+        // this.checkApiConnection()
 
-        setInterval(() => {
-          this.auth.refreshToken()
-          this.autoRefreshData()
-          this.checkApiConnection()
-        }, 20000);
+        // setInterval(() => {
+        //   this.auth.refreshToken()
+        //   this.autoRefreshData()
+        //   this.checkApiConnection()
+        // }, 20000);
       }
     })
-
-    try {
-      await this.oAuthService.init().then((authenticated) => {
-        if (authenticated) {
-          this.router.navigate(['/'])
-          this.header.setIsLoggedIn(true)
-          this.cdr.detectChanges()
-        }
-      }).finally(() => {
-        this.cdr.detectChanges()
-      })
-    } catch (error) {
-      console.log(error)
-    }
 
     this.cdr.detectChanges()
   }

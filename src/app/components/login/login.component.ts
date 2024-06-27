@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
-import { OAuthService } from 'src/app/services/o-auth.service';
+// import { OAuthService } from 'src/app/services/o-auth.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private oAuthService: OAuthService,
+    // private oAuthService: OAuthService,
     private router: Router,
     public fb: FormBuilder,
     public dialogRef: MatDialogRef<LoginComponent>,
@@ -38,9 +38,9 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  oAuthLogin() {
+  async oAuthLogin() {
     try {
-      this.oAuthService.login();
+      console.log('login.component > oAuthLogin', await this.auth.oAuthLogin());
     } catch (error) {
       console.log(error)
     }

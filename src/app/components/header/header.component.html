@@ -6,6 +6,9 @@
   </button>
   <span></span>
   <span class="spacer"></span>
+  <p >[TYPE: {{ currentUser.type }}]</p>
+  <p >[TYPE: {{ currentUser.firstname }}]</p>
+
   <span *ngIf="currentUser">{{ loggedInUserName }}</span>
   <button mat-icon-button [matMenuTriggerFor]="menu">
     <mat-icon>person_pin</mat-icon>

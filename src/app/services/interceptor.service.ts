@@ -23,7 +23,7 @@ export class InterceptorService {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh') && this.auth.getUserDetails()) {
+    if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh') && !this.auth.isOAuth) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.auth.getToken()}`
@@ -31,7 +31,7 @@ export class InterceptorService {
       })
     }
 
-    if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh') && this.auth.getUserDetails() && !localStorage.getItem('oAuthProfile')) {
+    if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh') && this.auth.isOAuth) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.auth.getRefreshToken()}`
@@ -40,17 +40,17 @@ export class InterceptorService {
     }
 
     return next.handle(request).pipe(
-      catchError((error: HttpErrorResponse) => {
+      catchError( (error: HttpErrorResponse) => {
         if (request.url.includes(this.api.apiServer) && error.status == 401 && this.auth.getUserDetails() && !this.refreshTokenInProgress && !request.url.includes("login/refresh")) {
           this.refreshTokenInProgress = true
           this.auth.refreshToken()
           this.refreshTokenInProgress = false    
         }
 
-        if (request.url.includes(this.api.apiServer) && request.url.includes("/refresh/") && error.status == 422) {
-          this.auth.logout()
+        if (request.url.includes(this.api.apiServer) && request.url.includes("/refresh/") && error.status == 422) {      
           this.router.navigate(["/"])          
           this.refreshTokenInProgress = false    
+          this.auth.logout()
         }
         else {
           this.refreshTokenInProgress = false;

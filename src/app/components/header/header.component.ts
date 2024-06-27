@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Output
@@ -8,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
-import { OAuthService } from 'src/app/services/o-auth.service';
+// import { OAuthService } from 'src/app/services/o-auth.service';
 import { LoginComponent } from '../login/login.component';
 
 @Component({
@@ -22,19 +23,22 @@ export class HeaderComponent {
 
   constructor(
     private auth: AuthService,
-    private oauth: OAuthService,
-    private router: Router,
+    // private oauth: OAuthService,
+    // private router: Router,
+    private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
   ) { }
 
   currentUser: any
-  oAuthUser: any
   loggedInUserName: string = ''
   public isLoggedIn: any = false;
 
   ngOnInit(): void {
-    this.currentUser = this.auth.getUserDetails()
-    this.showLoggedInName()
+    this.auth.currentUser.subscribe(data => {
+      this.currentUser = data;
+      this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
+      this.cdRef.detectChanges();
+    });
   }
 
   onOpenLoginDialog() {
@@ -45,31 +49,8 @@ export class HeaderComponent {
     })
   }
 
-  logout(): void {
-    if (localStorage.getItem('oAuthProfile')) {
-      console.log('logout from oAuth')
-      this.oauth.logout()
-      return
-    }
-
-    this.auth.logout()
+  async logout() {
+    await this.auth.logout()
     window.location.reload()
-  }
-
-  toProfile(): void {
-    console.log('change route to profile');
-  }
-
-  showLoggedInName() {
-    if (this.currentUser) {
-      this.loggedInUserName = `${this.currentUser.firstname} ${this.currentUser.lastname}`
-      return
-    }
-
-    this.loggedInUserName = 'nicht angemeldet'
-  }
-
-  public setIsLoggedIn(value: boolean): void {
-    this.isLoggedIn = value
   }
 }

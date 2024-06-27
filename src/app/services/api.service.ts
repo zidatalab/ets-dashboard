@@ -11,12 +11,18 @@ export class ApiService {
 
   public _apiServer = 'https://api.zidatasciencelab.de/'
   public dataApiServer = 'https://data.zi.de/'
-  public apiServer = localStorage.getItem('oAuthProfile') ? this.dataApiServer : this._apiServer
   public clientApiId = 'ets_reporting_2'
 
   public primarycolor = "#2196f3"; // "#e91e63";
   public accentcolor = "#e3714e1";
   public warncolor = "#e1149b";
+
+get apiServer() {
+  const data = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '{}') : false;
+  const isOAuth = data?.type === 'oauth';
+    
+  return isOAuth ? this.dataApiServer : this._apiServer;
+}
 
   constructor(private httpClient: HttpClient) { }
 

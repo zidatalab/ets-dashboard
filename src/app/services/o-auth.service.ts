@@ -109,7 +109,7 @@ export class OAuthService {
             const key = parts[1];
             const value = parts.slice(2).join('/') || '';
 
-            if(value === '') continue
+            if (value === '') continue
 
             if (userGroupsObject[key]) {
               userGroupsObject[key].push(value);
@@ -150,6 +150,8 @@ export class OAuthService {
         this.profile =
           (await this.keycloak.loadUserInfo()) as unknown as UserProfile;
         this.profile.token = this.keycloak.token || "";
+        localStorage.setItem('access_token', this.keycloak.token || "");
+        localStorage.setItem('refresh_token', this.keycloak.refreshToken || "");
         this.setProfile(this.profile)
         return true;
       }

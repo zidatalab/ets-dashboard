@@ -21,7 +21,6 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any>
   public currentUser: Observable<any>
 
-
   get isOAuth() {
     return this.currentUserSubject.value.type === 'oauth'
   }
@@ -35,7 +34,6 @@ export class AuthService {
     this.currentUserSubject = new BehaviorSubject<any>(this.getUserDetails())
     this.currentUser = this.currentUserSubject.asObservable()
 
-    console.log(keycloak);
     if(!this.currentUserSubject.value || this.isOAuth) {
       this.initOAuth();
     }
@@ -49,13 +47,11 @@ export class AuthService {
       checkLoginIframe: true,
       flow: "standard",
     });
-
-    console.log('AuthService > initOAuth', authenticated);
     
     if(authenticated) {
       const data = await this.oAuthLoadProfile();
       this.storeUserDetails(data, 'oauth')
-      console.log('AuthService > initOAuth > oAuthLoadProfile', data);
+      this.afterOAuthLoginTask()
     }
   }
 
@@ -104,10 +100,8 @@ export class AuthService {
 
   public getRefreshToken() {
     if (this.isOAuth) {
-      console.log('oAuthProfile> getRefreshToken')
-      // return keycloak.refreshKeycloakToken()
 
-      return
+      return this.refreshKeycloakToken()
     }
 
     return localStorage.getItem('refresh_token');
@@ -115,11 +109,10 @@ export class AuthService {
 
   public async logout() {
     if(this.isOAuth)  {
-      await keycloak.logout({ redirectUri: window.location.origin })
-      console.log("auth > logout")
-      localStorage.clear();
-      this.currentUserSubject.next(null);
-
+      keycloak.logout({ redirectUri: window.location.origin }).then(() => {
+        localStorage.clear()
+        this.currentUserSubject.next(null);
+      })
       return;
     }
 
@@ -129,6 +122,8 @@ export class AuthService {
     return this.api.logout(token).subscribe(res => {
       this.currentUserSubject.next(null);
     })
+
+    window.location.reload()
   }
 
   public updateUserData() {
@@ -170,11 +165,15 @@ export class AuthService {
   }
 
   async oAuthLogin() {
-    console.log("auth > oAuthLogin");
     await keycloak.login();
+
     const data = this.oAuthLoadProfile();
     this.storeUserDetails(data, 'oauth');
-    console.log('auth > oAuthLogin', data);
+  }
+
+  afterOAuthLoginTask() {
+    this.setDataInLocalStorage('refresh_token', keycloak.refreshToken)
+    this.setDataInLocalStorage('access_token', keycloak.token)
   }
 
   loginTask(user: any) {
@@ -190,12 +189,6 @@ export class AuthService {
   }
 
   refreshToken() {
-    if(this.isOAuth) {
-      console.log('oAuthProfile > refreshToken')
-
-      return;
-    }
-
     return this.http.post(`${this.api.apiServer}login/refresh/`, { refresh: true }).subscribe(
       data => {
         const result: any = data
@@ -227,5 +220,18 @@ export class AuthService {
     this.router.navigate(['/'])
 
     return false
+  }
+
+  public refreshKeycloakToken() {
+    return keycloak.updateToken(5).then(async (refreshed) => {
+      if (refreshed) {
+
+        localStorage.setItem('access_token', keycloak.token || "");
+        localStorage.setItem('refresh_token', keycloak.refreshToken || "");
+
+        return true;
+      }
+      return false;
+    });
   }
 }

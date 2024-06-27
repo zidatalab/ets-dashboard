@@ -1,15 +1,11 @@
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   EventEmitter,
   Output
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-
 import { AuthService } from 'src/app/services/auth.service';
-// import { OAuthService } from 'src/app/services/o-auth.service';
 import { LoginComponent } from '../login/login.component';
 
 @Component({
@@ -23,8 +19,6 @@ export class HeaderComponent {
 
   constructor(
     private auth: AuthService,
-    // private oauth: OAuthService,
-    // private router: Router,
     private cdRef: ChangeDetectorRef,
     public dialog: MatDialog,
   ) { }
@@ -51,6 +45,5 @@ export class HeaderComponent {
 
   async logout() {
     await this.auth.logout()
-    window.location.reload()
   }
 }

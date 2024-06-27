@@ -57,7 +57,6 @@ export class AppComponent {
 
   async ngOnInit() {
     this.db.clean()
-    this.api.setMetaData()
     this.checkApiConnection();
 
     this.currentDate = new Date()
@@ -68,14 +67,15 @@ export class AppComponent {
         this.isLoggedIn = !this.isLoggedIn
         this.isAdmin = this.currentUser["is_admin"] || this.currentUser['is_superadmin']
 
-        // this.autoRefreshData()
-        // this.checkApiConnection()
+        this.api.setMetaData()
+        this.autoRefreshData()
+        this.checkApiConnection()
 
-        // setInterval(() => {
-        //   this.auth.refreshToken()
-        //   this.autoRefreshData()
-        //   this.checkApiConnection()
-        // }, 20000);
+        setInterval(() => {
+          this.auth.refreshToken()
+          this.autoRefreshData()
+          this.checkApiConnection()
+        }, 20000);
       }
     })
 

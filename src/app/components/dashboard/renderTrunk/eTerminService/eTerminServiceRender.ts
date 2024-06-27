@@ -260,13 +260,16 @@ export class ETerminDashboardRender implements OnInit {
   childSummaryInfo: any = []
 
   ngOnInit(): void {
-    this.getUrlParams()
-
-    this.currentUser = this.auth.getUserDetails()
+    this.auth.currentUser.subscribe(data => {
+      this.currentUser = data
+      this.cdr.detectChanges()
+    })
 
     if (!this.currentUser) {
       this.router.navigate(['/'])
     }
+
+    this.getUrlParams()
 
     this.fillPeriodOfTime()
     this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
@@ -275,12 +278,11 @@ export class ETerminDashboardRender implements OnInit {
 
     if (this.currentUser) {
       setTimeout(() => {
+        this.currentUser = this.auth.getUserDetails()
         this.metaData = localStorage.getItem('metadata')
+        
         if (this.metaData) {
           if (this.currentUser) {
-            // this.setDataLevelForAccess().then((data: any) => {
-            //   this.levelValues = data;
-            // })
             this.levelValues = this.setDataLevelForAccess()
           } else {
             this.levelValues = ['Gesamt']
@@ -439,10 +441,10 @@ export class ETerminDashboardRender implements OnInit {
     let levelsAllowed = Array()
     let levelIdMeta: any
     const metaObject = this.api.getMetaData('metadata')['data']
-    
+
     userGroups = this.currentUser.usergroups[this.api.clientApiId]
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")
-    
+
     let levelrights = levelIdMeta?.levelrights
 
     for (let group of userGroups) {

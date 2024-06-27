@@ -8,7 +8,6 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-
   public _apiServer = 'https://api.zidatasciencelab.de/'
   public dataApiServer = 'https://data.zi.de/'
   public clientApiId = 'ets_reporting_2'
@@ -17,12 +16,12 @@ export class ApiService {
   public accentcolor = "#e3714e1";
   public warncolor = "#e1149b";
 
-get apiServer() {
-  const data = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '{}') : false;
-  const isOAuth = data?.type === 'oauth';
-    
-  return isOAuth ? this.dataApiServer : this._apiServer;
-}
+  get apiServer() {
+    const data = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '{}') : false;
+    const isOAuth = data?.type === 'oauth';
+
+    return isOAuth ? this.dataApiServer : this._apiServer;
+  }
 
   constructor(private httpClient: HttpClient) { }
 
@@ -37,8 +36,8 @@ get apiServer() {
     return firstValueFrom(this.httpClient.get(`${this.apiServer}${url}`).pipe(retry(3)))
   }
 
-  public getTypeRequestWithPayload(url: any, payload : any) {
-    return this.httpClient.get(`${this.apiServer}${url}`, { headers: {'Authorization': `Bearer ${payload.token}` }}).pipe(map(result => {
+  public getTypeRequestWithPayload(url: any, payload: any) {
+    return this.httpClient.get(`${this.apiServer}${url}`, { headers: { 'Authorization': `Bearer ${payload.token}` } }).pipe(map(result => {
       return result
     })).pipe(retry(3))
   }
@@ -88,7 +87,7 @@ get apiServer() {
     return this.postTypeRequest('changepwd', payload)
   }
 
-  public logout(token : any) {
+  public logout(token: any) {
     const payload = { 'token': token }
 
     return this.getTypeRequestWithPayload('logout/', payload)
@@ -191,12 +190,6 @@ get apiServer() {
     return result
   }
 
-  // public setMetaData() {
-  //   this.getTypeRequest(`get_metadata/${this.clientApiId}`).subscribe((data : any) => {
-  //     localStorage.setItem('metadata', JSON.stringify(data['data']))
-  //   })
-  // }
-
   public async setMetaData() {
     const resp = await this.getTypeRequestWithoutObs(`get_metadata/${this.clientApiId}`)
     localStorage.setItem('metadata', JSON.stringify(resp))
@@ -205,7 +198,7 @@ get apiServer() {
   public getMetaData(name: string) {
     const metaData: any = localStorage.getItem(name)
 
-    if(!metaData) {
+    if (!metaData) {
       this.setMetaData()
     }
 
@@ -338,7 +331,7 @@ get apiServer() {
     return Array.from(intersection)
   }
 
-  public countView(url : any) {
+  public countView(url: any) {
     // Privacy preserving Webcounter, see Documentation here https://github.com/zidatalab/ziwebcounter
     this.httpClient.get('https://analytics.api.ziapp.de/view/ets_reporting/data?pageid=' + url + '&cookiedissent=' + true, { withCredentials: false }).subscribe();
   }

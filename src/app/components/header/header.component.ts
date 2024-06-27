@@ -47,9 +47,8 @@ export class HeaderComponent {
 
   logout(): void {
     if (localStorage.getItem('oAuthProfile')) {
+      console.log('logout from oAuth')
       this.oauth.logout()
-      window.location.reload()
-
       return
     }
 

@@ -6,6 +6,13 @@ import { DBService } from './services/db.service';
 import { filter } from 'rxjs';
 import { OAuthService } from './services/o-auth.service';
 import { HeaderComponent } from './components/header/header.component';
+import Keycloak from "keycloak-js";
+
+const keycloak = new Keycloak({
+  url: "https://auth.zi.de",
+  realm: "dashboardsso",
+  clientId: "ets_reporting_2",
+});
 
 @Component({
   selector: 'app-root',
@@ -73,9 +80,21 @@ export class AppComponent {
     })
 
     try {
-      if(localStorage.getItem('oAuthProfile')) {
-        await this.oAuthService.init()
-        this.header.setIsLoggedIn(true)
+      const authenticated = await keycloak.init({
+        onLoad: "check-sso",
+        silentCheckSsoRedirectUri:
+          window.location.origin + "/assets/silent-check-sso.html"
+      })
+
+      console.log(authenticated)
+      
+      if (authenticated) {
+        await this.oAuthService.init().then((authenticated) => {
+          if (authenticated) {
+            this.router.navigate(['/'])
+            this.header.setIsLoggedIn(true)
+          }
+        })
       }
     } catch (error) {
       console.log(error)

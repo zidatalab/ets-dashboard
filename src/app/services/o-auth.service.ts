@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import Keycloak from "keycloak-js";
-import { skip } from "rxjs";
 
 export interface UserProfile {
   sub: string;
@@ -23,7 +22,7 @@ export class OAuthService {
       this._keycloak = new Keycloak({
         url: "https://auth.zi.de",
         realm: "dashboardsso",
-        clientId: "ets_reporting_test",
+        clientId: "ets_reporting_2",
       });
     }
     return this._keycloak;
@@ -40,6 +39,7 @@ export class OAuthService {
     });
 
     if (authenticated) {
+      console.log('authenticated')
       this.profile = await this.loadUserProfile()
 
       this.setProfile(this.profile)
@@ -52,11 +52,8 @@ export class OAuthService {
   }
 
   login() {
-    this.init().then((authenticated) => {
-      if (authenticated) {
+    this.init().then(() => {
         this.keycloak.login();
-        this.router.navigate(['/'])
-      }
     })
   }
 
@@ -68,11 +65,6 @@ export class OAuthService {
     localStorage.setItem('refresh_token', this.keycloak.refreshToken || "");
 
     return this.profile;
-  }
-
-
-  handleAuthCallback(): void {
-    this.init()
   }
 
   setProfile(profile: any) {
@@ -168,7 +160,8 @@ export class OAuthService {
   }
 
   logout() {
-    localStorage.clear()
-    return this.keycloak.logout({ redirectUri: window.location.origin });
+    this.keycloak.logout({ redirectUri: window.location.origin }).then(() => {
+      localStorage.clear()
+    })
   }
 }

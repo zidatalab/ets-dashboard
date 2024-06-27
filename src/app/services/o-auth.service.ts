@@ -43,7 +43,7 @@ export class OAuthService {
       this.profile = await this.loadUserProfile()
 
       this.setProfile(this.profile)
-      this.router.navigate(['/'])
+      // this.router.navigate(['/'])
 
       return true;
     }
@@ -52,9 +52,7 @@ export class OAuthService {
   }
 
   login() {
-    this.init().then(() => {
-        this.keycloak.login();
-    })
+    this.keycloak.login();
   }
 
   async loadUserProfile() {

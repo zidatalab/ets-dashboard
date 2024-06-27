@@ -80,28 +80,20 @@ export class AppComponent {
     })
 
     try {
-      const authenticated = await keycloak.init({
-        onLoad: "check-sso",
-        silentCheckSsoRedirectUri:
-          window.location.origin + "/assets/silent-check-sso.html"
+      await this.oAuthService.init().then((authenticated) => {
+        if (authenticated) {
+          this.router.navigate(['/'])
+          this.header.setIsLoggedIn(true)
+          this.cdr.detectChanges()
+        }
+      }).finally(() => {
+        this.cdr.detectChanges()
       })
-
-      console.log(authenticated)
-      
-      if (authenticated) {
-        await this.oAuthService.init().then((authenticated) => {
-          if (authenticated) {
-            this.router.navigate(['/'])
-            this.header.setIsLoggedIn(true)
-          }
-        })
-      }
     } catch (error) {
       console.log(error)
     }
 
     this.cdr.detectChanges()
-
   }
 
   public checkApiConnection() {

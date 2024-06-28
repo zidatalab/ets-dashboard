@@ -191,6 +191,10 @@ export class AuthService {
   }
 
   refreshToken() {
+    if(this.isOAuth) {
+      return this.refreshKeycloakToken()
+    }
+
     return this.http.post(`${this.api.apiServer}login/refresh/`, { refresh: true }).subscribe(
       data => {
         const result: any = data

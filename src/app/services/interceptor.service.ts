@@ -30,8 +30,8 @@ export class InterceptorService {
 
     if (currentUser) {
       if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh')) {
+        if (request.url.includes('get_data')) console.log('get_data', request.url)
         if (this.auth.isOAuth) {
-          if (request.url.includes('get_data')) console.log('get_data', request.url)
           if (request.url.includes(this.api.dataApiServer)) {
             request = request.clone({
               setHeaders: {
@@ -49,13 +49,13 @@ export class InterceptorService {
         } else {
           request = request.clone({
             setHeaders: {
-              Authorization: `Bearer ${currentUser['token']}`
+              Authorization: `Bearer ${this.auth.getToken()}`
             }
           })
         }
       }
     }
-    if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh') && this.auth.isOAuth) {
+    if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh') && !this.auth.isOAuth) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.auth.getRefreshToken()}`

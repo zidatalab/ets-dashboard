@@ -11,7 +11,6 @@ import { catchError } from 'rxjs/operators';
 })
 export class InterceptorService {
   private refreshTokenInProgress = true;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
     private router: Router,

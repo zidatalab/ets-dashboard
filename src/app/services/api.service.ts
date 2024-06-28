@@ -195,14 +195,15 @@ export class ApiService {
     localStorage.setItem('metadata', JSON.stringify(resp))
   }
 
-  public getMetaData(name: string) {
+  public getMetaData(name: string) : any {
     const metaData: any = localStorage.getItem(name)
+    const parsedData = JSON.parse(metaData)
 
-    if (!metaData) {
+    if (!metaData || parsedData.data.length < 16) {
       this.setMetaData()
     }
 
-    return JSON.parse(metaData)
+    return parsedData
   }
 
   public sortArray(array: any, key: string | number, order = 'ascending') {

@@ -21,10 +21,8 @@ const keycloak = new Keycloak({
 })
 
 export class AppComponent {
-
   constructor(
     private auth: AuthService,
-    // private oAuthService: OAuthService,
     private api: ApiService,
     private db: DBService,
     private router: Router,
@@ -58,6 +56,7 @@ export class AppComponent {
   async ngOnInit() {
     this.db.clean()
     this.checkApiConnection();
+    this.api.setMetaData()
 
     this.currentDate = new Date()
 

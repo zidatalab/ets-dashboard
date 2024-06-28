@@ -39,6 +39,7 @@ export class ETerminDashboardRender implements OnInit {
     private router: Router,
     private queryETerminData: ETerminQuery,
     private cdr: ChangeDetectorRef,
+    private cdrfor: ChangeDetectorRef,
     private route: ActivatedRoute,
   ) { }
 
@@ -259,10 +260,27 @@ export class ETerminDashboardRender implements OnInit {
   childData: any = []
   childSummaryInfo: any = []
 
-  ngOnInit(): void {
-    this.auth.currentUser.subscribe(data => {
+  async ngOnInit(): Promise<void> {
+    await this.auth.currentUser.subscribe(async data => {
       this.currentUser = data
-      this.cdr.detectChanges()
+      this.metaData = this.api.getMetaData('metadata')
+
+      if (this.metaData) {
+        if (this.currentUser) {
+          if(this.metaData['data'].length < 16) {
+            await this.api.setMetaData().then(() => {
+              this.metaData = this.api.getMetaData('metadata')
+            })
+          }
+          this.levelValues = this.setDataLevelForAccess(this.metaData)
+        } else {
+          this.levelValues = ['Gesamt']
+        }
+
+        this.setLevelData()
+      }
+
+      this.cdrfor.detectChanges();
     })
 
     if (!this.currentUser) {
@@ -276,20 +294,10 @@ export class ETerminDashboardRender implements OnInit {
     this.setKeyDataString()
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
 
+
     if (this.currentUser) {
       setTimeout(() => {
-        this.currentUser = this.auth.getUserDetails()
-        this.metaData = localStorage.getItem('metadata')
-        
-        if (this.metaData) {
-          if (this.currentUser) {
-            this.levelValues = this.setDataLevelForAccess()
-          } else {
-            this.levelValues = ['Gesamt']
-          }
 
-          this.setLevelData()
-        }
       }, 100);
     }
   }
@@ -436,11 +444,11 @@ export class ETerminDashboardRender implements OnInit {
     return 'Gesamt Termin Angebot'
   }
 
-  setDataLevelForAccess() {
+  setDataLevelForAccess(metaData: any) {
     let userGroups = Array()
     let levelsAllowed = Array()
     let levelIdMeta: any
-    const metaObject = this.api.getMetaData('metadata')['data']
+    const metaObject = metaData['data']
 
     userGroups = this.currentUser.usergroups[this.api.clientApiId]
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")
@@ -535,6 +543,8 @@ export class ETerminDashboardRender implements OnInit {
    */
   async setData(input: any = '') {
     this.isInProgress = true
+
+    if (!this.currentUser) return
 
     const result = await this.queryETerminData.getQueryData(input, this.levelSettings, this.allPublicFields)
 

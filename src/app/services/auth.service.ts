@@ -29,13 +29,12 @@ export class AuthService {
     private http: HttpClient,
     private api: ApiService,
     private router: Router,
-    // private oAuthService: OAuthService
   ) {
     this.currentUserSubject = new BehaviorSubject<any>(this.getUserDetails())
     this.currentUser = this.currentUserSubject.asObservable()
 
     if(!this.currentUserSubject.value || this.isOAuth) {
-      this.initOAuth();
+      this.initOAuth()
     }
   }
 
@@ -53,6 +52,8 @@ export class AuthService {
       this.storeUserDetails(data, 'oauth')
       this.afterOAuthLoginTask()
     }
+
+    return authenticated;
   }
 
   private async oAuthLoadProfile() {
@@ -86,7 +87,8 @@ export class AuthService {
       refresh_counter: 0,
       refresh_counter_blocked: 0,
       roles: [] as string[],
-      usergroups: userGroups
+      usergroups: userGroups,
+      token: keycloak.token,
     }
   }
 

@@ -54,7 +54,7 @@ export class AppComponent {
   public apiConnection: number = 0
 
   async ngOnInit() {
-    this.db.clean()
+    // this.db.clean()
     this.checkApiConnection();
     this.api.setMetaData()
 

@@ -236,6 +236,8 @@ export class AuthService {
         return true;
       }
       return false;
-    });
+    }).catch((error) => {
+      return false;
+    })
   }
 }

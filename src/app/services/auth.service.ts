@@ -102,14 +102,13 @@ export class AuthService {
 
   public getRefreshToken() {
     if (this.isOAuth) {
-
       return this.refreshKeycloakToken()
     }
 
     return localStorage.getItem('refresh_token');
   }
 
-  public async logout() {
+  public logout() {
     if(this.isOAuth)  {
       keycloak.logout({ redirectUri: window.location.origin }).then(() => {
         localStorage.clear()
@@ -119,13 +118,12 @@ export class AuthService {
     }
 
     const token = this.getToken();
-    localStorage.clear();
-
-    return this.api.logout(token).subscribe(res => {
+    
+    this.api.logout(token).subscribe(res => {
       this.currentUserSubject.next(null);
+      localStorage.clear();
+      window.location.reload()
     })
-
-    window.location.reload()
   }
 
   public updateUserData() {

@@ -29,7 +29,6 @@ export class InterceptorService {
 
     if (currentUser) {
       if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh')) {
-        if (request.url.includes('get_data')) console.log('get_data', request.url)
         if (this.auth.isOAuth) {
           if (request.url.includes(this.api.dataApiServer)) {
             request = request.clone({

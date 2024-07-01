@@ -57,7 +57,6 @@ export class DBService {
         .where('[level+levelId+indicator+timeframe]').equals([level, levelId, indicator, resolution]).toArray();
     };
 
-    // subject of change for error handling
     return null
   }
 

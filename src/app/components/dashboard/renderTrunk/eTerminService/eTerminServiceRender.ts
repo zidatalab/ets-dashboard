@@ -261,23 +261,25 @@ export class ETerminDashboardRender implements OnInit {
   childSummaryInfo: any = []
 
   async ngOnInit(): Promise<void> {
-    await this.auth.currentUser.subscribe(async data => {
-      this.currentUser = data
-      this.metaData = this.api.getMetaData('metadata')
+    this.auth.currentUser.subscribe(async (data) => {
+      this.currentUser = data;
+      this.metaData = this.api.getMetaData('metadata');
 
       if (this.metaData) {
         if (this.currentUser) {
-          if(this.metaData['data'].length < 16) {
-            await this.api.setMetaData().then(() => {
-              this.metaData = this.api.getMetaData('metadata')
-            })
-          }
-          this.levelValues = this.setDataLevelForAccess(this.metaData)
-        } else {
-          this.levelValues = ['Gesamt']
-        }
+          setTimeout(async () => {
+            if (this.metaData['data'].length < 16) {
+              await this.api.setMetaData().then(() => {
+                this.metaData = this.api.getMetaData('metadata');
+              });
+            } else {
+              this.levelValues = ['Gesamt']
+            }
 
-        this.setLevelData()
+            this.levelValues = this.setDataLevelForAccess(this.metaData);
+            this.setLevelData()
+          }, 100)
+        }
       }
 
       this.cdrfor.detectChanges();
@@ -293,13 +295,6 @@ export class ETerminDashboardRender implements OnInit {
     this.dataLastAggregation = localStorage.getItem('date_of_aggregation')
     this.setKeyDataString()
     this.levelSettings = this.aggregation.updateStartStop(this.levelSettings)
-
-
-    if (this.currentUser) {
-      setTimeout(() => {
-
-      }, 100);
-    }
   }
 
   filteredSubGroup(professionGroup: any) {

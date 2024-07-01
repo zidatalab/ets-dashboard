@@ -62,6 +62,10 @@ export class AppComponent {
         this.autoRefreshData()
         this.checkApiConnection()
 
+        if(localStorage.getItem('access_token')) {
+          this.auth.refreshToken()
+        }
+
         setInterval(() => {
           this.auth.refreshToken()
           this.autoRefreshData()

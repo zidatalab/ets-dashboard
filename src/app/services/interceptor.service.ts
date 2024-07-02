@@ -27,6 +27,19 @@ export class InterceptorService {
       currentUser = user
     });
 
+  // if (currentUser) {
+  //   if (!request.url.includes('login/refresh')) {
+
+  //     if (this.auth.isOAuth) {
+  //       const url = request.url.replace(this.api.apiServer, this.api.dataApiServer)
+  //       console.log(url)
+  //     }
+  //     console.log(request.url)
+  //   }
+  //   console.log(request.url)
+  // }
+  // console.log(request.url)
+
     if (currentUser) {
       if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh')) {
         if (this.auth.isOAuth) {
@@ -53,7 +66,7 @@ export class InterceptorService {
         }
       }
     }
-    if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh') && !this.auth.isOAuth) {
+    if (request.url.includes(this.api.apiServer) && request.url.includes('login/refresh')) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.auth.getRefreshToken()}`

@@ -27,33 +27,36 @@ export class InterceptorService {
       currentUser = user
     });
 
-  // if (currentUser) {
-  //   if (!request.url.includes('login/refresh')) {
+    // if (currentUser) {
+    //   if (!request.url.includes('login/refresh')) {
 
-  //     if (this.auth.isOAuth) {
-  //       const url = request.url.replace(this.api.apiServer, this.api.dataApiServer)
-  //       console.log(url)
-  //     }
-  //     console.log(request.url)
-  //   }
-  //   console.log(request.url)
-  // }
-  // console.log(request.url)
+    //     if (this.auth.isOAuth) {
+    //       const url = request.url.replace(this.api.apiServer, this.api.dataApiServer)
+    //       console.log(url)
+    //     }
+    //     console.log(request.url)
+    //   }
+    //   console.log(request.url)
+    // }
+    // console.log(request.url)
 
     if (currentUser) {
       if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh')) {
         if (this.auth.isOAuth) {
+          if (this.auth.isKeycloakTokenExpired()) {
+            this.auth.refreshKeycloakToken()
+          }
           if (request.url.includes(this.api.dataApiServer)) {
             request = request.clone({
               setHeaders: {
-                Authorization: `Bearer ${currentUser['token']}`
+                Authorization: `Bearer ${this.auth.getToken()}`
               }
             })
           } else {
             request = request.clone({
               url: request.url.replace(this.api.apiServer, this.api.dataApiServer),
               setHeaders: {
-                Authorization: `Bearer ${currentUser['token']}`
+                Authorization: `Bearer ${this.auth.getToken()}`
               }
             })
           }

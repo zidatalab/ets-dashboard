@@ -48,6 +48,9 @@ export class AppComponent {
   async ngOnInit() {
     // this.db.clean()
     this.checkApiConnection();
+    if(this.auth.isKeycloakTokenExpired()) {
+      this.auth.refreshToken()
+    }
     this.api.setMetaData()
 
     this.currentDate = new Date()
@@ -59,10 +62,12 @@ export class AppComponent {
         this.isAdmin = this.currentUser["is_admin"] || this.currentUser['is_superadmin']
 
         this.api.setMetaData()
-        this.autoRefreshData()
+        if (data.type !== 'oauth') {
+          this.autoRefreshData()
+        }
         this.checkApiConnection()
 
-        if(localStorage.getItem('access_token')) {
+        if (localStorage.getItem('access_token')) {
           this.auth.refreshToken()
         }
 
@@ -95,6 +100,10 @@ export class AppComponent {
   }
 
   public autoRefreshData() {
+    if(this.auth.isKeycloakTokenExpired()) {
+      this.auth.refreshToken()
+    }
+
     this.api.setMetaData()
   }
 

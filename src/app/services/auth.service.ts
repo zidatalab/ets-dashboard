@@ -226,13 +226,15 @@ export class AuthService {
     return false
   }
 
+  public isKeycloakTokenExpired() {
+    return keycloak.isTokenExpired()
+  }
+
   public refreshKeycloakToken() {
     return keycloak.updateToken(5).then(async (refreshed) => {
       if (refreshed) {
-
         localStorage.setItem('access_token', keycloak.token || "");
         localStorage.setItem('refresh_token', keycloak.refreshToken || "");
-
         return true;
       }
       return false;

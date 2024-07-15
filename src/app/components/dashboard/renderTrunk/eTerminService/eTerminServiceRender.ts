@@ -259,6 +259,7 @@ export class ETerminDashboardRender implements OnInit {
   }
   childData: any = []
   childSummaryInfo: any = []
+  hasNoUsergroups = false;
 
   async ngOnInit(): Promise<void> {
     this.auth.currentUser.subscribe(async (data) => {
@@ -446,6 +447,11 @@ export class ETerminDashboardRender implements OnInit {
     const metaObject = metaData['data']
 
     userGroups = this.currentUser.usergroups[this.api.clientApiId]
+
+    if(userGroups.length === 0) {
+      this.hasNoUsergroups = true
+    }
+
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")
 
     let levelrights = levelIdMeta?.levelrights

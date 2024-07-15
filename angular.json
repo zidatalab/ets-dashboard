@@ -26,7 +26,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/CNAME"
+              "src/CNAME",
+              "src/_headers"
             ],
             "styles": [
               "src/styles.scss",

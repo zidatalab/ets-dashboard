@@ -16,7 +16,7 @@
         Operationalisierung können sich noch ändern. Bei Fragen wenden Sie sich bitte an das Zi.</p>
     </div>
   </div>
-  <div *ngIf="!this.currentUser">
+  <div *ngIf="!this.currentUser || hasNoUsergroups">
     <p>Aktuell sind keine öffentlichen Informationen verfügbar.</p>
   </div>
   <div class="dashboard-content" *ngIf="this.currentUser">

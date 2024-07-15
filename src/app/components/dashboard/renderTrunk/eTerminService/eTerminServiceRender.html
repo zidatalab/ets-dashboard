@@ -19,7 +19,7 @@
   <div *ngIf="!this.currentUser || hasNoUsergroups">
     <p>Aktuell sind keine öffentlichen Informationen verfügbar.</p>
   </div>
-  <div class="dashboard-content" *ngIf="this.currentUser">
+  <div class="dashboard-content" *ngIf="this.currentUser && !hasNoUsergroups">
     <div class="dashboard-content-header">
       <h3>Ansicht</h3>
       <mat-chip-listbox>

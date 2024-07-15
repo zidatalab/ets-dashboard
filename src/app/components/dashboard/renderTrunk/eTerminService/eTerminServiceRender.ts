@@ -448,8 +448,9 @@ export class ETerminDashboardRender implements OnInit {
 
     userGroups = this.currentUser.usergroups[this.api.clientApiId]
 
-    if(userGroups.length === 0) {
+    if(!userGroups || !userGroups.length) {
       this.hasNoUsergroups = true
+      return []
     }
 
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")

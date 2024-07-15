@@ -16,11 +16,20 @@ export class ApiService {
   public accentcolor = "#e3714e1";
   public warncolor = "#e1149b";
 
-  get apiServer() {
-    const data = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '{}') : false;
-    const isOAuth = data?.type === 'oauth';
+  get isOAuth () {
+    const data = localStorage.getItem('userInfo')
 
-    return isOAuth ? this.dataApiServer : this._apiServer;
+    if(data) {
+      const parsed = JSON.parse(data)
+
+      return parsed.type === 'oauth'
+    }
+
+    return false
+  }
+
+  get apiServer() {
+    return this.isOAuth ? this.dataApiServer : this._apiServer;
   }
 
   constructor(private httpClient: HttpClient) { }
@@ -199,7 +208,7 @@ export class ApiService {
     const metaData: any = localStorage.getItem(name)
     const parsedData = JSON.parse(metaData)
 
-    if (!metaData || parsedData.data.length < 16) {
+    if (!metaData || (this.isOAuth && parsedData.data.length < 16)) {
       this.setMetaData()
     }
 

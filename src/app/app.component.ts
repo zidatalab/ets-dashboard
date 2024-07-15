@@ -49,17 +49,16 @@ export class AppComponent {
     if (this.auth.isKeycloakTokenExpired()) {
       this.auth.refreshToken()
     }
-    this.api.setMetaData()
 
     this.currentDate = new Date()
-
+    
+    this.api.setMetaData()
     this.auth.currentUser.subscribe(data => {
       if (data) {
         this.currentUser = data
         this.isLoggedIn = !this.isLoggedIn
         this.isAdmin = this.currentUser["is_admin"] || this.currentUser['is_superadmin']
 
-        this.api.setMetaData()
         this.checkApiConnection()
 
         setInterval(() => {
@@ -94,8 +93,6 @@ export class AppComponent {
     if (this.auth.isKeycloakTokenExpired()) {
       this.auth.refreshToken()
     }
-
-    this.api.setMetaData()
   }
 
   getSortData() {

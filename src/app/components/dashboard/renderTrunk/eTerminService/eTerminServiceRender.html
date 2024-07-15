@@ -16,10 +16,10 @@
         Operationalisierung können sich noch ändern. Bei Fragen wenden Sie sich bitte an das Zi.</p>
     </div>
   </div>
-  <div *ngIf="!this.currentUser || hasNoUsergroups">
+  <div *ngIf="!currentUser || !hasUserGroups">
     <p>Aktuell sind keine öffentlichen Informationen verfügbar.</p>
   </div>
-  <div class="dashboard-content" *ngIf="this.currentUser && !hasNoUsergroups">
+  <div class="dashboard-content" *ngIf="currentUser && hasUserGroups">
     <div class="dashboard-content-header">
       <h3>Ansicht</h3>
       <mat-chip-listbox>

@@ -259,7 +259,14 @@ export class ETerminDashboardRender implements OnInit {
   }
   childData: any = []
   childSummaryInfo: any = []
-  hasNoUsergroups = false;
+
+  get userGroups() {
+    return this.currentUser.usergroups[this.api.clientApiId] || []
+  }
+
+  get hasUserGroups() {
+    return this.userGroups.length
+  }
 
   async ngOnInit(): Promise<void> {
     this.auth.currentUser.subscribe(async (data) => {
@@ -277,8 +284,11 @@ export class ETerminDashboardRender implements OnInit {
               this.levelValues = ['Gesamt']
             }
 
-            this.levelValues = this.setDataLevelForAccess(this.metaData);
-            this.setLevelData()
+
+            if(this.hasUserGroups) {
+              this.levelValues = this.setDataLevelForAccess(this.metaData);
+              this.setLevelData()
+            }
           }, 100)
         }
       }
@@ -441,23 +451,15 @@ export class ETerminDashboardRender implements OnInit {
   }
 
   setDataLevelForAccess(metaData: any) {
-    let userGroups = Array()
     let levelsAllowed = Array()
     let levelIdMeta: any
     const metaObject = metaData['data']
-
-    userGroups = this.currentUser.usergroups[this.api.clientApiId]
-
-    if(!userGroups || !userGroups.length) {
-      this.hasNoUsergroups = true
-      return []
-    }
 
     levelIdMeta = metaObject.find((element: any) => element['type'] === "levelid")
 
     let levelrights = levelIdMeta?.levelrights
 
-    for (let group of userGroups) {
+    for (let group of this.userGroups) {
       let idArray = Array()
       if (levelrights[group]) {
         idArray = levelrights[group]

@@ -281,7 +281,6 @@ export class ETerminDashboardRender implements OnInit {
               this.levelValues = ['Gesamt']
             }
 
-
             if(this.hasUserGroups) {
               this.levelValues = this.setDataLevelForAccess(this.metaData);
               this.setLevelData()

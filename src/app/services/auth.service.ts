@@ -227,6 +227,8 @@ export class AuthService {
   }
 
   public isKeycloakTokenExpired() {
+    if (!keycloak.authenticated) return null
+    
     return keycloak.isTokenExpired()
   }
 

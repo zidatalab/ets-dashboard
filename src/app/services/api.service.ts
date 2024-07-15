@@ -211,7 +211,7 @@ export class ApiService {
     const metaData: any = localStorage.getItem(name)
     let parsedData = JSON.parse(metaData)
 
-    if (!metaData || (this.isOAuth && parsedData.data.length < 16)) {
+    if (!metaData || !parsedData.data || (this.isOAuth && parsedData.data.length < 16)) {
       parsedData = await this.loadMetaData()
     }
 

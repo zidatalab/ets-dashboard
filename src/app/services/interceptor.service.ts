@@ -43,9 +43,6 @@ export class InterceptorService {
     if (currentUser) {
       if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh')) {
         if (this.auth.isOAuth) {
-          if (this.auth.isKeycloakTokenExpired()) {
-            this.auth.refreshKeycloakToken()
-          }
           if (request.url.includes(this.api.dataApiServer)) {
             request = request.clone({
               setHeaders: {

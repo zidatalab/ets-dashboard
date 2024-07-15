@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { retry, timeout } from 'rxjs/operators';
+import { retry } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -16,16 +16,20 @@ export class ApiService {
   public accentcolor = "#e3714e1";
   public warncolor = "#e1149b";
 
-  get isOAuth () {
+  get currentUser() {
     const data = localStorage.getItem('userInfo')
 
     if(data) {
       const parsed = JSON.parse(data)
 
-      return parsed.type === 'oauth'
+      return parsed
     }
 
-    return false
+    return null
+  }
+
+  get isOAuth() {
+    return this.currentUser?.type === 'oauth'
   }
 
   get apiServer() {
@@ -211,7 +215,7 @@ export class ApiService {
     const metaData: any = localStorage.getItem(name)
     let parsedData = JSON.parse(metaData)
 
-    if (!metaData || !parsedData.data || (this.isOAuth && parsedData.data.length < 16)) {
+    if (!metaData || !parsedData.data || (this.currentUser && parsedData.data.length < 16)) {
       parsedData = await this.loadMetaData()
     }
 

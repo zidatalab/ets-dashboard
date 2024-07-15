@@ -199,17 +199,20 @@ export class ApiService {
     return result
   }
 
-  public async setMetaData() {
+  public async loadMetaData() {
     const resp = await this.getTypeRequestWithoutObs(`get_metadata/${this.clientApiId}`)
-    localStorage.setItem('metadata', JSON.stringify(resp))
+    const data = JSON.stringify(resp);
+    localStorage.setItem('metadata', data)
+
+    return JSON.parse(data)
   }
 
-  public getMetaData(name: string) : any {
+   public async getMetaData(name: string = 'metadata') {
     const metaData: any = localStorage.getItem(name)
-    const parsedData = JSON.parse(metaData)
+    let parsedData = JSON.parse(metaData)
 
     if (!metaData || (this.isOAuth && parsedData.data.length < 16)) {
-      this.setMetaData()
+      parsedData = await this.loadMetaData()
     }
 
     return parsedData

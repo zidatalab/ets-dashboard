@@ -272,29 +272,23 @@ export class ETerminDashboardRender implements OnInit {
     this.auth.currentUser.subscribe(async (data) => {
       if (data) {
         this.currentUser = data;
-        this.metaData = this.api.getMetaData('metadata');
+        this.metaData = await this.api.getMetaData('metadata');
 
-        if (this.metaData) {
-          if (this.currentUser) {
-            setTimeout(async () => {
-              if (this.metaData['data'].length < 16) {
-                await this.api.setMetaData().then(() => {
-                  this.metaData = this.api.getMetaData('metadata');
-                });
-              } else {
-                this.levelValues = ['Gesamt']
-              }
+        if (this.metaData && this.currentUser) {
+            if (this.metaData['data'].length < 16) {
+              this.metaData =  await this.api.getMetaData();
+            } else {
+              this.levelValues = ['Gesamt']
+            }
 
 
             if(this.hasUserGroups) {
               this.levelValues = this.setDataLevelForAccess(this.metaData);
               this.setLevelData()
             }
-          }, 100)
-        }
-      }
 
-        this.cdrfor.detectChanges();
+          this.cdrfor.detectChanges();
+        }
       }
     })
 

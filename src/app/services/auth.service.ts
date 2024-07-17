@@ -6,13 +6,6 @@ import { BehaviorSubject, Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { KeycloakService } from 'keycloak-angular';
 
-
-// const keycloak = new Keycloak({
-//   url: "https://auth.zi.de",
-//   realm: "dashboardsso",
-//   clientId: "ets_reporting_2",
-// });
-
 @Injectable({
   providedIn: 'root'
 })

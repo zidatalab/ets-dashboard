@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   private async checkAuthentication() {
-    if (this.isOAuth) {
+    if (this.keycloakService.getKeycloakInstance().authenticated) {
       const data = await this.oAuthLoadProfile();
       this.storeUserDetails(data, 'oauth')
       this.afterOAuthLoginTask()
@@ -42,6 +42,7 @@ export class AuthService {
   }
 
   public async oAuthLogin() {
+    console.log('oAuthLogin')
     await this.keycloakService.login();
   }
 

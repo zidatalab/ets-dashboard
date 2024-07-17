@@ -20,10 +20,6 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any>
   public currentUser: Observable<any>
 
-  get isOAuth() {
-    return this.currentUserSubject.value.type === 'oauth'
-  }
-
   constructor(
     private http: HttpClient,
     private api: ApiService,
@@ -38,7 +34,6 @@ export class AuthService {
 
   private async checkAuthentication() {
     if (await this.isAuthenticated) {
-      this.oAuthLoadProfile()
       const data = await this.oAuthLoadProfile();
       this.storeUserDetails(data, 'oauth')
       this.afterOAuthLoginTask()
@@ -50,7 +45,6 @@ export class AuthService {
   }
 
   public async oAuthLogin() {
-    console.log('auth.service > oAuthLogin');
     await this.keycloakService.login();
   }
 
@@ -59,7 +53,6 @@ export class AuthService {
   }
 
   public async getUserInfo() {
-    console.log(await this.keycloakService.getKeycloakInstance().loadUserInfo())
     return await this.keycloakService.getKeycloakInstance().loadUserInfo();
   }
 
@@ -137,18 +130,18 @@ export class AuthService {
   //   return keycloak.isTokenExpired()
   // }
 
-  // public refreshKeycloakToken() {
-  //   return keycloak.updateToken(5).then(async (refreshed) => {
-  //     if (refreshed) {
-  //       localStorage.setItem('access_token', keycloak.token || "");
-  //       localStorage.setItem('refresh_token', keycloak.refreshToken || "");
-  //       return true;
-  //     }
-  //     return false;
-  //   }).catch((error) => {
-  //     return false;
-  //   })
-  // }
+  public refreshKeycloakToken() {
+    return this.keycloakService.updateToken(5).then(async (refreshed) => {
+      if (refreshed) {
+        localStorage.setItem('access_token', this.keycloakService.getKeycloakInstance().token || "");
+        localStorage.setItem('refresh_token', this.keycloakService.getKeycloakInstance().refreshToken || "");
+        return true;
+      }
+      return false;
+    }).catch((error) => {
+      return false;
+    })
+  }
 
   public getUserDetails() {
     return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '{}') : false
@@ -158,10 +151,10 @@ export class AuthService {
     return localStorage.getItem('access_token')
   }
 
-  public getRefreshToken() {
-    // if (this.isOAuth) {
-    //   return this.refreshKeycloakToken()
-    // }
+  public async getRefreshToken() {
+    if (await this.isAuthenticated) {
+      return this.refreshKeycloakToken()
+    }
 
     return localStorage.getItem('refresh_token');
   }
@@ -234,10 +227,10 @@ export class AuthService {
     return this.api.postTypeRequest('newuser', data)
   }
 
-  refreshToken() {
-    // if(this.isOAuth) {
-    //   return this.refreshKeycloakToken()
-    // }
+  async refreshToken() {
+    if(await this.isAuthenticated) {
+      return this.refreshKeycloakToken()
+    }
 
     return this.http.post(`${this.api.apiServer}login/refresh/`, { refresh: true }).subscribe(
       data => {

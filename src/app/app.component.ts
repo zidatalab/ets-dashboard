@@ -46,9 +46,9 @@ export class AppComponent {
   public apiConnection: number = 0
 
   async ngOnInit() {
-    if (this.auth.isKeycloakTokenExpired()) {
-      this.auth.refreshToken()
-    }
+    // if (this.auth.isKeycloakTokenExpired()) {
+    //   this.auth.refreshToken()
+    // }
 
     this.currentDate = new Date()
     
@@ -90,9 +90,9 @@ export class AppComponent {
   }
 
   public autoRefreshData() {
-    if (this.auth.isKeycloakTokenExpired()) {
-      this.auth.refreshToken()
-    }
+    // if (this.auth.isKeycloakTokenExpired()) {
+    //   this.auth.refreshToken()
+    // }
   }
 
   getSortData() {

@@ -45,8 +45,26 @@ import { NgChartsModule } from 'ng2-charts';
 import { MapComponent } from './components/maps/map/map.component';
 import { ShapeService } from './services/shape.service';
 import { MarkerService } from './services/marker.service';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 registerLocaleData(locales, 'de');
+export function initializeKeycloak(keycloak: KeycloakService) {
+  
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'https://auth.zi.de',
+        realm: 'dashboardsso',
+        clientId: 'ets_reporting_2',
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+        checkLoginIframe: true,
+        flow: 'standard',
+      },
+    });
+}
 
 const routes: Routes = [
   {
@@ -130,13 +148,20 @@ const routes: Routes = [
     MatIconModule,
     MatButtonModule,
     LayoutModule,
-    NgChartsModule
+    NgChartsModule,
+    KeycloakAngularModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
       multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
     },
     ShapeService,
     MarkerService,

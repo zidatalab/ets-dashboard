@@ -4,15 +4,14 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Observer, fromEvent, merge } from 'rxjs';
 import { map } from 'rxjs/operators';
-// import { OAuthService } from './o-auth.service';
-import Keycloak from "keycloak-js";
+import { KeycloakService } from 'keycloak-angular';
 
 
-const keycloak = new Keycloak({
-  url: "https://auth.zi.de",
-  realm: "dashboardsso",
-  clientId: "ets_reporting_2",
-});
+// const keycloak = new Keycloak({
+//   url: "https://auth.zi.de",
+//   realm: "dashboardsso",
+//   clientId: "ets_reporting_2",
+// });
 
 @Injectable({
   providedIn: 'root'
@@ -29,35 +28,61 @@ export class AuthService {
     private http: HttpClient,
     private api: ApiService,
     private router: Router,
+    private keycloakService: KeycloakService
   ) {
     this.currentUserSubject = new BehaviorSubject<any>(this.getUserDetails())
     this.currentUser = this.currentUserSubject.asObservable()
 
-    if(!this.currentUserSubject.value || this.isOAuth) {
-      this.initOAuth()
-    }
+    this.checkAuthentication()
   }
 
-  async initOAuth() {
-    const authenticated = await keycloak.init({
-      onLoad: "check-sso",
-      silentCheckSsoRedirectUri: window.location.origin + "/assets/silent-check-sso.html",
-      enableLogging: true,
-      checkLoginIframe: true,
-      flow: "standard",
-    });
-    
-    if(authenticated) {
+  private async checkAuthentication() {
+    if (await this.isAuthenticated) {
+      this.oAuthLoadProfile()
       const data = await this.oAuthLoadProfile();
       this.storeUserDetails(data, 'oauth')
       this.afterOAuthLoginTask()
     }
-
-    return authenticated;
   }
 
+  public get isAuthenticated(): Promise<boolean> {
+    return Promise.resolve(this.keycloakService.isLoggedIn());
+  }
+
+  public async oAuthLogin() {
+    console.log('auth.service > oAuthLogin');
+    await this.keycloakService.login();
+  }
+
+  public async oAuthlogout() {
+    await this.keycloakService.logout();
+  }
+
+  public async getUserInfo() {
+    console.log(await this.keycloakService.getKeycloakInstance().loadUserInfo())
+    return await this.keycloakService.getKeycloakInstance().loadUserInfo();
+  }
+
+  // async initOAuth() {
+  //   const authenticated = await keycloak.init({
+  //     onLoad: "check-sso",
+  //     silentCheckSsoRedirectUri: window.location.origin + "/assets/silent-check-sso.html",
+  //     enableLogging: true,
+  //     checkLoginIframe: true,
+  //     flow: "standard",
+  //   });
+    
+  //   if(authenticated) {
+  //     const data = await this.oAuthLoadProfile();
+  //     this.storeUserDetails(data, 'oauth')
+  //     this.afterOAuthLoginTask()
+  //   }
+
+  //   return authenticated;
+  // }
+
   private async oAuthLoadProfile() {
-    const data = await keycloak.loadUserInfo() as any;
+    const data = await this.getUserInfo() as any;
 
     const userGroups = data.groups.reduce((output: any, group: any) => {
       const parts = group.split('/');
@@ -88,9 +113,42 @@ export class AuthService {
       refresh_counter_blocked: 0,
       roles: [] as string[],
       usergroups: userGroups,
-      token: keycloak.token,
+      type: 'oauth',
+      token: this.keycloakService.getKeycloakInstance().token,
     }
   }
+
+  afterOAuthLoginTask() {
+    this.setDataInLocalStorage('refresh_token', this.keycloakService.getKeycloakInstance().refreshToken)
+    this.setDataInLocalStorage('access_token', this.keycloakService.getKeycloakInstance().token)
+  }
+
+  // async oAuthLogin() {
+  //   await keycloak.login();
+
+  //   const data = this.oAuthLoadProfile();
+  //   this.storeUserDetails(data, 'oauth');
+  // }
+
+
+  // public isKeycloakTokenExpired() {
+  //   if (!keycloak.authenticated) return null
+    
+  //   return keycloak.isTokenExpired()
+  // }
+
+  // public refreshKeycloakToken() {
+  //   return keycloak.updateToken(5).then(async (refreshed) => {
+  //     if (refreshed) {
+  //       localStorage.setItem('access_token', keycloak.token || "");
+  //       localStorage.setItem('refresh_token', keycloak.refreshToken || "");
+  //       return true;
+  //     }
+  //     return false;
+  //   }).catch((error) => {
+  //     return false;
+  //   })
+  // }
 
   public getUserDetails() {
     return localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo') || '{}') : false
@@ -101,16 +159,16 @@ export class AuthService {
   }
 
   public getRefreshToken() {
-    if (this.isOAuth) {
-      return this.refreshKeycloakToken()
-    }
+    // if (this.isOAuth) {
+    //   return this.refreshKeycloakToken()
+    // }
 
     return localStorage.getItem('refresh_token');
   }
 
-  public logout() {
-    if(this.isOAuth)  {
-      keycloak.logout({ redirectUri: window.location.origin }).then(() => {
+  public async logout() {
+    if(await this.isAuthenticated)  {
+      this.keycloakService.logout(window.location.origin).then(() => {
         localStorage.clear()
         this.currentUserSubject.next(null);
       })
@@ -164,18 +222,6 @@ export class AuthService {
     }))
   }
 
-  async oAuthLogin() {
-    await keycloak.login();
-
-    const data = this.oAuthLoadProfile();
-    this.storeUserDetails(data, 'oauth');
-  }
-
-  afterOAuthLoginTask() {
-    this.setDataInLocalStorage('refresh_token', keycloak.refreshToken)
-    this.setDataInLocalStorage('access_token', keycloak.token)
-  }
-
   loginTask(user: any) {
     this.setDataInLocalStorage('refresh_token', user.refresh_token)
     this.setDataInLocalStorage('access_token', user.access_token)
@@ -189,9 +235,9 @@ export class AuthService {
   }
 
   refreshToken() {
-    if(this.isOAuth) {
-      return this.refreshKeycloakToken()
-    }
+    // if(this.isOAuth) {
+    //   return this.refreshKeycloakToken()
+    // }
 
     return this.http.post(`${this.api.apiServer}login/refresh/`, { refresh: true }).subscribe(
       data => {
@@ -226,22 +272,4 @@ export class AuthService {
     return false
   }
 
-  public isKeycloakTokenExpired() {
-    if (!keycloak.authenticated) return null
-    
-    return keycloak.isTokenExpired()
-  }
-
-  public refreshKeycloakToken() {
-    return keycloak.updateToken(5).then(async (refreshed) => {
-      if (refreshed) {
-        localStorage.setItem('access_token', keycloak.token || "");
-        localStorage.setItem('refresh_token', keycloak.refreshToken || "");
-        return true;
-      }
-      return false;
-    }).catch((error) => {
-      return false;
-    })
-  }
 }

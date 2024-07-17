@@ -18,10 +18,10 @@ export class InterceptorService {
     private api: ApiService
   ) { }
 
-  async intercept(
+  intercept(
     request: HttpRequest<any>,
     next: HttpHandler
-  ): Promise<Observable<HttpEvent<any>>> {
+  ): Observable<HttpEvent<any>> {
     let currentUser = undefined
     this.auth.currentUser.subscribe(user => {
       currentUser = user
@@ -29,7 +29,7 @@ export class InterceptorService {
 
     if (currentUser) {
       if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh')) {
-        if (await this.auth.isAuthenticated) {
+        if (this.auth.isOAuth) {
           if (request.url.includes(this.api.dataApiServer)) {
             request = request.clone({
               setHeaders: {

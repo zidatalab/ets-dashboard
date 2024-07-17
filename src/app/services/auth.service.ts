@@ -20,6 +20,10 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any>
   public currentUser: Observable<any>
 
+  get isOAuth() {
+    return this.currentUserSubject.value.type === 'oauth'
+  }
+
   constructor(
     private http: HttpClient,
     private api: ApiService,
@@ -33,7 +37,7 @@ export class AuthService {
   }
 
   private async checkAuthentication() {
-    if (await this.isAuthenticated) {
+    if (this.isOAuth) {
       const data = await this.oAuthLoadProfile();
       this.storeUserDetails(data, 'oauth')
       this.afterOAuthLoginTask()
@@ -151,16 +155,16 @@ export class AuthService {
     return localStorage.getItem('access_token')
   }
 
-  public async getRefreshToken() {
-    if (await this.isAuthenticated) {
+  public getRefreshToken() {
+    if (this.isOAuth) {
       return this.refreshKeycloakToken()
     }
 
     return localStorage.getItem('refresh_token');
   }
 
-  public async logout() {
-    if(await this.isAuthenticated)  {
+  public logout() {
+    if (this.isOAuth)  {
       this.keycloakService.logout(window.location.origin).then(() => {
         localStorage.clear()
         this.currentUserSubject.next(null);
@@ -227,8 +231,8 @@ export class AuthService {
     return this.api.postTypeRequest('newuser', data)
   }
 
-  async refreshToken() {
-    if(await this.isAuthenticated) {
+  refreshToken() {
+    if (this.isOAuth) {
       return this.refreshKeycloakToken()
     }
 

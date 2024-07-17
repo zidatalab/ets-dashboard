@@ -216,6 +216,7 @@ export class ApiService {
     let parsedData = JSON.parse(metaData)
 
     if (!metaData || !parsedData.data || (this.currentUser && parsedData.data.length < 16)) {
+      console.log('loading metadata')
       parsedData = await this.loadMetaData()
     }
 

@@ -81,7 +81,6 @@ export class AuthService {
       refresh_counter_blocked: 0,
       roles: [] as string[],
       usergroups: userGroups,
-      type: 'oauth',
       token: this.keycloakService.getKeycloakInstance().token,
     }
   }

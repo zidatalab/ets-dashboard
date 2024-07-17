@@ -56,24 +56,6 @@ export class AuthService {
     return await this.keycloakService.getKeycloakInstance().loadUserInfo();
   }
 
-  // async initOAuth() {
-  //   const authenticated = await keycloak.init({
-  //     onLoad: "check-sso",
-  //     silentCheckSsoRedirectUri: window.location.origin + "/assets/silent-check-sso.html",
-  //     enableLogging: true,
-  //     checkLoginIframe: true,
-  //     flow: "standard",
-  //   });
-    
-  //   if(authenticated) {
-  //     const data = await this.oAuthLoadProfile();
-  //     this.storeUserDetails(data, 'oauth')
-  //     this.afterOAuthLoginTask()
-  //   }
-
-  //   return authenticated;
-  // }
-
   private async oAuthLoadProfile() {
     const data = await this.getUserInfo() as any;
 
@@ -116,19 +98,11 @@ export class AuthService {
     this.setDataInLocalStorage('access_token', this.keycloakService.getKeycloakInstance().token)
   }
 
-  // async oAuthLogin() {
-  //   await keycloak.login();
-
-  //   const data = this.oAuthLoadProfile();
-  //   this.storeUserDetails(data, 'oauth');
-  // }
-
-
-  // public isKeycloakTokenExpired() {
-  //   if (!keycloak.authenticated) return null
+  public isKeycloakTokenExpired() {
+    if (!this.isAuthenticated) return null
     
-  //   return keycloak.isTokenExpired()
-  // }
+    return this.keycloakService.isTokenExpired()
+  }
 
   public refreshKeycloakToken() {
     return this.keycloakService.updateToken(5).then(async (refreshed) => {

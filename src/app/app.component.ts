@@ -51,8 +51,8 @@ export class AppComponent {
     }
 
     this.currentDate = new Date()
-    
     this.api.getMetaData()
+    
     this.auth.currentUser.subscribe(data => {
       if (data) {
         this.currentUser = data

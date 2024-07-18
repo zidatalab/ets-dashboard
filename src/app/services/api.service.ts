@@ -46,7 +46,12 @@ export class ApiService {
   }
 
   public getTypeRequestWithoutObs(url: any) {
-    return firstValueFrom(this.httpClient.get(`${this.apiServer}${url}`).pipe(retry(3)))
+    try {
+      return firstValueFrom(this.httpClient.get(`${this.apiServer}${url}`).pipe(retry(3)))
+    } catch (error) {
+      console.log(error)
+      return null
+    }
   }
 
   public getTypeRequestWithPayload(url: any, payload: any) {

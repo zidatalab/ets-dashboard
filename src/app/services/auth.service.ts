@@ -29,7 +29,7 @@ export class AuthService {
     return this.currentUserSubject.value.type === 'oauth'
   }
 
-  private async checkAuthentication() {
+  public async checkAuthentication() {
     if (this.keycloakService.getKeycloakInstance().authenticated) {
       const data = await this.oAuthLoadProfile();
       this.storeUserDetails(data, 'oauth')
@@ -106,6 +106,7 @@ export class AuthService {
     }
     return this.keycloakService.getKeycloakInstance().updateToken(15).then((refreshed) => {
       if (refreshed) {
+        console.log(this.keycloakService.getKeycloakInstance())
         localStorage.setItem('access_token', this.keycloakService.getKeycloakInstance().token || "");
         localStorage.setItem('refresh_token', this.keycloakService.getKeycloakInstance().refreshToken || "");
 

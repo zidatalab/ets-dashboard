@@ -57,6 +57,8 @@ export function initializeKeycloak(keycloak: KeycloakService) {
           realm: 'dashboardsso',
           clientId: 'ets_reporting_2',
         },
+        bearerExcludedUrls: ['https://s3zide.obs.eu-de.otc.t-systems.com'
+        ],
         initOptions: {
           onLoad: 'check-sso',
           silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
@@ -65,7 +67,7 @@ export function initializeKeycloak(keycloak: KeycloakService) {
         },
       });
   } catch (error) {
-    console.log(error)    
+    console.log(error)
     localStorage.clear()
 
     return null

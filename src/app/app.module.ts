@@ -49,20 +49,27 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 registerLocaleData(locales, 'de');
 export function initializeKeycloak(keycloak: KeycloakService) {
-  return () =>
-    keycloak.init({
-      config: {
-        url: 'https://auth.zi.de',
-        realm: 'dashboardsso',
-        clientId: 'ets_reporting_2',
-      },
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
-        checkLoginIframe: true,
-        flow: 'standard',
-      },
-    });
+  try {
+    return () =>
+      keycloak.init({
+        config: {
+          url: 'https://auth.zi.de',
+          realm: 'dashboardsso',
+          clientId: 'ets_reporting_2',
+        },
+        initOptions: {
+          onLoad: 'check-sso',
+          silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+          checkLoginIframe: true,
+          flow: 'standard',
+        },
+      });
+  } catch (error) {
+    console.log(error)    
+    localStorage.clear()
+
+    return null
+  }
 }
 
 const routes: Routes = [

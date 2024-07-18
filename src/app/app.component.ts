@@ -46,10 +46,7 @@ export class AppComponent {
   public apiConnection: number = 0
 
   async ngOnInit() {
-    if (this.auth.isKeycloakTokenExpired()) {
-      this.auth.refreshToken()
-    }
-
+    this.auth.checkAuthentication()
     this.currentDate = new Date()
     this.api.getMetaData()
 
@@ -91,10 +88,6 @@ export class AppComponent {
   }
 
   public autoRefreshData() {
-    if(this.auth.isKeycloakTokenExpired()) {
-      this.auth.refreshKeycloakToken()
-    }
-
     this.auth.refreshToken()
     this.api.loadMetaData()
   }

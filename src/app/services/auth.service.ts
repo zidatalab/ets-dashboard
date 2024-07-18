@@ -18,8 +18,6 @@ export class AuthService {
   ) {
     this.currentUserSubject = new BehaviorSubject<any>(this.getUserDetails())
     this.currentUser = this.currentUserSubject.asObservable()
-
-    this.checkAuthentication()
   }
 
   private currentUserSubject: BehaviorSubject<any>
@@ -30,7 +28,7 @@ export class AuthService {
   }
 
   public async checkAuthentication() {
-    if (this.keycloakService.getKeycloakInstance().authenticated) {
+    if (this.isAuthenticated) {
       const data = await this.oAuthLoadProfile();
       this.storeUserDetails(data, 'oauth')
       this.afterOAuthLoginTask()
@@ -101,10 +99,8 @@ export class AuthService {
   }
 
   public refreshKeycloakToken() {
-    this.keycloakService.getKeycloakInstance().onTokenExpired = () => {
-      console.log("onTokenExpired")
-    }
-    return this.keycloakService.getKeycloakInstance().updateToken(15).then((refreshed) => {
+    return this.keycloakService.getKeycloakInstance().updateToken().then((refreshed) => {
+      console.log(refreshed)
       if (refreshed) {
         console.log(this.keycloakService.getKeycloakInstance())
         localStorage.setItem('access_token', this.keycloakService.getKeycloakInstance().token || "");
@@ -115,6 +111,7 @@ export class AuthService {
 
       return false;
     }).catch((error) => {
+      console.log(error)
       return false;
     })
   }

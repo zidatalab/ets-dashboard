@@ -41,11 +41,6 @@ export class InterceptorService {
     // console.log(request.url)
 
     if (currentUser) {
-      if(request.url.includes('s3')) {
-        request.headers.set('authorization', ``)
-        console.log(request)
-        // return next.handle(request)
-      }
       if (request.url.includes(this.api.apiServer) && !request.url.includes('login/refresh')) {
         if (this.auth.isOAuth) {
           if (request.url.includes(this.api.dataApiServer)) {

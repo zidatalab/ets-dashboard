@@ -67,7 +67,6 @@ export function initializeKeycloak(keycloak: KeycloakService) {
         },
       });
   } catch (error) {
-    console.log(error)
     localStorage.clear()
 
     return null

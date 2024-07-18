@@ -100,9 +100,7 @@ export class AuthService {
 
   public refreshKeycloakToken() {
     return this.keycloakService.getKeycloakInstance().updateToken().then((refreshed) => {
-      console.log(refreshed)
       if (refreshed) {
-        console.log(this.keycloakService.getKeycloakInstance())
         localStorage.setItem('access_token', this.keycloakService.getKeycloakInstance().token || "");
         localStorage.setItem('refresh_token', this.keycloakService.getKeycloakInstance().refreshToken || "");
 
@@ -111,7 +109,6 @@ export class AuthService {
 
       return false;
     }).catch((error) => {
-      console.log(error)
       return false;
     })
   }

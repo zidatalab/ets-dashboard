@@ -49,7 +49,6 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 registerLocaleData(locales, 'de');
 export function initializeKeycloak(keycloak: KeycloakService) {
-  
   return () =>
     keycloak.init({
       config: {

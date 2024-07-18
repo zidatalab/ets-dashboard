@@ -52,9 +52,11 @@ export class AppComponent {
 
     this.currentDate = new Date()
     this.api.getMetaData()
-    
+
     this.auth.currentUser.subscribe(data => {
       if (data) {
+        this.api.getMetaData()
+        this.autoRefreshData()
         this.currentUser = data
         this.isLoggedIn = !this.isLoggedIn
         this.isAdmin = this.currentUser["is_admin"] || this.currentUser['is_superadmin']
@@ -62,7 +64,6 @@ export class AppComponent {
         this.checkApiConnection()
 
         setInterval(() => {
-          this.auth.refreshToken()
           this.autoRefreshData()
           this.checkApiConnection()
         }, 20000);
@@ -90,9 +91,12 @@ export class AppComponent {
   }
 
   public autoRefreshData() {
-    // if (this.auth.isKeycloakTokenExpired()) {
-    //   this.auth.refreshToken()
-    // }
+    if(this.auth.isKeycloakTokenExpired()) {
+      this.auth.refreshKeycloakToken()
+    }
+
+    this.auth.refreshToken()
+    this.api.loadMetaData()
   }
 
   getSortData() {

@@ -10,13 +10,6 @@ import { KeycloakService } from 'keycloak-angular';
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<any>
-  public currentUser: Observable<any>
-
-  get isOAuth() {
-    return this.currentUserSubject.value.type === 'oauth'
-  }
-
   constructor(
     private http: HttpClient,
     private api: ApiService,
@@ -29,6 +22,13 @@ export class AuthService {
     this.checkAuthentication()
   }
 
+  private currentUserSubject: BehaviorSubject<any>
+  public currentUser: Observable<any>
+
+  get isOAuth() {
+    return this.currentUserSubject.value.type === 'oauth'
+  }
+
   private async checkAuthentication() {
     if (this.keycloakService.getKeycloakInstance().authenticated) {
       const data = await this.oAuthLoadProfile();
@@ -37,12 +37,11 @@ export class AuthService {
     }
   }
 
-  public get isAuthenticated(): Promise<boolean> {
-    return Promise.resolve(this.keycloakService.isLoggedIn());
+  public get isAuthenticated() {
+    return this.keycloakService.getKeycloakInstance().authenticated;
   }
 
   public async oAuthLogin() {
-    console.log('oAuthLogin')
     await this.keycloakService.login();
   }
 
@@ -98,12 +97,17 @@ export class AuthService {
   public isKeycloakTokenExpired() {
     if (!this.isAuthenticated) return null
     
-    return this.keycloakService.isTokenExpired()
+    return this.keycloakService.getKeycloakInstance().isTokenExpired()
   }
 
   public refreshKeycloakToken() {
-    return this.keycloakService.updateToken(5).then(async (refreshed) => {
+    console.log("refreshKeycloakToken")
+    console.log('instance',this.keycloakService.getKeycloakInstance())
+    console.log('is expired', this.isKeycloakTokenExpired())
+    return this.keycloakService.getKeycloakInstance().updateToken(5).then((refreshed) => {
+      console.log(refreshed)
       if (refreshed) {
+        console.log(this.keycloakService.getKeycloakInstance())
         localStorage.setItem('access_token', this.keycloakService.getKeycloakInstance().token || "");
         localStorage.setItem('refresh_token', this.keycloakService.getKeycloakInstance().refreshToken || "");
         return true;

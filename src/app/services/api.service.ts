@@ -46,7 +46,6 @@ export class ApiService {
   }
 
   public getTypeRequestWithoutObs(url: any) {
-    console.log(this.apiServer)
     return firstValueFrom(this.httpClient.get(`${this.apiServer}${url}`).pipe(retry(3)))
   }
 
@@ -213,7 +212,6 @@ export class ApiService {
   }
 
    public async getMetaData(name: string = 'metadata') {
-    console.log('getMetaData')
     const metaData: any = localStorage.getItem(name)
     let parsedData = JSON.parse(metaData)
 

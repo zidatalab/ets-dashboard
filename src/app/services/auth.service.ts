@@ -97,21 +97,21 @@ export class AuthService {
   public isKeycloakTokenExpired() {
     if (!this.isAuthenticated) return null
     
-    return this.keycloakService.getKeycloakInstance().isTokenExpired()
+    return this.keycloakService.getKeycloakInstance().isTokenExpired(15)
   }
 
   public refreshKeycloakToken() {
-    console.log("refreshKeycloakToken")
-    console.log('instance',this.keycloakService.getKeycloakInstance())
-    console.log('is expired', this.isKeycloakTokenExpired())
-    return this.keycloakService.getKeycloakInstance().updateToken(5).then((refreshed) => {
-      console.log(refreshed)
+    this.keycloakService.getKeycloakInstance().onTokenExpired = () => {
+      console.log("onTokenExpired")
+    }
+    return this.keycloakService.getKeycloakInstance().updateToken(15).then((refreshed) => {
       if (refreshed) {
-        console.log(this.keycloakService.getKeycloakInstance())
         localStorage.setItem('access_token', this.keycloakService.getKeycloakInstance().token || "");
         localStorage.setItem('refresh_token', this.keycloakService.getKeycloakInstance().refreshToken || "");
+
         return true;
       }
+
       return false;
     }).catch((error) => {
       return false;
